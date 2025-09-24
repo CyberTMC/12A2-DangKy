@@ -3,141 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ thống đăng ký xét tuyển đại học</title>
+    <title>Đăng ký môn thi</title>
+    <meta name="description" content="Hệ thống đăng ký xét tuyển đại học và môn thi. Đăng ký thông tin và theo dõi kết quả xét tuyển.">
+    
+    <!-- Open Graph Meta Tags for Link Sharing -->
+    <meta property="og:title" content="Đăng ký môn thi">
+    <meta property="og:description" content="Hệ thống đăng ký xét tuyển đại học và môn thi. Đăng ký thông tin và theo dõi kết quả xét tuyển.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-website-url.com"> <!-- Thay bằng URL thực tế của bạn -->
+    <meta property="og:image" content="https://your-website-url.com/preview-image.jpg"> <!-- Thay bằng URL hình ảnh preview (ví dụ: 1200x630px) -->
+    <meta property="og:image:alt" content="Hình ảnh hệ thống đăng ký môn thi">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://your-website-url.com/favicon.ico" type="image/x-icon"> <!-- Thay bằng URL favicon của bạn -->
+    <link rel="apple-touch-icon" href="https://your-website-url.com/apple-touch-icon.png"> <!-- Thay bằng URL icon cho Apple -->
+    
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
-        /* Giữ nguyên toàn bộ phần style từ code gốc của bạn */
+        /* Cập nhật giao diện đẹp hơn: Thêm gradient, shadow mượt mà hơn, font hiện đại, animation nhẹ, responsive tốt hơn */
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
             margin: 0;
             padding: 0;
-            background-color: #f0f2f5;
+            background: linear-gradient(to bottom, #f0f2f5, #ffffff);
             color: #333;
+            min-height: 100vh;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px 20px;
         }
         header {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #3498db);
             color: white;
-            padding: 20px 0;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px 0;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         header h1 {
-            text-align: center;
+            font-size: 2.5rem;
             margin: 0;
-            font-size: 2.2rem;
         }
         header p {
-            text-align: center;
+            font-size: 1.2rem;
             margin: 10px 0 0;
-            opacity: 0.9;
+            opacity: 0.95;
         }
         .admin-panel {
-            background-color: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin: 15px auto;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 20px auto;
             max-width: 300px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .admin-panel:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         .warning {
-            background-color: #ffeaa7;
-            border-left: 5px solid #fdcb6e;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            background: linear-gradient(to right, #ffeaa7, #fff3bf);
+            border-left: 6px solid #fdcb6e;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
             font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .form-section, .list-section {
             background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease-in-out;
         }
         h2 {
             color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 12px;
             margin-top: 0;
+            font-size: 1.8rem;
         }
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: #2c3e50;
         }
         input, select {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
-            transition: border 0.3s;
+            transition: all 0.3s ease;
         }
         input:focus, select:focus {
             border-color: #3498db;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         }
         button {
-            background-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
+            padding: 14px 30px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         .search-box {
-            margin-bottom: 20px;
-            padding: 12px;
+            margin-bottom: 25px;
+            padding: 14px;
             width: 100%;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
         }
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 14px;
             text-align: left;
         }
         th {
-            background-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             position: sticky;
             top: 0;
@@ -147,42 +177,46 @@
         }
         tr:hover {
             background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
         }
         .actions {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
         .view-btn {
-            background-color: #27ae60;
-            padding: 8px 12px;
+            background: linear-gradient(135deg, #27ae60, #219653);
+            padding: 10px 14px;
             font-size: 14px;
+            border-radius: 6px;
         }
         .view-btn:hover {
-            background-color: #219653;
+            background: linear-gradient(135deg, #219653, #27ae60);
         }
         .edit-btn {
-            background-color: #f39c12;
-            padding: 8px 12px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            padding: 10px 14px;
             font-size: 14px;
+            border-radius: 6px;
         }
         .edit-btn:hover {
-            background-color: #e67e22;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
         }
         .delete-btn {
-            background-color: #e74c3c;
-            padding: 8px 12px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 10px 14px;
             font-size: 14px;
+            border-radius: 6px;
         }
         .delete-btn:hover {
-            background-color: #c0392b;
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
         }
         .export-btn, .export-selected-btn {
-            background-color: #2ecc71;
-            margin-bottom: 10px;
-            margin-right: 10px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            margin-bottom: 15px;
+            margin-right: 15px;
         }
         .export-btn:hover, .export-selected-btn:hover {
-            background-color: #27ae60;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
         }
         .modal {
             display: none;
@@ -191,44 +225,52 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.6);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            animation: fadeIn 0.5s ease;
         }
         .modal-content {
             background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
+            padding: 35px;
+            border-radius: 15px;
+            max-width: 650px;
+            width: 95%;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            animation: scaleIn 0.3s ease;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
         .close {
             float: right;
-            font-size: 28px;
+            font-size: 30px;
             font-weight: bold;
             cursor: pointer;
             color: #7f8c8d;
+            transition: color 0.3s;
         }
         .close:hover {
             color: #34495e;
         }
         .admin-login {
-            background-color: #2c3e50;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
         }
         .admin-login h3 {
             color: white;
             margin-top: 0;
+            font-size: 1.5rem;
         }
         .login-form {
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
         .login-form input {
             flex: 1;
@@ -236,35 +278,40 @@
         .stats {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
+            margin: 25px 0;
             flex-wrap: wrap;
+            gap: 20px;
         }
         .stat-card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
+            background: linear-gradient(135deg, white, #f9f9f9);
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             flex: 1;
-            margin: 10px;
-            min-width: 150px;
+            min-width: 180px;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: bold;
             color: #3498db;
-            margin: 10px 0;
+            margin: 15px 0;
         }
         .stat-label {
             color: #7f8c8d;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
         footer {
             text-align: center;
-            margin-top: 40px;
-            padding: 20px;
+            margin-top: 50px;
+            padding: 25px;
             color: #7f8c8d;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            border-top: 1px solid #ddd;
         }
         @media (max-width: 768px) {
             .form-grid {
@@ -272,10 +319,14 @@
             }
             .actions {
                 flex-direction: column;
+                gap: 10px;
             }
             table {
                 display: block;
                 overflow-x: auto;
+            }
+            .stats {
+                flex-direction: column;
             }
         }
     </style>
@@ -343,7 +394,7 @@
                     
                     <div class="form-group">
                         <label for="subject3">Môn 3 *</label>
-                        <select id="subject3" required>
+                        <select id="subject3" required onchange="updateSubjectOptions()">
                             <option value="">Chọn môn</option>
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
@@ -356,7 +407,7 @@
                     
                     <div class="form-group">
                         <label for="subject4">Môn 4 *</label>
-                        <select id="subject4" required>
+                        <select id="subject4" required onchange="updateSubjectOptions()">
                             <option value="">Chọn môn</option>
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
@@ -482,7 +533,7 @@
                     
                     <div class="form-group">
                         <label for="editSubject3">Môn 3 *</label>
-                        <select id="editSubject3" required>
+                        <select id="editSubject3" required onchange="updateEditSubjectOptions()">
                             <option value="">Chọn môn</option>
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
@@ -495,7 +546,7 @@
                     
                     <div class="form-group">
                         <label for="editSubject4">Môn 4 *</label>
-                        <select id="editSubject4" required>
+                        <select id="editSubject4" required onchange="updateEditSubjectOptions()">
                             <option value="">Chọn môn</option>
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
@@ -638,6 +689,11 @@
                 return;
             }
 
+            if (formData.subject3 === formData.subject4 && formData.subject3 !== "") {
+                alert('Môn 3 và Môn 4 không được trùng nhau!');
+                return;
+            }
+
             currentUser = formData.fullName;
             localStorage.setItem('currentUser', currentUser);
 
@@ -656,6 +712,7 @@
             document.getElementById('fullName').value = currentUser;
             document.getElementById('subject1').value = 'Toán';
             document.getElementById('subject2').value = 'Văn';
+            updateSubjectOptions(); // Reset options
         });
 
         // Submit edit form
@@ -686,6 +743,11 @@
                 return;
             }
 
+            if (formData.subject3 === formData.subject4 && formData.subject3 !== "") {
+                alert('Môn 3 và Môn 4 không được trùng nhau!');
+                return;
+            }
+
             try {
                 await updateDoc(doc(db, 'registrations', editId), formData);
                 const index = registrations.findIndex(r => r.id === editId);
@@ -698,6 +760,56 @@
                 console.error('Error updating registration:', error);
             }
         });
+
+        // Function to update subject options in registration form to prevent duplicates
+        window.updateSubjectOptions = function() {
+            const subject3 = document.getElementById('subject3').value;
+            const subject4 = document.getElementById('subject4').value;
+            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Lịch sử", "GDKT-PL", "Vật lí"];
+
+            // Update subject4 options based on subject3
+            let subject4Options = '<option value="">Chọn môn</option>';
+            options.forEach(opt => {
+                if (opt !== subject3) {
+                    subject4Options += `<option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>`;
+                }
+            });
+            document.getElementById('subject4').innerHTML = subject4Options;
+
+            // Update subject3 options based on subject4
+            let subject3Options = '<option value="">Chọn môn</option>';
+            options.forEach(opt => {
+                if (opt !== subject4) {
+                    subject3Options += `<option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>`;
+                }
+            });
+            document.getElementById('subject3').innerHTML = subject3Options;
+        };
+
+        // Function to update subject options in edit form to prevent duplicates
+        window.updateEditSubjectOptions = function() {
+            const subject3 = document.getElementById('editSubject3').value;
+            const subject4 = document.getElementById('editSubject4').value;
+            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Lịch sử", "GDKT-PL", "Vật lí"];
+
+            // Update editSubject4 options based on editSubject3
+            let subject4Options = '<option value="">Chọn môn</option>';
+            options.forEach(opt => {
+                if (opt !== subject3) {
+                    subject4Options += `<option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>`;
+                }
+            });
+            document.getElementById('editSubject4').innerHTML = subject4Options;
+
+            // Update editSubject3 options based on editSubject4
+            let subject3Options = '<option value="">Chọn môn</option>';
+            options.forEach(opt => {
+                if (opt !== subject4) {
+                    subject3Options += `<option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>`;
+                }
+            });
+            document.getElementById('editSubject3').innerHTML = subject3Options;
+        };
 
         // Search
         document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -820,6 +932,7 @@
             document.getElementById('editSchool').value = r.school || '';
             document.getElementById('editMethod').value = r.method;
             document.getElementById('editNote').value = r.note || '';
+            updateEditSubjectOptions(); // Update options when opening edit modal
             document.getElementById('editModal').style.display = 'flex';
         };
 
