@@ -392,8 +392,8 @@
                             <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển</option>
                             <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển</option>
                             <option value="411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài">411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài</option>
-                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phòng vấn đề xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phòng vấn đề xét tuyển</option>
-                            <option value="414 - Kết hợp kết quả học tập cấp THPT với với phòng vấn đề xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với với phòng vấn đề xét tuyển</option>
+                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển</option>
                             <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển</option>
                             <option value="416 - Kỳ thi V-SAT">416 - Kỳ thi V-SAT</option>
                             <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển</option>
@@ -531,8 +531,8 @@
                             <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển</option>
                             <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển</option>
                             <option value="411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài">411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài</option>
-                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phòng vấn đề xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phòng vấn đề xét tuyển</option>
-                            <option value="414 - Kết hợp kết quả học tập cấp THPT với với phòng vấn đề xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với với phòng vấn đề xét tuyển</option>
+                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển</option>
                             <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển</option>
                             <option value="416 - Kỳ thi V-SAT">416 - Kỳ thi V-SAT</option>
                             <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển</option>
@@ -556,26 +556,28 @@
     </footer>
 
     <script>
-        // Dữ liệu mẫu
+        // Dữ liệu mẫu (dùng khi API không khả dụng)
         const sampleData = [
-            { fullName: "Nguyễn Thị Ngọc Anh", subject1: "Toán", subject2: "Văn", subject3: "Tiếng Anh", subject4: "Vật lí", major: "Công nghệ thông tin", school: "Đại học Bách Khoa Hà Nội", method: "100 - Xét kết quả thi tốt nghiệp THPT", note: "", createdAt: "2023-10-01" },
-            { fullName: "Trần Hoàng Anh", subject1: "Toán", subject2: "Văn", subject3: "Tin học", subject4: "Địa lý", major: "Kinh tế", school: "Đại học Kinh tế Quốc dân", method: "200 - Xét kết quả học tập cấp THPT (học bạ)", note: "", createdAt: "2023-10-02" },
-            { fullName: "Vũ Lâm Anh", subject1: "Toán", subject2: "Văn", subject3: "Lịch sử", subject4: "GDKT-PL", major: "Luật", school: "Đại học Luật Hà Nội", method: "401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển", note: "", createdAt: "2023-10-02" }
+            { id: 1, fullName: "Nguyễn Thị Ngọc Anh", subject1: "Toán", subject2: "Văn", subject3: "Tiếng Anh", subject4: "Vật lí", major: "Công nghệ thông tin", school: "Đại học Bách Khoa Hà Nội", method: "100 - Xét kết quả thi tốt nghiệp THPT", note: "", createdAt: "2023-10-01", userToken: generateUserToken() },
+            { id: 2, fullName: "Trần Hoàng Anh", subject1: "Toán", subject2: "Văn", subject3: "Tin học", subject4: "Địa lý", major: "Kinh tế", school: "Đại học Kinh tế Quốc dân", method: "200 - Xét kết quả học tập cấp THPT (học bạ)", note: "", createdAt: "2023-10-02", userToken: generateUserToken() },
+            { id: 3, fullName: "Vũ Lâm Anh", subject1: "Toán", subject2: "Văn", subject3: "Lịch sử", subject4: "GDKT-PL", major: "Luật", school: "Đại học Luật Hà Nội", method: "401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển", note: "", createdAt: "2023-10-02", userToken: generateUserToken() }
         ];
 
-        // Lưu trữ dữ liệu và trạng thái admin
-        let registrations = JSON.parse(localStorage.getItem('registrations')) || sampleData;
+        // Lưu trữ trạng thái
+        let registrations = [];
         let isAdmin = localStorage.getItem('isAdmin') === 'true';
         let editIndex = -1;
         let currentUser = localStorage.getItem('currentUser') || '';
-        
+        const API_BASE_URL = 'https://jsonplaceholder.typicode.com/posts'; // Mock API, thay bằng API thật
+
         // Khởi tạo trang
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             // Thiết lập môn Toán và Văn mặc định
             document.getElementById('subject1').value = 'Toán';
             document.getElementById('subject2').value = 'Văn';
             
-            displayRegistrations(registrations);
+            // Tải dữ liệu từ API
+            await fetchRegistrations();
             updateStats();
             checkAdminStatus();
             
@@ -584,9 +586,27 @@
                 document.getElementById('fullName').value = currentUser;
             }
         });
-        
+
+        // Lấy danh sách đăng ký từ API
+        async function fetchRegistrations() {
+            try {
+                // Thay bằng API thật của bạn
+                const response = await fetch(API_BASE_URL);
+                let data = await response.json();
+                
+                // JSONPlaceholder không lưu trữ dữ liệu thực, nên dùng sampleData để demo
+                // Trong thực tế, API sẽ trả về dữ liệu từ database
+                registrations = sampleData; // Thay bằng: registrations = data;
+                displayRegistrations(registrations);
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu:', error);
+                registrations = sampleData; // Fallback to sample data
+                displayRegistrations(registrations);
+            }
+        }
+
         // Xử lý sự kiện submit form
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const formData = {
@@ -599,8 +619,8 @@
                 school: document.getElementById('school').value,
                 method: document.getElementById('method').value,
                 note: document.getElementById('note').value,
-                createdAt: new Date().toISOString().split('T')[0], // Lưu ngày tạo
-                userToken: generateUserToken() // Tạo token để xác định người dùng
+                createdAt: new Date().toISOString().split('T')[0],
+                userToken: generateUserToken()
             };
             
             // Kiểm tra trường bắt buộc
@@ -613,17 +633,26 @@
             currentUser = formData.fullName;
             localStorage.setItem('currentUser', currentUser);
             
-            // Thêm dữ liệu mới
-            registrations.push(formData);
+            try {
+                // Gửi dữ liệu tới API
+                const response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const newRegistration = await response.json();
+                // JSONPlaceholder trả về id giả, cần API thật để lưu trữ
+                formData.id = newRegistration.id || Date.now(); // Tạm dùng timestamp làm id
+                registrations.push(formData);
+            } catch (error) {
+                console.error('Lỗi khi gửi đăng ký:', error);
+                registrations.push(formData); // Fallback local
+            }
             
-            // Lưu vào localStorage
-            localStorage.setItem('registrations', JSON.stringify(registrations));
-            
-            // Hiển thị lại danh sách
             displayRegistrations(registrations);
             updateStats();
             
-            // Reset form (giữ lại tên)
+            // Reset form
             document.getElementById('registrationForm').reset();
             document.getElementById('fullName').value = currentUser;
             document.getElementById('subject1').value = 'Toán';
@@ -631,9 +660,9 @@
             
             alert('Đăng ký thành công!');
         });
-        
-        // Xử lý sự kiện submit form chỉnh sửa (chỉ admin)
-        document.getElementById('editForm').addEventListener('submit', function(e) {
+
+        // Xử lý sự kiện submit form chỉnh sửa
+        document.getElementById('editForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!isAdmin) {
@@ -642,6 +671,7 @@
             }
             
             const formData = {
+                id: registrations[editIndex].id,
                 fullName: document.getElementById('editFullName').value,
                 subject1: document.getElementById('editSubject1').value,
                 subject2: document.getElementById('editSubject2').value,
@@ -651,8 +681,8 @@
                 school: document.getElementById('editSchool').value,
                 method: document.getElementById('editMethod').value,
                 note: document.getElementById('editNote').value,
-                createdAt: registrations[editIndex].createdAt, // Giữ nguyên ngày tạo
-                userToken: registrations[editIndex].userToken // Giữ nguyên token
+                createdAt: registrations[editIndex].createdAt,
+                userToken: registrations[editIndex].userToken
             };
             
             // Kiểm tra trường bắt buộc
@@ -661,22 +691,25 @@
                 return;
             }
             
-            // Cập nhật dữ liệu
-            registrations[editIndex] = formData;
+            try {
+                // Cập nhật dữ liệu qua API
+                await fetch(`${API_BASE_URL}/${formData.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                registrations[editIndex] = formData;
+            } catch (error) {
+                console.error('Lỗi khi cập nhật:', error);
+                registrations[editIndex] = formData; // Fallback local
+            }
             
-            // Lưu vào localStorage
-            localStorage.setItem('registrations', JSON.stringify(registrations));
-            
-            // Hiển thị lại danh sách
             displayRegistrations(registrations);
             updateStats();
-            
-            // Đóng modal
             document.getElementById('editModal').style.display = 'none';
-            
             alert('Cập nhật thông tin thành công!');
         });
-        
+
         // Tìm kiếm
         document.getElementById('searchInput').addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
@@ -687,7 +720,7 @@
             );
             displayRegistrations(filteredData);
         });
-        
+
         // Hiển thị danh sách đăng ký
         function displayRegistrations(data) {
             const tableBody = document.getElementById('tableBody');
@@ -695,8 +728,6 @@
             
             data.forEach((registration, index) => {
                 const row = document.createElement('tr');
-                
-                // Kiểm tra xem đây có phải là bản ghi của người dùng hiện tại không
                 const isOwnRecord = registration.userToken === getUserToken();
                 
                 row.innerHTML = `
@@ -719,7 +750,6 @@
                 tableBody.appendChild(row);
             });
 
-            // Hiển thị/ẩn các nút xuất và cột chọn cho admin
             document.getElementById('adminExportControls').style.display = isAdmin ? 'block' : 'none';
             document.getElementById('selectAllHeader').style.display = isAdmin ? 'table-cell' : 'none';
         }
@@ -731,7 +761,6 @@
                 return;
             }
 
-            // Chuẩn bị dữ liệu cho Excel
             const exportData = registrations.map(reg => ({
                 'Họ và tên': reg.fullName,
                 'Môn 1': reg.subject1,
@@ -745,14 +774,9 @@
                 'Ngày đăng ký': formatDate(reg.createdAt)
             }));
 
-            // Tạo worksheet từ dữ liệu
             const worksheet = XLSX.utils.json_to_sheet(exportData);
-            
-            // Tạo workbook và thêm worksheet
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách đăng ký');
-
-            // Tạo file Excel và tải xuống
             XLSX.writeFile(workbook, 'Danh_sach_dang_ky_tat_ca.xlsx');
         }
 
@@ -783,14 +807,9 @@
                 'Ngày đăng ký': formatDate(registrations[index].createdAt)
             }));
 
-            // Tạo worksheet từ dữ liệu
             const worksheet = XLSX.utils.json_to_sheet(exportData);
-            
-            // Tạo workbook và thêm worksheet
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách đã chọn');
-
-            // Tạo file Excel và tải xuống
             XLSX.writeFile(workbook, 'Danh_sach_dang_ky_chon.xlsx');
         }
 
@@ -823,15 +842,12 @@
         function editRegistration(index) {
             const registration = registrations[index];
             
-            // Kiểm tra quyền chỉnh sửa
             if (!isAdmin && registration.userToken !== getUserToken()) {
                 alert('Bạn không có quyền chỉnh sửa thông tin của người khác!');
                 return;
             }
             
             editIndex = index;
-            
-            // Điền dữ liệu vào form chỉnh sửa
             document.getElementById('editFullName').value = registration.fullName;
             document.getElementById('editSubject1').value = registration.subject1;
             document.getElementById('editSubject2').value = registration.subject2;
@@ -846,18 +862,24 @@
         }
 
         // Xóa đăng ký
-        function deleteRegistration(index) {
+        async function deleteRegistration(index) {
             const registration = registrations[index];
             
-            // Kiểm tra quyền xóa
             if (!isAdmin && registration.userToken !== getUserToken()) {
                 alert('Bạn không có quyền xóa thông tin của người khác!');
                 return;
             }
             
             if (confirm('Bạn có chắc chắn muốn xóa đăng ký này?')) {
-                registrations.splice(index, 1);
-                localStorage.setItem('registrations', JSON.stringify(registrations));
+                try {
+                    await fetch(`${API_BASE_URL}/${registration.id}`, {
+                        method: 'DELETE'
+                    });
+                    registrations.splice(index, 1);
+                } catch (error) {
+                    console.error('Lỗi khi xóa:', error);
+                    registrations.splice(index, 1); // Fallback local
+                }
                 displayRegistrations(registrations);
                 updateStats();
                 alert('Đã xóa đăng ký thành công!');
@@ -867,13 +889,10 @@
         // Cập nhật thống kê
         function updateStats() {
             document.getElementById('totalRegistrations').textContent = registrations.length;
-            
-            // Đếm số đăng ký hôm nay
             const today = new Date().toISOString().split('T')[0];
             const todayCount = registrations.filter(reg => reg.createdAt === today).length;
             document.getElementById('todayRegistrations').textContent = todayCount;
             
-            // Tìm ngành phổ biến
             const majorCount = {};
             registrations.forEach(reg => {
                 if (reg.major) {
@@ -883,14 +902,12 @@
             
             let popularMajor = '-';
             let maxCount = 0;
-            
             for (const major in majorCount) {
                 if (majorCount[major] > maxCount) {
                     maxCount = majorCount[major];
                     popularMajor = major;
                 }
             }
-            
             document.getElementById('popularMajor').textContent = popularMajor;
         }
 
@@ -913,8 +930,6 @@
         // Đăng nhập admin
         function loginAdmin() {
             const password = document.getElementById('adminPassword').value;
-            
-            // Mật khẩu mặc định là "admin123" - trong thực tế nên mã hóa và lưu an toàn
             if (password === 'admin123') {
                 isAdmin = true;
                 localStorage.setItem('isAdmin', 'true');
@@ -930,13 +945,11 @@
         // Toggle đăng nhập admin
         document.getElementById('adminToggle').addEventListener('click', function() {
             if (isAdmin) {
-                // Đăng xuất
                 isAdmin = false;
                 localStorage.setItem('isAdmin', 'false');
                 checkAdminStatus();
                 alert('Đã đăng xuất khỏi chế độ quản trị viên!');
             } else {
-                // Hiển thị form đăng nhập
                 document.getElementById('adminLogin').style.display = 'block';
             }
         });
@@ -961,7 +974,6 @@
         }
 
         function getUserToken() {
-            // Lấy token từ localStorage hoặc tạo mới nếu chưa có
             let token = localStorage.getItem('userToken');
             if (!token) {
                 token = generateUserToken();
