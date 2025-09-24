@@ -3,185 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký xét tuyển đại học</title>
-    <meta name="description" content="Hệ thống đăng ký xét tuyển đại học lớp 12A2">
+    <title>Đăng ký môn thi 12A2</title>
+    <meta name="description" content="Hệ thống đăng ký môn thi lớp 12A2">
     
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Đăng ký xét tuyển đại học">
-    <meta property="og:description" content="Hệ thống đăng ký xét tuyển đại học lớp 12A2">
+    <!-- Open Graph Meta Tags for Link Sharing -->
+    <meta property="og:title" content="Đăng ký môn thi">
+    <meta property="og:description" content="Hệ thống đăng ký môn thi lớp 12A2">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://cybertmc.github.io/TBR/">
     <meta property="og:image" content="https://your-website-url.com/preview-image.jpg">
-    <meta property="og:image:alt" content="Hình ảnh hệ thống đăng ký xét tuyển">
+    <meta property="og:image:alt" content="Hình ảnh hệ thống đăng ký môn thi">
     
     <!-- Favicon -->
     <link rel="icon" href="https://your-website-url.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://your-website-url.com/apple-touch-icon.png">
     
-    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
             margin: 0;
             padding: 0;
-            background: #f4f7fc;
-            color: #1a202c;
+            background: linear-gradient(to bottom, #f0f2f5, #ffffff);
+            color: #333;
             min-height: 100vh;
-            line-height: 1.6;
         }
         .container {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 30px 20px;
         }
         header {
-            background: linear-gradient(135deg, #2b6cb0, #3182ce);
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #3498db);
             color: white;
-            padding: 3rem 2rem;
-            border-radius: 1rem;
+            padding: 30px 0;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            animation: slideIn 0.8s ease-out;
+            animation: fadeIn 1s ease-in-out;
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-30px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         header h1 {
             font-size: 2.5rem;
             margin: 0;
-            font-weight: 700;
         }
         header p {
-            font-size: 1.25rem;
-            margin: 0.5rem 0 0;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            margin: 10px 0 0;
+            opacity: 0.95;
         }
         .admin-panel {
-            background: linear-gradient(135deg, #e53e3e, #f56565);
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            margin: 1.5rem auto;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 20px auto;
             max-width: 300px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .admin-panel:hover {
-            background: linear-gradient(135deg, #f56565, #e53e3e);
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
             transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         .warning {
-            background: #fefcbf;
-            border-left: 6px solid #f6e05e;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(to right, #ffeaa7, #fff3bf);
+            border-left: 6px solid #fdcb6e;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .form-section, .list-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-            animation: fadeIn 0.8s ease-out;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease-in-out;
         }
         h2 {
-            color: #2d3748;
-            border-bottom: 3px solid #3182ce;
-            padding-bottom: 0.75rem;
-            font-size: 1.75rem;
-            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 12px;
+            margin-top: 0;
+            font-size: 1.8rem;
         }
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 10px;
             font-weight: 600;
-            color: #2d3748;
+            color: #2c3e50;
         }
         input, select {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
             transition: all 0.3s ease;
-            background: #f7fafc;
         }
         input:focus, select:focus {
-            border-color: #3182ce;
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
-            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         }
         button {
-            background: linear-gradient(135deg, #3182ce, #2b6cb0);
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
+            padding: 14px 30px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         button:hover {
-            background: linear-gradient(135deg, #2b6cb0, #3182ce);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         .search-box {
-            margin-bottom: 1.5rem;
-            padding: 0.75rem;
+            margin-bottom: 25px;
+            padding: 14px;
             width: 100%;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            background: #f7fafc;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
         }
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin-top: 1.5rem;
-            border-radius: 0.5rem;
+            margin-top: 25px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         th, td {
-            border: 1px solid #e2e8f0;
-            padding: 1rem;
+            border: 1px solid #ddd;
+            padding: 14px;
             text-align: left;
         }
         th {
-            background: linear-gradient(135deg, #3182ce, #2b6cb0);
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             position: sticky;
             top: 0;
-            font-weight: 600;
         }
         tr:nth-child(even) {
-            background-color: #f7fafc;
+            background-color: #f8f9fa;
         }
         tr:hover {
             background-color: #e3f2fd;
@@ -189,42 +181,42 @@
         }
         .actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 8px;
         }
         .view-btn {
-            background: linear-gradient(135deg, #38a169, #2f855a);
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: 0.375rem;
+            background: linear-gradient(135deg, #27ae60, #219653);
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 6px;
         }
         .view-btn:hover {
-            background: linear-gradient(135deg, #2f855a, #38a169);
+            background: linear-gradient(135deg, #219653, #27ae60);
         }
         .edit-btn {
-            background: linear-gradient(135deg, #ed8936, #dd6b20);
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: 0.375rem;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 6px;
         }
         .edit-btn:hover {
-            background: linear-gradient(135deg, #dd6b20, #ed8936);
+            background: linear-gradient(135deg, #e67e22, #f39c12);
         }
         .delete-btn {
-            background: linear-gradient(135deg, #e53e3e, #c53030);
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: 0.375rem;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 6px;
         }
         .delete-btn:hover {
-            background: linear-gradient(135deg, #c53030, #e53e3e);
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
         }
         .export-btn, .export-selected-btn {
-            background: linear-gradient(135deg, #38a169, #2f855a);
-            margin-bottom: 1rem;
-            margin-right: 1rem;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            margin-bottom: 15px;
+            margin-right: 15px;
         }
         .export-btn:hover, .export-selected-btn:hover {
-            background: linear-gradient(135deg, #2f855a, #38a169);
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
         }
         .modal {
             display: none;
@@ -233,106 +225,93 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background-color: rgba(0,0,0,0.6);
             z-index: 1000;
             align-items: center;
             justify-content: center;
             animation: fadeIn 0.5s ease;
         }
         .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            max-width: 700px;
+            background-color: white;
+            padding: 35px;
+            border-radius: 15px;
+            max-width: 650px;
             width: 95%;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             animation: scaleIn 0.3s ease;
         }
         @keyframes scaleIn {
-            from { transform: scale(0.95); opacity: 0; }
+            from { transform: scale(0.9); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
         .close {
             float: right;
-            font-size: 1.5rem;
+            font-size: 30px;
             font-weight: bold;
             cursor: pointer;
-            color: #718096;
+            color: #7f8c8d;
             transition: color 0.3s;
         }
         .close:hover {
-            color: #2d3748;
+            color: #34495e;
         }
         .admin-login {
-            background: linear-gradient(135deg, #2d3748, #4a5568);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
         }
         .admin-login h3 {
             color: white;
             margin-top: 0;
             font-size: 1.5rem;
-            font-weight: 600;
         }
         .login-form {
             display: flex;
-            gap: 1rem;
+            gap: 15px;
         }
         .login-form input {
             flex: 1;
         }
         .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 1.5rem 0;
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 1rem;
+            background: linear-gradient(135deg, white, #f9f9f9);
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 180px;
             transition: transform 0.3s ease;
         }
         .stat-card:hover {
             transform: translateY(-5px);
         }
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #3182ce;
-            margin: 0.5rem 0;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 15px 0;
         }
         .stat-label {
-            color: #718096;
+            color: #7f8c8d;
             font-size: 1rem;
-            font-weight: 500;
         }
         footer {
             text-align: center;
-            margin-top: 3rem;
-            padding: 1.5rem;
-            color: #718096;
+            margin-top: 50px;
+            padding: 25px;
+            color: #7f8c8d;
             font-size: 1rem;
-            border-top: 1px solid #e2e8f0;
-        }
-        .loader {
-            display: none;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3182ce;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            border-top: 1px solid #ddd;
         }
         @media (max-width: 768px) {
             .form-grid {
@@ -340,15 +319,14 @@
             }
             .actions {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 10px;
             }
             table {
                 display: block;
                 overflow-x: auto;
-                white-space: nowrap;
             }
             .stats {
-                grid-template-columns: 1fr;
+                flex-direction: column;
             }
         }
     </style>
@@ -447,7 +425,7 @@
                     </div>
                     <div class="form-group">
                         <label for="school">Trường</label>
-                        <input type="text" id="school" placeholder="Ghi một vài trường muốn vào (Có thể để trống)">
+                        <input type="text" id="school" placeholder="Ghi một vài trường muốn vào(Có thể để trống)">
                     </div>
                     <div class="form-group">
                         <label for="method">Phương thức xét tuyển *</label>
@@ -455,7 +433,7 @@
                             <option value="">Chọn phương thức</option>
                             <option value="100 - Xét kết quả thi tốt nghiệp THPT">100 - Xét kết quả thi tốt nghiệp THPT</option>
                             <option value="200 - Xét kết quả học tập cấp THPT (học bạ)">200 - Xét kết quả học tập cấp THPT (học bạ)</option>
-                            <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 😎">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
+                            <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
                             <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển</option>
                             <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển">402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển</option>
                             <option value="403 - Thi văn hóa do CSĐT tổ chức để xét tuyển">403 - Thi văn hóa do CSĐT tổ chức để xét tuyển</option>
@@ -480,7 +458,6 @@
                     </div>
                 </div>
                 <button type="submit">Đăng ký</button>
-                <div class="loader" id="formLoader"></div>
             </form>
         </div>
         
@@ -592,7 +569,7 @@
                             <option value="">Chọn phương thức</option>
                             <option value="100 - Xét kết quả thi tốt nghiệp THPT">100 - Xét kết quả thi tốt nghiệp THPT</option>
                             <option value="200 - Xét kết quả học tập cấp THPT (học bạ)">200 - Xét kết quả học tập cấp THPT (học bạ)</option>
-                            <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 😎">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
+                            <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
                             <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển</option>
                             <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển">402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển</option>
                             <option value="403 - Thi văn hóa do CSĐT tổ chức để xét tuyển">403 - Thi văn hóa do CSĐT tổ chức để xét tuyển</option>
@@ -617,12 +594,11 @@
                     </div>
                 </div>
                 <button type="submit">Cập nhật</button>
-                <div class="loader" id="editLoader"></div>
             </form>
         </div>
     </div>
 
-    <!-- Modal xác nhận xóa -->
+    <!-- Modal xác nhận mật khẩu khi xóa -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -634,13 +610,12 @@
                     <input type="password" id="deletePassword" required placeholder="Nhập mật khẩu của bạn">
                 </div>
                 <button type="submit">Xóa</button>
-                <div class="loader" id="deleteLoader"></div>
             </form>
         </div>
     </div>
 
     <footer>
-        <p>Web by TMC | 2025</p>
+        <p>Web by TMC</p>
     </footer>
 
     <script type="module">
@@ -673,16 +648,6 @@
         let currentUser = localStorage.getItem('currentUser') || '';
         const registrationsCol = collection(db, 'registrations');
 
-        // Show loader
-        function showLoader(id) {
-            document.getElementById(id).style.display = 'block';
-        }
-
-        // Hide loader
-        function hideLoader(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
         // Page load
         document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('subject1').value = 'Toán';
@@ -704,33 +669,27 @@
         // Fetch registrations from Firestore
         async function fetchRegistrations() {
             try {
-                showLoader('formLoader');
                 const querySnapshot = await getDocs(registrationsCol);
                 registrations = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
                 displayRegistrations(registrations);
             } catch (error) {
                 console.error('Error fetching registrations:', error);
-                alert('Lỗi khi tải dữ liệu: ' + error.message);
-            } finally {
-                hideLoader('formLoader');
             }
         }
 
         // Submit registration form
         document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            showLoader('formLoader');
 
             const password = document.getElementById('password').value;
             if (!password) {
                 alert('Vui lòng nhập mật khẩu!');
-                hideLoader('formLoader');
                 return;
             }
 
             const formData = {
                 fullName: document.getElementById('fullName').value,
-                passwordHash: sha256(password),
+                passwordHash: sha256(password), // Hash mật khẩu trước khi lưu
                 subject1: document.getElementById('subject1').value,
                 subject2: document.getElementById('subject2').value,
                 subject3: document.getElementById('subject3').value,
@@ -744,13 +703,11 @@
 
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
                 alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
-                hideLoader('formLoader');
                 return;
             }
 
             if (formData.subject3 === formData.subject4 && formData.subject3 !== "") {
                 alert('Môn 3 và Môn 4 không được trùng nhau!');
-                hideLoader('formLoader');
                 return;
             }
 
@@ -764,35 +721,31 @@
                 displayRegistrations(registrations);
                 updateStats();
                 alert('Đăng ký thành công!');
-                document.getElementById('registrationForm').reset();
-                document.getElementById('fullName').value = currentUser;
-                document.getElementById('subject1').value = 'Toán';
-                document.getElementById('subject2').value = 'Văn';
-                updateSubjectOptions();
             } catch (error) {
                 console.error('Error adding registration:', error);
-                alert('Lỗi khi đăng ký: ' + error.message);
-            } finally {
-                hideLoader('formLoader');
             }
+
+            document.getElementById('registrationForm').reset();
+            document.getElementById('fullName').value = currentUser;
+            document.getElementById('subject1').value = 'Toán';
+            document.getElementById('subject2').value = 'Văn';
+            updateSubjectOptions(); // Reset options
         });
 
         // Submit edit form
         document.getElementById('editForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            showLoader('editLoader');
 
             const password = document.getElementById('editPassword').value;
             const r = registrations.find(r => r.id === editId);
             if (!isAdmin && sha256(password) !== r.passwordHash) {
                 alert('Mật khẩu không đúng. Nếu bạn quên mật khẩu, vui lòng liên hệ admin Chuyên.');
-                hideLoader('editLoader');
                 return;
             }
 
             const formData = {
                 fullName: document.getElementById('editFullName').value,
-                passwordHash: r.passwordHash,
+                passwordHash: r.passwordHash, // Giữ nguyên passwordHash cũ
                 subject1: document.getElementById('editSubject1').value,
                 subject2: document.getElementById('editSubject2').value,
                 subject3: document.getElementById('editSubject3').value,
@@ -806,13 +759,11 @@
 
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
                 alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
-                hideLoader('editLoader');
                 return;
             }
 
             if (formData.subject3 === formData.subject4 && formData.subject3 !== "") {
                 alert('Môn 3 và Môn 4 không được trùng nhau!');
-                hideLoader('editLoader');
                 return;
             }
 
@@ -826,22 +777,17 @@
                 alert('Cập nhật thành công!');
             } catch (error) {
                 console.error('Error updating registration:', error);
-                alert('Lỗi khi cập nhật: ' + error.message);
-            } finally {
-                hideLoader('editLoader');
             }
         });
 
         // Submit delete form
         document.getElementById('deleteForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            showLoader('deleteLoader');
 
             const password = document.getElementById('deletePassword').value;
             const r = registrations.find(r => r.id === deleteId);
             if (!isAdmin && sha256(password) !== r.passwordHash) {
                 alert('Mật khẩu không đúng. Nếu bạn quên mật khẩu, vui lòng liên hệ admin Chuyên.');
-                hideLoader('deleteLoader');
                 return;
             }
 
@@ -854,13 +800,10 @@
                 alert('Xóa thành công!');
             } catch (error) {
                 console.error('Error deleting:', error);
-                alert('Lỗi khi xóa: ' + error.message);
-            } finally {
-                hideLoader('deleteLoader');
             }
         });
 
-        // Function to update subject options in registration form
+        // Function to update subject options in registration form to prevent duplicates
         window.updateSubjectOptions = function() {
             const subject3 = document.getElementById('subject3').value;
             const subject4 = document.getElementById('subject4').value;
@@ -869,7 +812,7 @@
             let subject4Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject3) {
-                    subject4Options += <option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>;
+                    subject4Options += `<option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>`;
                 }
             });
             document.getElementById('subject4').innerHTML = subject4Options;
@@ -877,13 +820,13 @@
             let subject3Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject4) {
-                    subject3Options += <option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>;
+                    subject3Options += `<option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>`;
                 }
             });
             document.getElementById('subject3').innerHTML = subject3Options;
         };
 
-        // Function to update subject options in edit form
+        // Function to update subject options in edit form to prevent duplicates
         window.updateEditSubjectOptions = function() {
             const subject3 = document.getElementById('editSubject3').value;
             const subject4 = document.getElementById('editSubject4').value;
@@ -892,7 +835,7 @@
             let subject4Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject3) {
-                    subject4Options += <option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>;
+                    subject4Options += `<option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>`;
                 }
             });
             document.getElementById('editSubject4').innerHTML = subject4Options;
@@ -900,7 +843,7 @@
             let subject3Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject4) {
-                    subject3Options += <option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>;
+                    subject3Options += `<option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>`;
                 }
             });
             document.getElementById('editSubject3').innerHTML = subject3Options;
@@ -923,7 +866,7 @@
             tableBody.innerHTML = '';
             data.forEach((r) => {
                 const row = `<tr>
-                    ${isAdmin ? <td><input type="checkbox" class="selectRow" data-id="${r.id}"></td> : ''}
+                    ${isAdmin ? `<td><input type="checkbox" class="selectRow" data-id="${r.id}"></td>` : ''}
                     <td>${r.fullName}</td>
                     <td>${r.subject1}</td>
                     <td>${r.subject2}</td>
@@ -934,8 +877,8 @@
                     <td>${r.method}</td>
                     <td class="actions">
                         <button class="view-btn" onclick="viewDetails('${r.id}')">Xem</button>
-                        ${isAdmin || r.fullName === currentUser ? <button class="edit-btn" onclick="editRegistration('${r.id}')">Sửa</button> : ''}
-                        ${isAdmin || r.fullName === currentUser ? <button class="delete-btn" onclick="openDeleteModal('${r.id}')">Xóa</button> : ''}
+                        ${isAdmin || r.fullName === currentUser ? `<button class="edit-btn" onclick="editRegistration('${r.id}')">Sửa</button>` : ''}
+                        ${isAdmin || r.fullName === currentUser ? `<button class="delete-btn" onclick="openDeleteModal('${r.id}')">Xóa</button>` : ''}
                     </td>
                 </tr>`;
                 tableBody.innerHTML += row;
@@ -945,67 +888,140 @@
         }
 
         // Export all to Excel
-        window.exportAllToExcel = function() {
-            if (!isAdmin) return alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+        function exportAllToExcel() {
+            if (!isAdmin) {
+                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+                return;
+            }
+            const exportData = registrations.map(r => ({
+                'Họ và tên': r.fullName,
+                'Môn 1': r.subject1,
+                'Môn 2': r.subject2,
+                'Môn 3': r.subject3,
+                'Môn 4': r.subject4,
+                'Ngành học': r.major || 'Chưa xác định',
+                'Trường': r.school || 'Chưa xác định',
+                'Phương thức xét tuyển': r.method,
+                'Ghi chú': r.note || 'Không có',
+                'Ngày đăng ký': formatDate(r.createdAt)
+            }));
+
             try {
-                const exportData = registrations.map(r => ({
-                    'Họ và tên': r.fullName || 'Không xác định',
-                    'Môn 1': r.subject1 || 'Không xác định',
-                    'Môn 2': r.subject2 || 'Không xác định',
-                    'Môn 3': r.subject3 || 'Không xác định',
-                    'Môn 4': r.subject4 || 'Không xác định',
-                    'Ngành học': r.major || 'Chưa xác định',
-                    'Trường': r.school || 'Chưa xác định',
-                    'Phương thức xét tuyển': r.method || 'Không xác định',
-                    'Ghi chú': r.note || 'Không có',
-                    'Ngày đăng ký': formatDate(r.createdAt)
-                }));
-                const worksheet = XLSX.utils.json_to_sheet(exportData);
+                // Create a new workbook and worksheet
+                const worksheet = XLSX.utils.json_to_sheet(exportData, {
+                    header: [
+                        'Họ và tên',
+                        'Môn 1',
+                        'Môn 2',
+                        'Môn 3',
+                        'Môn 4',
+                        'Ngành học',
+                        'Trường',
+                        'Phương thức xét tuyển',
+                        'Ghi chú',
+                        'Ngày đăng ký'
+                    ]
+                });
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
-                XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx');
-            } catch (error) {
-                console.error('Error exporting to Excel:', error);
-                alert('Lỗi khi xuất file Excel: ' + error.message);
-            }
-        };
 
-        // Export selected
-        window.exportSelectedToExcel = function() {
-            if (!isAdmin) return alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+                // Add styling for headers
+                worksheet['!cols'] = [
+                    { wch: 20 }, // Họ và tên
+                    { wch: 15 }, // Môn 1
+                    { wch: 15 }, // Môn 2
+                    { wch: 15 }, // Môn 3
+                    { wch: 15 }, // Môn 4
+                    { wch: 25 }, // Ngành học
+                    { wch: 30 }, // Trường
+                    { wch: 50 }, // Phương thức xét tuyển
+                    { wch: 30 }, // Ghi chú
+                    { wch: 15 }  // Ngày đăng ký
+                ];
+
+                // Write the file
+                XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx', { compression: true });
+                alert('Xuất file Excel thành công!');
+            } catch (error) {
+                console.error('Lỗi khi xuất file Excel:', error);
+                alert('Có lỗi xảy ra khi xuất file Excel. Vui lòng thử lại.');
+            }
+        }
+
+        // Export selected to Excel
+        function exportSelectedToExcel() {
+            if (!isAdmin) {
+                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+                return;
+            }
+            const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
+            if (!selected.length) {
+                alert('Vui lòng chọn ít nhất một mục để xuất!');
+                return;
+            }
+            const exportData = selected.map(id => {
+                const r = registrations.find(r => r.id === id);
+                return {
+                    'Họ và tên': r.fullName,
+                    'Môn 1': r.subject1,
+                    'Môn 2': r.subject2,
+                    'Môn 3': r.subject3,
+                    'Môn 4': r.subject4,
+                    'Ngành học': r.major || 'Chưa xác định',
+                    'Trường': r.school || 'Chưa xác định',
+                    'Phương thức xét tuyển': r.method,
+                    'Ghi chú': r.note || 'Không có',
+                    'Ngày đăng ký': formatDate(r.createdAt)
+                };
+            });
+
             try {
-                const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
-                if (!selected.length) return alert('Vui lòng chọn ít nhất một mục!');
-                const exportData = selected.map(id => {
-                    const r = registrations.find(r => r.id === id);
-                    return {
-                        'Họ và tên': r.fullName || 'Không xác định',
-                        'Môn 1': r.subject1 || 'Không xác định',
-                        'Môn 2': r.subject2 || 'Không xác định',
-                        'Môn 3': r.subject3 || 'Không xác định',
-                        'Môn 4': r.subject4 || 'Không xác định',
-                        'Ngành học': r.major || 'Chưa xác định',
-                        'Trường': r.school || 'Chưa xác định',
-                        'Phương thức xét tuyển': r.method || 'Không xác định',
-                        'Ghi chú': r.note || 'Không có',
-                        'Ngày đăng ký': formatDate(r.createdAt)
-                    };
+                // Create a new workbook and worksheet
+                const worksheet = XLSX.utils.json_to_sheet(exportData, {
+                    header: [
+                        'Họ và tên',
+                        'Môn 1',
+                        'Môn 2',
+                        'Môn 3',
+                        'Môn 4',
+                        'Ngành học',
+                        'Trường',
+                        'Phương thức xét tuyển',
+                        'Ghi chú',
+                        'Ngày đăng ký'
+                    ]
                 });
-                const worksheet = XLSX.utils.json_to_sheet(exportData);
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
-                XLSX.writeFile(workbook, 'danh_sach_chon.xlsx');
+
+                // Add styling for headers
+                worksheet['!cols'] = [
+                    { wch: 20 }, // Họ và tên
+                    { wch: 15 }, // Môn 1
+                    { wch: 15 }, // Môn 2
+                    { wch: 15 }, // Môn 3
+                    { wch: 15 }, // Môn 4
+                    { wch: 25 }, // Ngành học
+                    { wch: 30 }, // Trường
+                    { wch: 50 }, // Phương thức xét tuyển
+                    { wch: 30 }, // Ghi chú
+                    { wch: 15 }  // Ngày đăng ký
+                ];
+
+                // Write the file
+                XLSX.writeFile(workbook, 'danh_sach_chon.xlsx', { compression: true });
+                alert('Xuất file Excel thành công!');
             } catch (error) {
-                console.error('Error exporting selected to Excel:', error);
-                alert('Lỗi khi xuất file Excel: ' + error.message);
+                console.error('Lỗi khi xuất file Excel:', error);
+                alert('Có lỗi xảy ra khi xuất file Excel. Vui lòng thử lại.');
             }
-        };
+        }
 
         // Toggle select all
-        window.toggleSelectAll = function() {
+        function toggleSelectAll() {
             const selectAll = document.getElementById('selectAll').checked;
             document.querySelectorAll('.selectRow').forEach(cb => cb.checked = selectAll);
-        };
+        }
 
         // View details
         window.viewDetails = function(id) {
@@ -1081,17 +1097,16 @@
             if (isAdmin) {
                 adminLogin.style.display = 'none';
                 adminToggle.textContent = 'Đăng xuất quản trị viên';
-                adminToggle.style.background = 'linear-gradient(135deg, #38a169, #2f855a)';
+                adminToggle.style.background = 'linear-gradient(135deg, #27ae60, #219653)';
             } else {
                 adminToggle.textContent = 'Đăng nhập quản trị viên';
-                adminToggle.style.background = 'linear-gradient(135deg, #e53e3e, #f56565)';
+                adminToggle.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
             }
             displayRegistrations(registrations);
         }
 
         // Login admin
         window.loginAdmin = function() {
-            showLoader('formLoader');
             const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
             signInWithEmailAndPassword(auth, email, password)
@@ -1099,10 +1114,7 @@
                     document.getElementById('adminLogin').style.display = 'none';
                     alert('Đăng nhập thành công!');
                 })
-                .catch(error => {
-                    alert('Lỗi đăng nhập: ' + error.message);
-                })
-                .finally(() => hideLoader('formLoader'));
+                .catch(error => alert('Lỗi: ' + error.message));
         };
 
         // Toggle admin
