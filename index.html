@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký môn thi 12A2 </title>
+    <title>Đăng ký môn thi 12A2</title>
     <meta name="description" content="Hệ thống đăng ký môn thi lớp 12A2">
     
     <!-- Open Graph Meta Tags for Link Sharing -->
@@ -19,6 +20,7 @@
     <link rel="apple-touch-icon" href="https://your-website-url.com/apple-touch-icon.png">
     
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -339,7 +341,7 @@
         </header>
 
         <div class="warning">
-            ⚠️ Lưu ý: Không được spam thông tin! Chỉ quản trị viên có quyền chỉnh sửa toàn bộ.
+            ⚠️ Lưu ý: Không được spam thông tin! Chỉ quản trị viên hoặc người biết mật khẩu có quyền chỉnh sửa/xóa thông tin của mình. Nếu gặp vấn đề, liên hệ admin Chuyên.
         </div>
 
         <div class="admin-login" id="adminLogin" style="display: none;">
@@ -374,7 +376,10 @@
                         <label for="fullName">Họ và tên *</label>
                         <input type="text" id="fullName" required>
                     </div>
-                    
+                    <div class="form-group">
+                        <label for="password">Mật khẩu (để sửa/xóa) *</label>
+                        <input type="password" id="password" required placeholder="Nhập mật khẩu của bạn">
+                    </div>
                     <div class="form-group">
                         <label for="subject1">Môn 1 *</label>
                         <select id="subject1" required>
@@ -382,7 +387,6 @@
                             <option value="Toán" selected>Toán</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="subject2">Môn 2 *</label>
                         <select id="subject2" required>
@@ -390,7 +394,6 @@
                             <option value="Văn" selected>Văn</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="subject3">Môn 3 *</label>
                         <select id="subject3" required onchange="updateSubjectOptions()">
@@ -403,7 +406,6 @@
                             <option value="Vật lí">Vật lí</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="subject4">Môn 4 *</label>
                         <select id="subject4" required onchange="updateSubjectOptions()">
@@ -416,17 +418,14 @@
                             <option value="Vật lí">Vật lí</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="major">Ngành học</label>
                         <input type="text" id="major" placeholder="Có thể để trống">
                     </div>
-                    
                     <div class="form-group">
                         <label for="school">Trường</label>
                         <input type="text" id="school" placeholder="Ghi một vài trường muốn vào">
                     </div>
-                    
                     <div class="form-group">
                         <label for="method">Phương thức xét tuyển *</label>
                         <select id="method" required>
@@ -452,13 +451,11 @@
                             <option value="500 - Sử dụng phương thức khác">500 - Sử dụng phương thức khác</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="note">Ghi chú</label>
                         <input type="text" id="note">
                     </div>
                 </div>
-                
                 <button type="submit">Đăng ký</button>
             </form>
         </div>
@@ -501,7 +498,7 @@
         </div>
     </div>
 
-    <!-- Modal chỉnh sửa (chỉ dành cho admin hoặc chủ sở hữu) -->
+    <!-- Modal chỉnh sửa -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -513,7 +510,10 @@
                         <label for="editFullName">Họ và tên *</label>
                         <input type="text" id="editFullName" required>
                     </div>
-                    
+                    <div class="form-group">
+                        <label for="editPassword">Mật khẩu (để xác nhận) *</label>
+                        <input type="password" id="editPassword" required placeholder="Nhập mật khẩu của bạn">
+                    </div>
                     <div class="form-group">
                         <label for="editSubject1">Môn 1 *</label>
                         <select id="editSubject1" required>
@@ -521,7 +521,6 @@
                             <option value="Toán">Toán</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="editSubject2">Môn 2 *</label>
                         <select id="editSubject2" required>
@@ -529,7 +528,6 @@
                             <option value="Văn">Văn</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="editSubject3">Môn 3 *</label>
                         <select id="editSubject3" required onchange="updateEditSubjectOptions()">
@@ -542,7 +540,6 @@
                             <option value="Vật lí">Vật lí</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="editSubject4">Môn 4 *</label>
                         <select id="editSubject4" required onchange="updateEditSubjectOptions()">
@@ -555,17 +552,14 @@
                             <option value="Vật lí">Vật lí</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="editMajor">Ngành học</label>
                         <input type="text" id="editMajor">
                     </div>
-                    
                     <div class="form-group">
                         <label for="editSchool">Trường</label>
                         <input type="text" id="editSchool">
                     </div>
-                    
                     <div class="form-group">
                         <label for="editMethod">Phương thức xét tuyển *</label>
                         <select id="editMethod" required>
@@ -591,14 +585,28 @@
                             <option value="500 - Sử dụng phương thức khác">500 - Sử dụng phương thức khác</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="editNote">Ghi chú</label>
                         <input type="text" id="editNote">
                     </div>
                 </div>
-                
                 <button type="submit">Cập nhật</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận mật khẩu khi xóa -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Xác nhận xóa đăng ký</h2>
+            <form id="deleteForm">
+                <input type="hidden" id="deleteId">
+                <div class="form-group">
+                    <label for="deletePassword">Nhập mật khẩu để xác nhận xóa *</label>
+                    <input type="password" id="deletePassword" required placeholder="Nhập mật khẩu của bạn">
+                </div>
+                <button type="submit">Xóa</button>
             </form>
         </div>
     </div>
@@ -633,6 +641,7 @@
         let registrations = [];
         let isAdmin = false;
         let editId = null;
+        let deleteId = null;
         let currentUser = localStorage.getItem('currentUser') || '';
         const registrationsCol = collection(db, 'registrations');
 
@@ -669,8 +678,15 @@
         document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const password = document.getElementById('password').value;
+            if (!password) {
+                alert('Vui lòng nhập mật khẩu!');
+                return;
+            }
+
             const formData = {
                 fullName: document.getElementById('fullName').value,
+                passwordHash: sha256(password), // Hash mật khẩu trước khi lưu
                 subject1: document.getElementById('subject1').value,
                 subject2: document.getElementById('subject2').value,
                 subject3: document.getElementById('subject3').value,
@@ -679,8 +695,7 @@
                 school: document.getElementById('school').value,
                 method: document.getElementById('method').value,
                 note: document.getElementById('note').value,
-                createdAt: new Date().toISOString().split('T')[0],
-                userToken: generateUserToken()
+                createdAt: new Date().toISOString().split('T')[0]
             };
 
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
@@ -718,8 +733,16 @@
         document.getElementById('editForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const password = document.getElementById('editPassword').value;
+            const r = registrations.find(r => r.id === editId);
+            if (!isAdmin && sha256(password) !== r.passwordHash) {
+                alert('Mật khẩu không đúng. Nếu bạn quên mật khẩu, vui lòng liên hệ admin Chuyên.');
+                return;
+            }
+
             const formData = {
                 fullName: document.getElementById('editFullName').value,
+                passwordHash: r.passwordHash, // Giữ nguyên passwordHash cũ
                 subject1: document.getElementById('editSubject1').value,
                 subject2: document.getElementById('editSubject2').value,
                 subject3: document.getElementById('editSubject3').value,
@@ -728,8 +751,7 @@
                 school: document.getElementById('editSchool').value,
                 method: document.getElementById('editMethod').value,
                 note: document.getElementById('editNote').value,
-                createdAt: registrations.find(r => r.id === editId).createdAt,
-                userToken: registrations.find(r => r.id === editId).userToken
+                createdAt: r.createdAt
             };
 
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
@@ -755,13 +777,35 @@
             }
         });
 
+        // Submit delete form
+        document.getElementById('deleteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const password = document.getElementById('deletePassword').value;
+            const r = registrations.find(r => r.id === deleteId);
+            if (!isAdmin && sha256(password) !== r.passwordHash) {
+                alert('Mật khẩu không đúng. Nếu bạn quên mật khẩu, vui lòng liên hệ admin Chuyên.');
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, 'registrations', deleteId));
+                registrations = registrations.filter(r => r.id !== deleteId);
+                displayRegistrations(registrations);
+                updateStats();
+                document.getElementById('deleteModal').style.display = 'none';
+                alert('Xóa thành công!');
+            } catch (error) {
+                console.error('Error deleting:', error);
+            }
+        });
+
         // Function to update subject options in registration form to prevent duplicates
         window.updateSubjectOptions = function() {
             const subject3 = document.getElementById('subject3').value;
             const subject4 = document.getElementById('subject4').value;
             const options = ["Tin học", "Địa lý", "Tiếng Anh", "Lịch sử", "GDKT-PL", "Vật lí"];
 
-            // Update subject4 options based on subject3
             let subject4Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject3) {
@@ -770,7 +814,6 @@
             });
             document.getElementById('subject4').innerHTML = subject4Options;
 
-            // Update subject3 options based on subject4
             let subject3Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject4) {
@@ -786,7 +829,6 @@
             const subject4 = document.getElementById('editSubject4').value;
             const options = ["Tin học", "Địa lý", "Tiếng Anh", "Lịch sử", "GDKT-PL", "Vật lí"];
 
-            // Update editSubject4 options based on editSubject3
             let subject4Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject3) {
@@ -795,7 +837,6 @@
             });
             document.getElementById('editSubject4').innerHTML = subject4Options;
 
-            // Update editSubject3 options based on editSubject4
             let subject3Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
                 if (opt !== subject4) {
@@ -821,7 +862,6 @@
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
             data.forEach((r) => {
-                const isOwn = r.userToken === getUserToken();
                 const row = `<tr>
                     ${isAdmin ? `<td><input type="checkbox" class="selectRow" data-id="${r.id}"></td>` : ''}
                     <td>${r.fullName}</td>
@@ -834,8 +874,8 @@
                     <td>${r.method}</td>
                     <td class="actions">
                         <button class="view-btn" onclick="viewDetails('${r.id}')">Xem</button>
-                        ${isAdmin || isOwn ? `<button class="edit-btn" onclick="editRegistration('${r.id}')">Sửa</button>` : ''}
-                        ${isAdmin || isOwn ? `<button class="delete-btn" onclick="deleteRegistration('${r.id}')">Xóa</button>` : ''}
+                        ${isAdmin || r.fullName === currentUser ? `<button class="edit-btn" onclick="editRegistration('${r.id}')">Sửa</button>` : ''}
+                        ${isAdmin || r.fullName === currentUser ? `<button class="delete-btn" onclick="openDeleteModal('${r.id}')">Xóa</button>` : ''}
                     </td>
                 </tr>`;
                 tableBody.innerHTML += row;
@@ -912,10 +952,13 @@
             document.getElementById('detailModal').style.display = 'flex';
         };
 
-        // Edit registration
+        // Open edit modal
         window.editRegistration = function(id) {
             const r = registrations.find(r => r.id === id);
-            if (!isAdmin && r.userToken !== getUserToken()) return alert('Không có quyền!');
+            if (!isAdmin && r.fullName !== currentUser) {
+                alert('Bạn chỉ có thể chỉnh sửa thông tin của chính mình. Nếu gặp vấn đề, liên hệ admin Chuyên.');
+                return;
+            }
             editId = id;
             document.getElementById('editFullName').value = r.fullName;
             document.getElementById('editSubject1').value = r.subject1;
@@ -926,25 +969,19 @@
             document.getElementById('editSchool').value = r.school || '';
             document.getElementById('editMethod').value = r.method;
             document.getElementById('editNote').value = r.note || '';
-            updateEditSubjectOptions(); // Update options when opening edit modal
+            updateEditSubjectOptions();
             document.getElementById('editModal').style.display = 'flex';
         };
 
-        // Delete registration
-        window.deleteRegistration = async function(id) {
+        // Open delete modal
+        window.openDeleteModal = function(id) {
             const r = registrations.find(r => r.id === id);
-            if (!isAdmin && r.userToken !== getUserToken()) return alert('Không có quyền!');
-            if (confirm('Xác nhận xóa?')) {
-                try {
-                    await deleteDoc(doc(db, 'registrations', id));
-                    registrations = registrations.filter(r => r.id !== id);
-                    displayRegistrations(registrations);
-                    updateStats();
-                    alert('Xóa thành công!');
-                } catch (error) {
-                    console.error('Error deleting:', error);
-                }
+            if (!isAdmin && r.fullName !== currentUser) {
+                alert('Bạn chỉ có thể xóa thông tin của chính mình. Nếu gặp vấn đề, liên hệ admin Chuyên.');
+                return;
             }
+            deleteId = id;
+            document.getElementById('deleteModal').style.display = 'flex';
         };
 
         // Update stats
@@ -1011,23 +1048,11 @@
             if (e.target.classList.contains('modal')) e.target.style.display = 'none';
         });
 
-        // Helper functions
-        function generateUserToken() {
-            return Math.random().toString(36).substring(2) + Date.now().toString(36);
-        }
-
-        function getUserToken() {
-            let token = localStorage.getItem('userToken');
-            if (!token) {
-                token = generateUserToken();
-                localStorage.setItem('userToken', token);
-            }
-            return token;
-        }
-
+        // Helper function to format date
         function formatDate(dateStr) {
             return new Date(dateStr).toLocaleDateString('vi-VN');
         }
     </script>
 </body>
 </html>
+```
