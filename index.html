@@ -665,9 +665,27 @@
             }
         }
 
+        // Function to get user IP
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error('Error fetching IP:', error);
+                return null;
+            }
+        }
+
         // Submit registration form
         document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const ip = await getUserIP();
+            if (!ip) {
+                alert('Không thể lấy địa chỉ IP. Vui lòng thử lại.');
+                return;
+            }
 
             const formData = {
                 fullName: document.getElementById('fullName').value,
@@ -680,7 +698,8 @@
                 method: document.getElementById('method').value,
                 note: document.getElementById('note').value,
                 createdAt: new Date().toISOString().split('T')[0],
-                userToken: generateUserToken()
+                userToken: generateUserToken(),
+                ip: ip  // Lưu IP khi đăng ký
             };
 
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
@@ -729,7 +748,8 @@
                 method: document.getElementById('editMethod').value,
                 note: document.getElementById('editNote').value,
                 createdAt: registrations.find(r => r.id === editId).createdAt,
-                userToken: registrations.find(r => r.id === editId).userToken
+                userToken: registrations.find(r => r.id === editId).userToken,
+                ip: registrations.find(r => r.id === editId).ip  // Giữ nguyên IP cũ
             };
 
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
@@ -821,7 +841,7 @@
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
             data.forEach((r) => {
-                const isOwn = r.userToken === getUserToken();
+                const isOwn = r.userToken === getUserToken();  // Giữ nguyên kiểm tra userToken, có thể kết hợp với IP nếu cần
                 const row = `<tr>
                     ${isAdmin ? `<td><input type="checkbox" class="selectRow" data-id="${r.id}"></td>` : ''}
                     <td>${r.fullName}</td>
@@ -857,7 +877,8 @@
                 'Trường': r.school || 'Chưa xác định',
                 'Phương thức xét tuyển': r.method,
                 'Ghi chú': r.note || 'Không có',
-                'Ngày đăng ký': formatDate(r.createdAt)
+                'Ngày đăng ký': formatDate(r.createdAt),
+                'IP': r.ip || 'Không có'  // Thêm IP vào export nếu cần
             }));
             const worksheet = XLSX.utils.json_to_sheet(exportData);
             const workbook = XLSX.utils.book_new();
@@ -882,7 +903,8 @@
                     'Trường': r.school || 'Chưa xác định',
                     'Phương thức xét tuyển': r.method,
                     'Ghi chú': r.note || 'Không có',
-                    'Ngày đăng ký': formatDate(r.createdAt)
+                    'Ngày đăng ký': formatDate(r.createdAt),
+                    'IP': r.ip || 'Không có'  // Thêm IP vào export nếu cần
                 };
             });
             const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -908,14 +930,21 @@
                 <p><strong>Phương thức xét tuyển:</strong> ${r.method}</p>
                 <p><strong>Ghi chú:</strong> ${r.note || 'Không có'}</p>
                 <p><strong>Ngày đăng ký:</strong> ${formatDate(r.createdAt)}</p>
+                <p><strong>IP đăng ký:</strong> ${r.ip || 'Không có'}</p>
             `;
             document.getElementById('detailModal').style.display = 'flex';
         };
 
         // Edit registration
-        window.editRegistration = function(id) {
+        window.editRegistration = async function(id) {
             const r = registrations.find(r => r.id === id);
+            const currentIP = await getUserIP();
+            if (!isAdmin && r.ip !== currentIP) {
+                alert('Địa chỉ IP không khớp. Nếu bạn gặp lỗi, vui lòng liên hệ admin Chuyên để sửa hoặc xóa giúp.');
+                return;
+            }
             if (!isAdmin && r.userToken !== getUserToken()) return alert('Không có quyền!');
+
             editId = id;
             document.getElementById('editFullName').value = r.fullName;
             document.getElementById('editSubject1').value = r.subject1;
@@ -933,7 +962,13 @@
         // Delete registration
         window.deleteRegistration = async function(id) {
             const r = registrations.find(r => r.id === id);
+            const currentIP = await getUserIP();
+            if (!isAdmin && r.ip !== currentIP) {
+                alert('Địa chỉ IP không khớp. Nếu bạn gặp lỗi, vui lòng liên hệ admin Chuyên để sửa hoặc xóa giúp.');
+                return;
+            }
             if (!isAdmin && r.userToken !== getUserToken()) return alert('Không có quyền!');
+
             if (confirm('Xác nhận xóa?')) {
                 try {
                     await deleteDoc(doc(db, 'registrations', id));
@@ -1019,7 +1054,7 @@
         function getUserToken() {
             let token = localStorage.getItem('userToken');
             if (!token) {
-                token = generateUserToken();
+                 token = generateUserToken();
                 localStorage.setItem('userToken', token);
             }
             return token;
