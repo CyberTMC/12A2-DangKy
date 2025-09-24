@@ -6,6 +6,7 @@
     <title>Hệ thống đăng ký xét tuyển đại học</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
+        /* Giữ nguyên toàn bộ phần style từ code gốc của bạn */
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -294,6 +295,7 @@
         <div class="admin-login" id="adminLogin" style="display: none;">
             <h3>Đăng nhập quản trị viên</h3>
             <div class="login-form">
+                <input type="email" id="adminEmail" placeholder="Nhập email quản trị">
                 <input type="password" id="adminPassword" placeholder="Nhập mật khẩu quản trị">
                 <button onclick="loginAdmin()">Đăng nhập</button>
             </div>
@@ -455,7 +457,7 @@
             <span class="close">&times;</span>
             <h2>Chỉnh sửa thông tin đăng ký</h2>
             <form id="editForm">
-                <input type="hidden" id="editIndex">
+                <input type="hidden" id="editId">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="editFullName">Họ và tên *</label>
@@ -555,60 +557,68 @@
         <p>Web by TMC</p>
     </footer>
 
-    <script>
-        // Dữ liệu mẫu (dùng khi API không khả dụng)
-        const sampleData = [
-            { id: 1, fullName: "Nguyễn Thị Ngọc Anh", subject1: "Toán", subject2: "Văn", subject3: "Tiếng Anh", subject4: "Vật lí", major: "Công nghệ thông tin", school: "Đại học Bách Khoa Hà Nội", method: "100 - Xét kết quả thi tốt nghiệp THPT", note: "", createdAt: "2023-10-01", userToken: generateUserToken() },
-            { id: 2, fullName: "Trần Hoàng Anh", subject1: "Toán", subject2: "Văn", subject3: "Tin học", subject4: "Địa lý", major: "Kinh tế", school: "Đại học Kinh tế Quốc dân", method: "200 - Xét kết quả học tập cấp THPT (học bạ)", note: "", createdAt: "2023-10-02", userToken: generateUserToken() },
-            { id: 3, fullName: "Vũ Lâm Anh", subject1: "Toán", subject2: "Văn", subject3: "Lịch sử", subject4: "GDKT-PL", major: "Luật", school: "Đại học Luật Hà Nội", method: "401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển", note: "", createdAt: "2023-10-02", userToken: generateUserToken() }
-        ];
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-        // Lưu trữ trạng thái
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0ibiATfvdSaPq96JMrPIEPGFJBdIqo6E",
+            authDomain: "dangky-xettuyen-daihoc.firebaseapp.com",
+            projectId: "dangky-xettuyen-daihoc",
+            storageBucket: "dangky-xettuyen-daihoc.appspot.com",
+            messagingSenderId: "386112576170",
+            appId: "1:386112576170:web:65443f37fa64b014a7ced3",
+            measurementId: "G-2FEDM2YXTY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // State variables
         let registrations = [];
-        let isAdmin = localStorage.getItem('isAdmin') === 'true';
-        let editIndex = -1;
+        let isAdmin = false;
+        let editId = null;
         let currentUser = localStorage.getItem('currentUser') || '';
-        const API_BASE_URL = 'https://jsonplaceholder.typicode.com/posts'; // Mock API, thay bằng API thật
+        const registrationsCol = collection(db, 'registrations');
 
-        // Khởi tạo trang
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Thiết lập môn Toán và Văn mặc định
+        // Page load
+        document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('subject1').value = 'Toán';
             document.getElementById('subject2').value = 'Văn';
-            
-            // Tải dữ liệu từ API
+
+            onAuthStateChanged(auth, (user) => {
+                isAdmin = !!user;
+                checkAdminStatus();
+            });
+
             await fetchRegistrations();
             updateStats();
-            checkAdminStatus();
-            
-            // Kiểm tra nếu có người dùng hiện tại
+
             if (currentUser) {
                 document.getElementById('fullName').value = currentUser;
             }
         });
 
-        // Lấy danh sách đăng ký từ API
+        // Fetch registrations from Firestore
         async function fetchRegistrations() {
             try {
-                // Thay bằng API thật của bạn
-                const response = await fetch(API_BASE_URL);
-                let data = await response.json();
-                
-                // JSONPlaceholder không lưu trữ dữ liệu thực, nên dùng sampleData để demo
-                // Trong thực tế, API sẽ trả về dữ liệu từ database
-                registrations = sampleData; // Thay bằng: registrations = data;
+                const querySnapshot = await getDocs(registrationsCol);
+                registrations = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
                 displayRegistrations(registrations);
             } catch (error) {
-                console.error('Lỗi khi lấy dữ liệu:', error);
-                registrations = sampleData; // Fallback to sample data
-                displayRegistrations(registrations);
+                console.error('Error fetching registrations:', error);
             }
         }
 
-        // Xử lý sự kiện submit form
-        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+        // Submit registration form
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const formData = {
                 fullName: document.getElementById('fullName').value,
                 subject1: document.getElementById('subject1').value,
@@ -622,56 +632,42 @@
                 createdAt: new Date().toISOString().split('T')[0],
                 userToken: generateUserToken()
             };
-            
-            // Kiểm tra trường bắt buộc
+
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
                 alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
                 return;
             }
-            
-            // Lưu tên người dùng hiện tại
+
             currentUser = formData.fullName;
             localStorage.setItem('currentUser', currentUser);
-            
+
             try {
-                // Gửi dữ liệu tới API
-                const response = await fetch(API_BASE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                const newRegistration = await response.json();
-                // JSONPlaceholder trả về id giả, cần API thật để lưu trữ
-                formData.id = newRegistration.id || Date.now(); // Tạm dùng timestamp làm id
+                const docRef = await addDoc(registrationsCol, formData);
+                formData.id = docRef.id;
                 registrations.push(formData);
+                displayRegistrations(registrations);
+                updateStats();
+                alert('Đăng ký thành công!');
             } catch (error) {
-                console.error('Lỗi khi gửi đăng ký:', error);
-                registrations.push(formData); // Fallback local
+                console.error('Error adding registration:', error);
             }
-            
-            displayRegistrations(registrations);
-            updateStats();
-            
-            // Reset form
+
             document.getElementById('registrationForm').reset();
             document.getElementById('fullName').value = currentUser;
             document.getElementById('subject1').value = 'Toán';
             document.getElementById('subject2').value = 'Văn';
-            
-            alert('Đăng ký thành công!');
         });
 
-        // Xử lý sự kiện submit form chỉnh sửa
-        document.getElementById('editForm').addEventListener('submit', async function(e) {
+        // Submit edit form
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             if (!isAdmin) {
                 alert('Chỉ quản trị viên mới có quyền chỉnh sửa!');
                 return;
             }
-            
+
             const formData = {
-                id: registrations[editIndex].id,
                 fullName: document.getElementById('editFullName').value,
                 subject1: document.getElementById('editSubject1').value,
                 subject2: document.getElementById('editSubject2').value,
@@ -681,241 +677,193 @@
                 school: document.getElementById('editSchool').value,
                 method: document.getElementById('editMethod').value,
                 note: document.getElementById('editNote').value,
-                createdAt: registrations[editIndex].createdAt,
-                userToken: registrations[editIndex].userToken
+                createdAt: registrations.find(r => r.id === editId).createdAt,
+                userToken: registrations.find(r => r.id === editId).userToken
             };
-            
-            // Kiểm tra trường bắt buộc
+
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
                 alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
                 return;
             }
-            
+
             try {
-                // Cập nhật dữ liệu qua API
-                await fetch(`${API_BASE_URL}/${formData.id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                registrations[editIndex] = formData;
+                await updateDoc(doc(db, 'registrations', editId), formData);
+                const index = registrations.findIndex(r => r.id === editId);
+                registrations[index] = { ...formData, id: editId };
+                displayRegistrations(registrations);
+                updateStats();
+                document.getElementById('editModal').style.display = 'none';
+                alert('Cập nhật thành công!');
             } catch (error) {
-                console.error('Lỗi khi cập nhật:', error);
-                registrations[editIndex] = formData; // Fallback local
+                console.error('Error updating registration:', error);
             }
-            
-            displayRegistrations(registrations);
-            updateStats();
-            document.getElementById('editModal').style.display = 'none';
-            alert('Cập nhật thông tin thành công!');
         });
 
-        // Tìm kiếm
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const filteredData = registrations.filter(reg => 
-                reg.fullName.toLowerCase().includes(searchTerm) ||
-                (reg.major && reg.major.toLowerCase().includes(searchTerm)) ||
-                (reg.school && reg.school.toLowerCase().includes(searchTerm))
+        // Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = registrations.filter(r =>
+                r.fullName.toLowerCase().includes(term) ||
+                (r.major && r.major.toLowerCase().includes(term)) ||
+                (r.school && r.school.toLowerCase().includes(term))
             );
-            displayRegistrations(filteredData);
+            displayRegistrations(filtered);
         });
 
-        // Hiển thị danh sách đăng ký
+        // Display registrations
         function displayRegistrations(data) {
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
-            
-            data.forEach((registration, index) => {
-                const row = document.createElement('tr');
-                const isOwnRecord = registration.userToken === getUserToken();
-                
-                row.innerHTML = `
-                    ${isAdmin ? `<td><input type="checkbox" class="selectRow" data-index="${index}"></td>` : ''}
-                    <td>${registration.fullName}</td>
-                    <td>${registration.subject1}</td>
-                    <td>${registration.subject2}</td>
-                    <td>${registration.subject3}</td>
-                    <td>${registration.subject4}</td>
-                    <td>${registration.major || '-'}</td>
-                    <td>${registration.school || '-'}</td>
-                    <td>${registration.method}</td>
+            data.forEach((r) => {
+                const isOwn = r.userToken === getUserToken();
+                const row = `<tr>
+                    ${isAdmin ? `<td><input type="checkbox" class="selectRow" data-id="${r.id}"></td>` : ''}
+                    <td>${r.fullName}</td>
+                    <td>${r.subject1}</td>
+                    <td>${r.subject2}</td>
+                    <td>${r.subject3}</td>
+                    <td>${r.subject4}</td>
+                    <td>${r.major || '-'}</td>
+                    <td>${r.school || '-'}</td>
+                    <td>${r.method}</td>
                     <td class="actions">
-                        <button class="view-btn" onclick="viewDetails(${index})">Xem</button>
-                        ${isAdmin || isOwnRecord ? `<button class="edit-btn" onclick="editRegistration(${index})">Sửa</button>` : ''}
-                        ${isAdmin || isOwnRecord ? `<button class="delete-btn" onclick="deleteRegistration(${index})">Xóa</button>` : ''}
+                        <button class="view-btn" onclick="viewDetails('${r.id}')">Xem</button>
+                        ${isAdmin || isOwn ? `<button class="edit-btn" onclick="editRegistration('${r.id}')">Sửa</button>` : ''}
+                        ${isAdmin || isOwn ? `<button class="delete-btn" onclick="deleteRegistration('${r.id}')">Xóa</button>` : ''}
                     </td>
-                `;
-                
-                tableBody.appendChild(row);
+                </tr>`;
+                tableBody.innerHTML += row;
             });
-
             document.getElementById('adminExportControls').style.display = isAdmin ? 'block' : 'none';
             document.getElementById('selectAllHeader').style.display = isAdmin ? 'table-cell' : 'none';
         }
 
-        // Xuất tất cả dữ liệu ra Excel
+        // Export all to Excel
         function exportAllToExcel() {
-            if (!isAdmin) {
-                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-                return;
-            }
-
-            const exportData = registrations.map(reg => ({
-                'Họ và tên': reg.fullName,
-                'Môn 1': reg.subject1,
-                'Môn 2': reg.subject2,
-                'Môn 3': reg.subject3,
-                'Môn 4': reg.subject4,
-                'Ngành học': reg.major || 'Chưa xác định',
-                'Trường': reg.school || 'Chưa xác định',
-                'Phương thức xét tuyển': reg.method,
-                'Ghi chú': reg.note || 'Không có',
-                'Ngày đăng ký': formatDate(reg.createdAt)
+            if (!isAdmin) return alert('Chỉ quản trị viên!');
+            const exportData = registrations.map(r => ({
+                'Họ và tên': r.fullName,
+                'Môn 1': r.subject1,
+                'Môn 2': r.subject2,
+                'Môn 3': r.subject3,
+                'Môn 4': r.subject4,
+                'Ngành học': r.major || 'Chưa xác định',
+                'Trường': r.school || 'Chưa xác định',
+                'Phương thức xét tuyển': r.method,
+                'Ghi chú': r.note || 'Không có',
+                'Ngày đăng ký': formatDate(r.createdAt)
             }));
-
             const worksheet = XLSX.utils.json_to_sheet(exportData);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách đăng ký');
-            XLSX.writeFile(workbook, 'Danh_sach_dang_ky_tat_ca.xlsx');
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
+            XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx');
         }
 
-        // Xuất các mục đã chọn ra Excel
+        // Export selected
         function exportSelectedToExcel() {
-            if (!isAdmin) {
-                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-                return;
-            }
-
-            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
-            if (selectedCheckboxes.length === 0) {
-                alert('Vui lòng chọn ít nhất một mục để xuất!');
-                return;
-            }
-
-            const selectedIndices = Array.from(selectedCheckboxes).map(cb => parseInt(cb.getAttribute('data-index')));
-            const exportData = selectedIndices.map(index => ({
-                'Họ và tên': registrations[index].fullName,
-                'Môn 1': registrations[index].subject1,
-                'Môn 2': registrations[index].subject2,
-                'Môn 3': registrations[index].subject3,
-                'Môn 4': registrations[index].subject4,
-                'Ngành học': registrations[index].major || 'Chưa xác định',
-                'Trường': registrations[index].school || 'Chưa xác định',
-                'Phương thức xét tuyển': registrations[index].method,
-                'Ghi chú': registrations[index].note || 'Không có',
-                'Ngày đăng ký': formatDate(registrations[index].createdAt)
-            }));
-
+            if (!isAdmin) return alert('Chỉ quản trị viên!');
+            const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
+            if (!selected.length) return alert('Chọn ít nhất một!');
+            const exportData = selected.map(id => {
+                const r = registrations.find(r => r.id === id);
+                return {
+                    'Họ và tên': r.fullName,
+                    'Môn 1': r.subject1,
+                    'Môn 2': r.subject2,
+                    'Môn 3': r.subject3,
+                    'Môn 4': r.subject4,
+                    'Ngành học': r.major || 'Chưa xác định',
+                    'Trường': r.school || 'Chưa xác định',
+                    'Phương thức xét tuyển': r.method,
+                    'Ghi chú': r.note || 'Không có',
+                    'Ngày đăng ký': formatDate(r.createdAt)
+                };
+            });
             const worksheet = XLSX.utils.json_to_sheet(exportData);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách đã chọn');
-            XLSX.writeFile(workbook, 'Danh_sach_dang_ky_chon.xlsx');
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
+            XLSX.writeFile(workbook, 'danh_sach_chon.xlsx');
         }
 
-        // Chọn/tắt chọn tất cả
+        // Toggle select all
         function toggleSelectAll() {
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const checkboxes = document.querySelectorAll('.selectRow');
-            checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+            const selectAll = document.getElementById('selectAll').checked;
+            document.querySelectorAll('.selectRow').forEach(cb => cb.checked = selectAll);
         }
 
-        // Xem chi tiết
-        function viewDetails(index) {
-            const registration = registrations[index];
-            const modalContent = document.getElementById('modalContent');
-            
-            modalContent.innerHTML = `
-                <p><strong>Họ và tên:</strong> ${registration.fullName}</p>
-                <p><strong>Tổ hợp môn:</strong> ${registration.subject1}, ${registration.subject2}, ${registration.subject3}, ${registration.subject4}</p>
-                <p><strong>Ngành học:</strong> ${registration.major || 'Chưa xác định'}</p>
-                <p><strong>Trường:</strong> ${registration.school || 'Chưa xác định'}</p>
-                <p><strong>Phương thức xét tuyển:</strong> ${registration.method}</p>
-                <p><strong>Ghi chú:</strong> ${registration.note || 'Không có'}</p>
-                <p><strong>Ngày đăng ký:</strong> ${formatDate(registration.createdAt)}</p>
+        // View details
+        window.viewDetails = function(id) {
+            const r = registrations.find(r => r.id === id);
+            document.getElementById('modalContent').innerHTML = `
+                <p><strong>Họ và tên:</strong> ${r.fullName}</p>
+                <p><strong>Tổ hợp môn:</strong> ${r.subject1}, ${r.subject2}, ${r.subject3}, ${r.subject4}</p>
+                <p><strong>Ngành học:</strong> ${r.major || 'Chưa xác định'}</p>
+                <p><strong>Trường:</strong> ${r.school || 'Chưa xác định'}</p>
+                <p><strong>Phương thức xét tuyển:</strong> ${r.method}</p>
+                <p><strong>Ghi chú:</strong> ${r.note || 'Không có'}</p>
+                <p><strong>Ngày đăng ký:</strong> ${formatDate(r.createdAt)}</p>
             `;
-            
             document.getElementById('detailModal').style.display = 'flex';
-        }
+        };
 
-        // Chỉnh sửa đăng ký
-        function editRegistration(index) {
-            const registration = registrations[index];
-            
-            if (!isAdmin && registration.userToken !== getUserToken()) {
-                alert('Bạn không có quyền chỉnh sửa thông tin của người khác!');
-                return;
-            }
-            
-            editIndex = index;
-            document.getElementById('editFullName').value = registration.fullName;
-            document.getElementById('editSubject1').value = registration.subject1;
-            document.getElementById('editSubject2').value = registration.subject2;
-            document.getElementById('editSubject3').value = registration.subject3;
-            document.getElementById('editSubject4').value = registration.subject4;
-            document.getElementById('editMajor').value = registration.major || '';
-            document.getElementById('editSchool').value = registration.school || '';
-            document.getElementById('editMethod').value = registration.method;
-            document.getElementById('editNote').value = registration.note || '';
-            
+        // Edit registration
+        window.editRegistration = function(id) {
+            const r = registrations.find(r => r.id === id);
+            if (!isAdmin && r.userToken !== getUserToken()) return alert('Không có quyền!');
+            editId = id;
+            document.getElementById('editFullName').value = r.fullName;
+            document.getElementById('editSubject1').value = r.subject1;
+            document.getElementById('editSubject2').value = r.subject2;
+            document.getElementById('editSubject3').value = r.subject3;
+            document.getElementById('editSubject4').value = r.subject4;
+            document.getElementById('editMajor').value = r.major || '';
+            document.getElementById('editSchool').value = r.school || '';
+            document.getElementById('editMethod').value = r.method;
+            document.getElementById('editNote').value = r.note || '';
             document.getElementById('editModal').style.display = 'flex';
-        }
+        };
 
-        // Xóa đăng ký
-        async function deleteRegistration(index) {
-            const registration = registrations[index];
-            
-            if (!isAdmin && registration.userToken !== getUserToken()) {
-                alert('Bạn không có quyền xóa thông tin của người khác!');
-                return;
-            }
-            
-            if (confirm('Bạn có chắc chắn muốn xóa đăng ký này?')) {
+        // Delete registration
+        window.deleteRegistration = async function(id) {
+            const r = registrations.find(r => r.id === id);
+            if (!isAdmin && r.userToken !== getUserToken()) return alert('Không có quyền!');
+            if (confirm('Xác nhận xóa?')) {
                 try {
-                    await fetch(`${API_BASE_URL}/${registration.id}`, {
-                        method: 'DELETE'
-                    });
-                    registrations.splice(index, 1);
+                    await deleteDoc(doc(db, 'registrations', id));
+                    registrations = registrations.filter(r => r.id !== id);
+                    displayRegistrations(registrations);
+                    updateStats();
+                    alert('Xóa thành công!');
                 } catch (error) {
-                    console.error('Lỗi khi xóa:', error);
-                    registrations.splice(index, 1); // Fallback local
+                    console.error('Error deleting:', error);
                 }
-                displayRegistrations(registrations);
-                updateStats();
-                alert('Đã xóa đăng ký thành công!');
             }
-        }
+        };
 
-        // Cập nhật thống kê
+        // Update stats
         function updateStats() {
             document.getElementById('totalRegistrations').textContent = registrations.length;
             const today = new Date().toISOString().split('T')[0];
-            const todayCount = registrations.filter(reg => reg.createdAt === today).length;
-            document.getElementById('todayRegistrations').textContent = todayCount;
-            
-            const majorCount = {};
-            registrations.forEach(reg => {
-                if (reg.major) {
-                    majorCount[reg.major] = (majorCount[reg.major] || 0) + 1;
-                }
-            });
-            
-            let popularMajor = '-';
-            let maxCount = 0;
-            for (const major in majorCount) {
-                if (majorCount[major] > maxCount) {
-                    maxCount = majorCount[major];
-                    popularMajor = major;
+            document.getElementById('todayRegistrations').textContent = registrations.filter(r => r.createdAt === today).length;
+            const majorCount = registrations.reduce((acc, r) => {
+                if (r.major) acc[r.major] = (acc[r.major] || 0) + 1;
+                return acc;
+            }, {});
+            let popular = '-';
+            let max = 0;
+            for (const m in majorCount) {
+                if (majorCount[m] > max) {
+                    max = majorCount[m];
+                    popular = m;
                 }
             }
-            document.getElementById('popularMajor').textContent = popularMajor;
+            document.getElementById('popularMajor').textContent = popular;
         }
 
-        // Kiểm tra trạng thái admin
+        // Check admin status
         function checkAdminStatus() {
             const adminLogin = document.getElementById('adminLogin');
             const adminToggle = document.getElementById('adminToggle');
-            
             if (isAdmin) {
                 adminLogin.style.display = 'none';
                 adminToggle.textContent = 'Đăng xuất quản trị viên';
@@ -927,48 +875,36 @@
             displayRegistrations(registrations);
         }
 
-        // Đăng nhập admin
-        function loginAdmin() {
+        // Login admin
+        window.loginAdmin = function() {
+            const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
-            if (password === 'admin123') {
-                isAdmin = true;
-                localStorage.setItem('isAdmin', 'true');
-                document.getElementById('adminLogin').style.display = 'none';
-                document.getElementById('adminPassword').value = '';
-                checkAdminStatus();
-                alert('Đăng nhập quản trị viên thành công!');
-            } else {
-                alert('Mật khẩu không đúng!');
-            }
-        }
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    document.getElementById('adminLogin').style.display = 'none';
+                    alert('Đăng nhập thành công!');
+                })
+                .catch(error => alert('Lỗi: ' + error.message));
+        };
 
-        // Toggle đăng nhập admin
-        document.getElementById('adminToggle').addEventListener('click', function() {
+        // Toggle admin
+        document.getElementById('adminToggle').addEventListener('click', () => {
             if (isAdmin) {
-                isAdmin = false;
-                localStorage.setItem('isAdmin', 'false');
-                checkAdminStatus();
-                alert('Đã đăng xuất khỏi chế độ quản trị viên!');
+                signOut(auth).then(() => alert('Đăng xuất thành công!'));
             } else {
                 document.getElementById('adminLogin').style.display = 'block';
             }
         });
 
-        // Đóng modal
-        document.querySelectorAll('.close').forEach(closeBtn => {
-            closeBtn.addEventListener('click', function() {
-                this.closest('.modal').style.display = 'none';
-            });
+        // Close modals
+        document.querySelectorAll('.close').forEach(btn => {
+            btn.addEventListener('click', () => btn.closest('.modal').style.display = 'none');
+        });
+        window.addEventListener('click', e => {
+            if (e.target.classList.contains('modal')) e.target.style.display = 'none';
         });
 
-        // Đóng modal khi click bên ngoài
-        window.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        });
-
-        // Hàm hỗ trợ
+        // Helper functions
         function generateUserToken() {
             return Math.random().toString(36).substring(2) + Date.now().toString(36);
         }
@@ -982,9 +918,8 @@
             return token;
         }
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('vi-VN');
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('vi-VN');
         }
     </script>
 </body>
