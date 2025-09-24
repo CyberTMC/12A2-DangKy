@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký môn thi</title>
-    <meta name="description" content="Hệ thống đăng ký xét tuyển đại học và môn thi. Đăng ký thông tin và theo dõi kết quả xét tuyển.">
+    <title>Đăng ký môn thi 12A2 </title>
+    <meta name="description" content="Hệ thống đăng ký môn thi lớp 12A2">
     
     <!-- Open Graph Meta Tags for Link Sharing -->
     <meta property="og:title" content="Đăng ký môn thi">
-    <meta property="og:description" content="Hệ thống đăng ký xét tuyển đại học và môn thi. Đăng ký thông tin và theo dõi kết quả xét tuyển.">
+    <meta property="og:description" content="Hệ thống đăng ký môn thi lớp 12A2">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://your-website-url.com"> <!-- Thay bằng URL thực tế của bạn -->
-    <meta property="og:image" content="https://your-website-url.com/preview-image.jpg"> <!-- Thay bằng URL hình ảnh preview (ví dụ: 1200x630px) -->
+    <meta property="og:url" content="https://cybertmc.github.io/TBR/">
+    <meta property="og:image" content="https://your-website-url.com/preview-image.jpg">
     <meta property="og:image:alt" content="Hình ảnh hệ thống đăng ký môn thi">
     
     <!-- Favicon -->
-    <link rel="icon" href="https://your-website-url.com/favicon.ico" type="image/x-icon"> <!-- Thay bằng URL favicon của bạn -->
-    <link rel="apple-touch-icon" href="https://your-website-url.com/apple-touch-icon.png"> <!-- Thay bằng URL icon cho Apple -->
+    <link rel="icon" href="https://your-website-url.com/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://your-website-url.com/apple-touch-icon.png">
     
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
-        /* Cập nhật giao diện đẹp hơn: Thêm gradient, shadow mượt mà hơn, font hiện đại, animation nhẹ, responsive tốt hơn */
         * {
             box-sizing: border-box;
             font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -340,7 +339,7 @@
         </header>
 
         <div class="warning">
-            ⚠️ Lưu ý: Không được sửa thông tin của người khác! Chỉ quản trị viên có quyền chỉnh sửa.
+            ⚠️ Lưu ý: Không được sửa thông tin của người khác! Chỉ quản trị viên có quyền chỉnh sửa toàn bộ.
         </div>
 
         <div class="admin-login" id="adminLogin" style="display: none;">
@@ -502,7 +501,7 @@
         </div>
     </div>
 
-    <!-- Modal chỉnh sửa (chỉ dành cho admin) -->
+    <!-- Modal chỉnh sửa (chỉ dành cho admin hoặc chủ sở hữu) -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -718,11 +717,6 @@
         // Submit edit form
         document.getElementById('editForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            if (!isAdmin) {
-                alert('Chỉ quản trị viên mới có quyền chỉnh sửa!');
-                return;
-            }
 
             const formData = {
                 fullName: document.getElementById('editFullName').value,
@@ -980,10 +974,10 @@
             if (isAdmin) {
                 adminLogin.style.display = 'none';
                 adminToggle.textContent = 'Đăng xuất quản trị viên';
-                adminToggle.style.backgroundColor = '#27ae60';
+                adminToggle.style.background = 'linear-gradient(135deg, #27ae60, #219653)';
             } else {
                 adminToggle.textContent = 'Đăng nhập quản trị viên';
-                adminToggle.style.backgroundColor = '#e74c3c';
+                adminToggle.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
             }
             displayRegistrations(registrations);
         }
