@@ -18,7 +18,7 @@
     <link rel="icon" href="https://your-website-url.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://your-website-url.com/apple-touch-icon.png">
     
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.21.0/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <style>
         * {
@@ -664,12 +664,6 @@
             if (currentUser) {
                 document.getElementById('fullName').value = currentUser;
             }
-
-            // Check if XLSX library is loaded
-            if (typeof XLSX === 'undefined') {
-                console.error('XLSX library failed to load.');
-                alert('Thư viện xuất Excel không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-            }
         });
 
         // Fetch registrations from Firestore
@@ -680,7 +674,6 @@
                 displayRegistrations(registrations);
             } catch (error) {
                 console.error('Error fetching registrations:', error);
-                alert('Lỗi khi tải dữ liệu đăng ký: ' + error.message);
             }
         }
 
@@ -730,7 +723,6 @@
                 alert('Đăng ký thành công!');
             } catch (error) {
                 console.error('Error adding registration:', error);
-                alert('Lỗi khi đăng ký: ' + error.message);
             }
 
             document.getElementById('registrationForm').reset();
@@ -785,7 +777,6 @@
                 alert('Cập nhật thành công!');
             } catch (error) {
                 console.error('Error updating registration:', error);
-                alert('Lỗi khi cập nhật: ' + error.message);
             }
         });
 
@@ -809,7 +800,6 @@
                 alert('Xóa thành công!');
             } catch (error) {
                 console.error('Error deleting:', error);
-                alert('Lỗi khi xóa: ' + error.message);
             }
         });
 
@@ -898,144 +888,140 @@
         }
 
         // Export all to Excel
-        function exportAllToExcel() {
-            if (!isAdmin) {
-                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-                return;
-            }
-            if (typeof XLSX === 'undefined') {
-                alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-                console.error('XLSX library is not loaded.');
-                return;
-            }
-            if (!registrations.length) {
-                alert('Không có dữ liệu để xuất!');
-                return;
-            }
-            try {
-                const exportData = registrations.map(r => ({
-                    'Họ và tên': r.fullName || '',
-                    'Môn 1': r.subject1 || '',
-                    'Môn 2': r.subject2 || '',
-                    'Môn 3': r.subject3 || '',
-                    'Môn 4': r.subject4 || '',
-                    'Ngành học': r.major || 'Chưa xác định',
-                    'Trường': r.school || 'Chưa xác định',
-                    'Phương thức xét tuyển': r.method || '',
-                    'Ghi chú': r.note || 'Không có',
-                    'Ngày đăng ký': formatDate(r.createdAt) || ''
-                }));
+function exportAllToExcel() {
+    if (!isAdmin) {
+        alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+        return;
+    }
+    if (typeof XLSX === 'undefined') {
+        alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
+        console.error('XLSX library is not loaded.');
+        return;
+    }
+    try {
+        const exportData = registrations.map(r => ({
+            'Họ và tên': r.fullName || '',
+            'Môn 1': r.subject1 || '',
+            'Môn 2': r.subject2 || '',
+            'Môn 3': r.subject3 || '',
+            'Môn 4': r.subject4 || '',
+            'Ngành học': r.major || 'Chưa xác định',
+            'Trường': r.school || 'Chưa xác định',
+            'Phương thức xét tuyển': r.method || '',
+            'Ghi chú': r.note || 'Không có',
+            'Ngày đăng ký': formatDate(r.createdAt) || ''
+        }));
 
-                const worksheet = XLSX.utils.json_to_sheet(exportData, {
-                    header: [
-                        'Họ và tên',
-                        'Môn 1',
-                        'Môn 2',
-                        'Môn 3',
-                        'Môn 4',
-                        'Ngành học',
-                        'Trường',
-                        'Phương thức xét tuyển',
-                        'Ghi chú',
-                        'Ngày đăng ký'
-                    ]
-                });
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
+        const worksheet = XLSX.utils.json_to_sheet(exportData, {
+            header: [
+                'Họ và tên',
+                'Môn 1',
+                'Môn 2',
+                'Môn 3',
+                'Môn 4',
+                'Ngành học',
+                'Trường',
+                'Phương thức xét tuyển',
+                'Ghi chú',
+                'Ngày đăng ký'
+            ]
+        });
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
 
-                // Set column widths
-                worksheet['!cols'] = [
-                    { wch: 20 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 25 },
-                    { wch: 30 },
-                    { wch: 50 },
-                    { wch: 30 },
-                    { wch: 15 }
-                ];
+        // Set column widths for better readability
+        worksheet['!cols'] = [
+            { wch: 20 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 25 },
+            { wch: 30 },
+            { wch: 50 },
+            { wch: 30 },
+            { wch: 15 }
+        ];
 
-                XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx', { compression: true });
-                alert('Xuất file Excel thành công!');
-            } catch (error) {
-                console.error('Lỗi khi xuất file Excel:', error);
-                alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
-            }
-        }
+        XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx', { compression: true });
+        alert('Xuất file Excel thành công!');
+    } catch (error) {
+        console.error('Lỗi khi xuất file Excel:', error);
+        alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
+    }
+}
 
-        // Export selected to Excel
-        function exportSelectedToExcel() {
-            if (!isAdmin) {
-                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-                return;
-            }
-            if (typeof XLSX === 'undefined') {
-                alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-                console.error('XLSX library is not loaded.');
-                return;
-            }
-            const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
-            if (!selected.length) {
-                alert('Vui lòng chọn ít nhất một mục để xuất!');
-                return;
-            }
-            try {
-                const exportData = selected.map(id => {
-                    const r = registrations.find(r => r.id === id);
-                    return {
-                        'Họ và tên': r.fullName || '',
-                        'Môn 1': r.subject1 || '',
-                        'Môn 2': r.subject2 || '',
-                        'Môn 3': r.subject3 || '',
-                        'Môn 4': r.subject4 || '',
-                        'Ngành học': r.major || 'Chưa xác định',
-                        'Trường': r.school || 'Chưa xác định',
-                        'Phương thức xét tuyển': r.method || '',
-                        'Ghi chú': r.note || 'Không có',
-                        'Ngày đăng ký': formatDate(r.createdAt) || ''
-                    };
-                });
+// Export selected to Excel
+function exportSelectedToExcel() {
+    if (!isAdmin) {
+        alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+        return;
+    }
+    if (typeof XLSX === 'undefined') {
+        alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
+        console.error('XLSX library is not loaded.');
+        return;
+    }
+    const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
+    if (!selected.length) {
+        alert('Vui lòng chọn ít nhất một mục để xuất!');
+        return;
+    }
+    try {
+        const exportData = selected.map(id => {
+            const r = registrations.find(r => r.id === id);
+            return {
+                'Họ và tên': r.fullName || '',
+                'Môn 1': r.subject1 || '',
+                'Môn 2': r.subject2 || '',
+                'Môn 3': r.subject3 || '',
+                'Môn 4': r.subject4 || '',
+                'Ngành học': r.major || 'Chưa xác định',
+                'Trường': r.school || 'Chưa xác định',
+                'Phương thức xét tuyển': r.method || '',
+                'Ghi chú': r.note || 'Không có',
+                'Ngày đăng ký': formatDate(r.createdAt) || ''
+            };
+        });
 
-                const worksheet = XLSX.utils.json_to_sheet(exportData, {
-                    header: [
-                        'Họ và tên',
-                        'Môn 1',
-                        'Môn 2',
-                        'Môn 3',
-                        'Môn 4',
-                        'Ngành học',
-                        'Trường',
-                        'Phương thức xét tuyển',
-                        'Ghi chú',
-                        'Ngày đăng ký'
-                    ]
-                });
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
+        const worksheet = XLSX.utils.json_to_sheet(exportData, {
+            header: [
+                'Họ và tên',
+                'Môn 1',
+                'Môn 2',
+                'Môn 3',
+                'Môn 4',
+                'Ngành học',
+                'Trường',
+                'Phương thức xét tuyển',
+                'Ghi chú',
+                'Ngày đăng ký'
+            ]
+        });
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
 
-                // Set column widths
-                worksheet['!cols'] = [
-                    { wch: 20 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 25 },
-                    { wch: 30 },
-                    { wch: 50 },
-                    { wch: 30 },
-                    { wch: 15 }
-                ];
+        // Set column widths
+        worksheet['!cols'] = [
+            { wch: 20 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 25 },
+            { wch: 30 },
+            { wch: 50 },
+            { wch: 30 },
+            { wch: 15 }
+        ];
 
-                XLSX.writeFile(workbook, 'danh_sach_chon.xlsx', { compression: true });
-                alert('Xuất file Excel thành công!');
-            } catch (error) {
-                console.error('Lỗi khi xuất file Excel:', error);
-                alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
-            }
-        }
+        XLSX.writeFile(workbook, 'danh_sach_chon.xlsx', { compression: true });
+        alert('Xuất file Excel thành công!');
+    } catch (error) {
+        console.error('Lỗi khi xuất file Excel:', error);
+        alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
+    }
+}
 
         // Toggle select all
         function toggleSelectAll() {
@@ -1156,7 +1142,7 @@
 
         // Helper function to format date
         function formatDate(dateStr) {
-            return dateStr ? new Date(dateStr).toLocaleDateString('vi-VN') : '';
+            return new Date(dateStr).toLocaleDateString('vi-VN');
         }
     </script>
 </body>
