@@ -175,11 +175,12 @@
         .delete-btn:hover {
             background-color: #c0392b;
         }
-        .export-btn {
+        .export-btn, .export-selected-btn {
             background-color: #2ecc71;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            margin-right: 10px;
         }
-        .export-btn:hover {
+        .export-btn:hover, .export-selected-btn:hover {
             background-color: #27ae60;
         }
         .modal {
@@ -412,11 +413,15 @@
         
         <div class="list-section">
             <h2>Danh sách đã đăng ký</h2>
-            <button class="export-btn" onclick="exportToExcel()">Xuất ra Excel</button>
+            <div id="adminExportControls" style="display: none;">
+                <button class="export-btn" onclick="exportAllToExcel()">Xuất tất cả ra Excel</button>
+                <button class="export-selected-btn" onclick="exportSelectedToExcel()">Xuất các mục đã chọn</button>
+            </div>
             <input type="text" id="searchInput" class="search-box" placeholder="Tìm kiếm theo tên...">
             <table id="registrationTable">
                 <thead>
                     <tr>
+                        <th id="selectAllHeader" style="display: none;"><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
                         <th>Họ và tên</th>
                         <th>Môn 1</th>
                         <th>Môn 2</th>
@@ -547,7 +552,7 @@
     </div>
 
     <footer>
-        <p>Hệ thống đăng ký xét tuyển đại học &copy; 2023</p>
+        <p>Web by TMC</p>
     </footer>
 
     <script>
@@ -695,6 +700,7 @@
                 const isOwnRecord = registration.userToken === getUserToken();
                 
                 row.innerHTML = `
+                    ${isAdmin ? `<td><input type="checkbox" class="selectRow" data-index="${index}"></td>` : ''}
                     <td>${registration.fullName}</td>
                     <td>${registration.subject1}</td>
                     <td>${registration.subject2}</td>
@@ -712,10 +718,19 @@
                 
                 tableBody.appendChild(row);
             });
+
+            // Hiển thị/ẩn các nút xuất và cột chọn cho admin
+            document.getElementById('adminExportControls').style.display = isAdmin ? 'block' : 'none';
+            document.getElementById('selectAllHeader').style.display = isAdmin ? 'table-cell' : 'none';
         }
 
-        // Xuất dữ liệu ra Excel
-        function exportToExcel() {
+        // Xuất tất cả dữ liệu ra Excel
+        function exportAllToExcel() {
+            if (!isAdmin) {
+                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+                return;
+            }
+
             // Chuẩn bị dữ liệu cho Excel
             const exportData = registrations.map(reg => ({
                 'Họ và tên': reg.fullName,
@@ -738,7 +753,52 @@
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách đăng ký');
 
             // Tạo file Excel và tải xuống
-            XLSX.writeFile(workbook, 'Danh_sach_dang_ky.xlsx');
+            XLSX.writeFile(workbook, 'Danh_sach_dang_ky_tat_ca.xlsx');
+        }
+
+        // Xuất các mục đã chọn ra Excel
+        function exportSelectedToExcel() {
+            if (!isAdmin) {
+                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+                return;
+            }
+
+            const selectedCheckboxes = document.querySelectorAll('.selectRow:checked');
+            if (selectedCheckboxes.length === 0) {
+                alert('Vui lòng chọn ít nhất một mục để xuất!');
+                return;
+            }
+
+            const selectedIndices = Array.from(selectedCheckboxes).map(cb => parseInt(cb.getAttribute('data-index')));
+            const exportData = selectedIndices.map(index => ({
+                'Họ và tên': registrations[index].fullName,
+                'Môn 1': registrations[index].subject1,
+                'Môn 2': registrations[index].subject2,
+                'Môn 3': registrations[index].subject3,
+                'Môn 4': registrations[index].subject4,
+                'Ngành học': registrations[index].major || 'Chưa xác định',
+                'Trường': registrations[index].school || 'Chưa xác định',
+                'Phương thức xét tuyển': registrations[index].method,
+                'Ghi chú': registrations[index].note || 'Không có',
+                'Ngày đăng ký': formatDate(registrations[index].createdAt)
+            }));
+
+            // Tạo worksheet từ dữ liệu
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+            
+            // Tạo workbook và thêm worksheet
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách đã chọn');
+
+            // Tạo file Excel và tải xuống
+            XLSX.writeFile(workbook, 'Danh_sach_dang_ky_chon.xlsx');
+        }
+
+        // Chọn/tắt chọn tất cả
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.selectRow');
+            checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
         }
 
         // Xem chi tiết
@@ -847,6 +907,7 @@
                 adminToggle.textContent = 'Đăng nhập quản trị viên';
                 adminToggle.style.backgroundColor = '#e74c3c';
             }
+            displayRegistrations(registrations);
         }
 
         // Đăng nhập admin
@@ -860,7 +921,6 @@
                 document.getElementById('adminLogin').style.display = 'none';
                 document.getElementById('adminPassword').value = '';
                 checkAdminStatus();
-                displayRegistrations(registrations);
                 alert('Đăng nhập quản trị viên thành công!');
             } else {
                 alert('Mật khẩu không đúng!');
@@ -874,7 +934,6 @@
                 isAdmin = false;
                 localStorage.setItem('isAdmin', 'false');
                 checkAdminStatus();
-                displayRegistrations(registrations);
                 alert('Đã đăng xuất khỏi chế độ quản trị viên!');
             } else {
                 // Hiển thị form đăng nhập
