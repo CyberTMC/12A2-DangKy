@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -341,7 +340,7 @@
         </header>
 
         <div class="warning">
-            ⚠️ Lưu ý: Không được spam thông tin! Chỉ quản trị viên hoặc người biết mật khẩu có quyền chỉnh sửa/xóa thông tin của mình. Nếu gặp vấn đề, liên hệ admin .
+            ⚠️ Lưu ý: Không được spam thông tin! Chỉ quản trị viên hoặc người biết mật khẩu có quyền chỉnh sửa/xóa thông tin của mình. Nếu gặp vấn đề, liên hệ admin Chuyên.
         </div>
 
         <div class="admin-login" id="adminLogin" style="display: none;">
@@ -401,6 +400,7 @@
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
                             <option value="Tiếng Anh">Tiếng Anh</option>
+                            <option value="Tiếng Trung">Tiếng Trung</option>
                             <option value="Lịch sử">Lịch sử</option>
                             <option value="GDKT-PL">GDKT-PL</option>
                             <option value="Vật lí">Vật lí</option>
@@ -413,6 +413,7 @@
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
                             <option value="Tiếng Anh">Tiếng Anh</option>
+                            <option value="Tiếng Trung">Tiếng Trung</option>
                             <option value="Lịch sử">Lịch sử</option>
                             <option value="GDKT-PL">GDKT-PL</option>
                             <option value="Vật lí">Vật lí</option>
@@ -535,6 +536,7 @@
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
                             <option value="Tiếng Anh">Tiếng Anh</option>
+                            <option value="Tiếng Trung">Tiếng Trung</option>
                             <option value="Lịch sử">Lịch sử</option>
                             <option value="GDKT-PL">GDKT-PL</option>
                             <option value="Vật lí">Vật lí</option>
@@ -547,6 +549,7 @@
                             <option value="Tin học">Tin học</option>
                             <option value="Địa lý">Địa lý</option>
                             <option value="Tiếng Anh">Tiếng Anh</option>
+                            <option value="Tiếng Trung">Tiếng Trung</option>
                             <option value="Lịch sử">Lịch sử</option>
                             <option value="GDKT-PL">GDKT-PL</option>
                             <option value="Vật lí">Vật lí</option>
@@ -804,7 +807,7 @@
         window.updateSubjectOptions = function() {
             const subject3 = document.getElementById('subject3').value;
             const subject4 = document.getElementById('subject4').value;
-            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Lịch sử", "GDKT-PL", "Vật lí"];
+            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Tiếng Trung", "Lịch sử", "GDKT-PL", "Vật lí"];
 
             let subject4Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
@@ -827,7 +830,7 @@
         window.updateEditSubjectOptions = function() {
             const subject3 = document.getElementById('editSubject3').value;
             const subject4 = document.getElementById('editSubject4').value;
-            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Lịch sử", "GDKT-PL", "Vật lí"];
+            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Tiếng Trung", "Lịch sử", "GDKT-PL", "Vật lí"];
 
             let subject4Options = '<option value="">Chọn môn</option>';
             options.forEach(opt => {
@@ -1055,4 +1058,3 @@
     </script>
 </body>
 </html>
-```
