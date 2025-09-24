@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký môn thi 12A2</title>
     <meta name="description" content="Hệ thống đăng ký môn thi lớp 12A2">
     
@@ -18,198 +18,205 @@
     <link rel="icon" href="https://your-website-url.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://your-website-url.com/apple-touch-icon.png">
     
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.21.0/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
             margin: 0;
             padding: 0;
-            background: #f5f5f5;
+            background: linear-gradient(to bottom, #f0f2f5, #ffffff);
             color: #333;
             min-height: 100vh;
-            font-size: 16px;
-            line-height: 1.5;
         }
         .container {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 16px;
+            padding: 30px 20px;
         }
         header {
-            background: linear-gradient(135deg, #1e3c72, #3498db);
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #3498db);
             color: white;
-            padding: 20px;
+            padding: 30px 0;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
             text-align: center;
-            border-radius: 8px;
-            margin-bottom: 16px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         header h1 {
-            font-size: 1.8rem;
+            font-size: 2.5rem;
             margin: 0;
-            font-weight: 600;
         }
         header p {
-            font-size: 1rem;
-            margin: 8px 0 0;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            margin: 10px 0 0;
+            opacity: 0.95;
         }
         .admin-panel {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            padding: 12px;
+            padding: 12px 20px;
             border-radius: 8px;
-            margin: 16px auto;
-            max-width: 90%;
+            margin: 20px auto;
+            max-width: 300px;
             text-align: center;
             cursor: pointer;
-            font-size: 1rem;
-            touch-action: manipulation;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .admin-panel:hover, .admin-panel:active {
-            background: #c0392b;
+        .admin-panel:hover {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffca28;
-            padding: 12px;
-            margin-bottom: 16px;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            font-weight: 500;
+            background: linear-gradient(to right, #ffeaa7, #fff3bf);
+            border-left: 6px solid #fdcb6e;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .form-section, .list-section {
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease-in-out;
         }
         h2 {
             color: #2c3e50;
-            font-size: 1.5rem;
-            margin: 0 0 12px;
-            font-weight: 600;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 12px;
+            margin-top: 0;
+            font-size: 1.8rem;
         }
         .form-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
+            margin-bottom: 10px;
+            font-weight: 600;
             color: #2c3e50;
-            font-size: 1rem;
         }
         input, select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-            background: #fff;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
         input:focus, select:focus {
             border-color: #3498db;
-            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         }
         button {
-            background: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 14px 30px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            width: 100%;
-            touch-action: manipulation;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        button:hover, button:active {
-            background: #2980b9;
+        button:hover {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         .search-box {
-            margin-bottom: 12px;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
+            margin-bottom: 25px;
+            padding: 14px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
         }
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-            font-size: 0.9rem;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         th, td {
-            padding: 10px;
+            border: 1px solid #ddd;
+            padding: 14px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
         th {
-            background: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
-            font-weight: 500;
             position: sticky;
             top: 0;
         }
         tr:nth-child(even) {
-            background: #f9f9f9;
+            background-color: #f8f9fa;
         }
         tr:hover {
-            background: #e3f2fd;
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
         }
         .actions {
             display: flex;
-            flex-wrap: wrap;
             gap: 8px;
         }
-        .view-btn, .edit-btn, .delete-btn {
-            padding: 8px 12px;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            touch-action: manipulation;
-        }
         .view-btn {
-            background: #27ae60;
+            background: linear-gradient(135deg, #27ae60, #219653);
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 6px;
         }
-        .view-btn:hover, .view-btn:active {
-            background: #219653;
+        .view-btn:hover {
+            background: linear-gradient(135deg, #219653, #27ae60);
         }
         .edit-btn {
-            background: #f39c12;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 6px;
         }
-        .edit-btn:hover, .edit-btn:active {
-            background: #e67e22;
+        .edit-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
         }
         .delete-btn {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 6px;
         }
-        .delete-btn:hover, .delete-btn:active {
-            background: #c0392b;
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
         }
         .export-btn, .export-selected-btn {
-            background: #2ecc71;
-            margin-bottom: 12px;
-            width: auto;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            margin-bottom: 15px;
+            margin-right: 15px;
         }
         .export-btn:hover, .export-selected-btn:hover {
-            background: #27ae60;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
         }
         .modal {
             display: none;
@@ -218,103 +225,108 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.6);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            animation: fadeIn 0.5s ease;
         }
         .modal-content {
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
-            max-width: 90%;
-            max-height: 80vh;
+            background-color: white;
+            padding: 35px;
+            border-radius: 15px;
+            max-width: 650px;
+            width: 95%;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            animation: scaleIn 0.3s ease;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
         .close {
             float: right;
-            font-size: 1.5rem;
+            font-size: 30px;
+            font-weight: bold;
             cursor: pointer;
-            color: #666;
+            color: #7f8c8d;
+            transition: color 0.3s;
         }
         .close:hover {
-            color: #333;
+            color: #34495e;
         }
         .admin-login {
-            background: #2c3e50;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
         }
         .admin-login h3 {
             color: white;
-            font-size: 1.2rem;
-            margin: 0 0 12px;
+            margin-top: 0;
+            font-size: 1.5rem;
         }
         .login-form {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            gap: 15px;
+        }
+        .login-form input {
+            flex: 1;
         }
         .stats {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 16px 0;
+            justify-content: space-around;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         .stat-card {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, white, #f9f9f9);
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 180px;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
         .stat-number {
-            font-size: 2rem;
-            font-weight: 600;
+            font-size: 3rem;
+            font-weight: bold;
             color: #3498db;
-            margin: 8px 0;
+            margin: 15px 0;
         }
         .stat-label {
-            font-size: 0.9rem;
-            color: #666;
+            color: #7f8c8d;
+            font-size: 1rem;
         }
         footer {
             text-align: center;
-            padding: 16px;
-            color: #666;
-            font-size: 0.9rem;
+            margin-top: 50px;
+            padding: 25px;
+            color: #7f8c8d;
+            font-size: 1rem;
+            border-top: 1px solid #ddd;
         }
-        @media (min-width: 768px) {
-            .container {
-                max-width: 700px;
-                padding: 24px;
-            }
-            header h1 {
-                font-size: 2rem;
-            }
+        @media (max-width: 768px) {
             .form-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
+                grid-template-columns: 1fr;
             }
-            .stats {
-                flex-direction: row;
-                gap: 16px;
-            }
-            .stat-card {
-                flex: 1;
-            }
-            button {
-                width: auto;
-                padding: 12px 24px;
+            .actions {
+                flex-direction: column;
+                gap: 10px;
             }
             table {
-                font-size: 1rem;
+                display: block;
+                overflow-x: auto;
             }
-            .modal-content {
-                max-width: 600px;
+            .stats {
+                flex-direction: column;
             }
         }
     </style>
@@ -413,7 +425,7 @@
                     </div>
                     <div class="form-group">
                         <label for="school">Trường</label>
-                        <input type="text" id="school" placeholder="Ghi một vài trường muốn vào">
+                        <input type="text" id="school" placeholder="Ghi một vài trường muốn vào(Có thể để trống)">
                     </div>
                     <div class="form-group">
                         <label for="method">Phương thức xét tuyển *</label>
@@ -422,21 +434,21 @@
                             <option value="100 - Xét kết quả thi tốt nghiệp THPT">100 - Xét kết quả thi tốt nghiệp THPT</option>
                             <option value="200 - Xét kết quả học tập cấp THPT (học bạ)">200 - Xét kết quả học tập cấp THPT (học bạ)</option>
                             <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
-                            <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức</option>
-                            <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy do đơn vị khác tổ chức">402 - Sử dụng kết quả thi đánh giá năng lực do đơn vị khác tổ chức</option>
-                            <option value="403 - Thi văn hóa do CSĐT tổ chức">403 - Thi văn hóa do CSĐT tổ chức</option>
-                            <option value="404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức">404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức</option>
-                            <option value="405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu">405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu</option>
-                            <option value="406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu">406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu</option>
-                            <option value="407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT">407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT</option>
-                            <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế</option>
-                            <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế</option>
+                            <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển</option>
+                            <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển">402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển</option>
+                            <option value="403 - Thi văn hóa do CSĐT tổ chức để xét tuyển">403 - Thi văn hóa do CSĐT tổ chức để xét tuyển</option>
+                            <option value="404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển">404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển</option>
+                            <option value="405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển">405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển</option>
+                            <option value="406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển">406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển</option>
+                            <option value="407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển">407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển</option>
+                            <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển</option>
+                            <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển</option>
                             <option value="411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài">411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài</option>
-                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn</option>
-                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn</option>
-                            <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác</option>
+                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển</option>
                             <option value="416 - Kỳ thi V-SAT">416 - Kỳ thi V-SAT</option>
-                            <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức</option>
+                            <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển</option>
                             <option value="500 - Sử dụng phương thức khác">500 - Sử dụng phương thức khác</option>
                         </select>
                     </div>
@@ -471,11 +483,14 @@
                         <th>Thao tác</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody"></tbody>
+                <tbody id="tableBody">
+                    <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+                </tbody>
             </table>
         </div>
     </div>
     
+    <!-- Modal hiển thị chi tiết -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -484,6 +499,7 @@
         </div>
     </div>
 
+    <!-- Modal chỉnh sửa -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -527,7 +543,6 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <div class="form-group">
                         <label for="editSubject4">Môn 4 *</label>
                         <select id="editSubject4" required onchange="updateEditSubjectOptions()">
                             <option value="">Chọn môn</option>
@@ -555,21 +570,21 @@
                             <option value="100 - Xét kết quả thi tốt nghiệp THPT">100 - Xét kết quả thi tốt nghiệp THPT</option>
                             <option value="200 - Xét kết quả học tập cấp THPT (học bạ)">200 - Xét kết quả học tập cấp THPT (học bạ)</option>
                             <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
-                            <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức</option>
-                            <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy do đơn vị khác tổ chức">402 - Sử dụng kết quả thi đánh giá năng lực do đơn vị khác tổ chức</option>
-                            <option value="403 - Thi văn hóa do CSĐT tổ chức">403 - Thi văn hóa do CSĐT tổ chức</option>
-                            <option value="404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức">404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức</option>
-                            <option value="405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu">405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu</option>
-                            <option value="406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu">406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu</option>
-                            <option value="407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT">407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT</option>
-                            <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế</option>
-                            <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế</option>
+                            <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển</option>
+                            <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển">402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển</option>
+                            <option value="403 - Thi văn hóa do CSĐT tổ chức để xét tuyển">403 - Thi văn hóa do CSĐT tổ chức để xét tuyển</option>
+                            <option value="404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển">404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển</option>
+                            <option value="405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển">405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển</option>
+                            <option value="406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển">406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển</option>
+                            <option value="407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển">407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển</option>
+                            <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển</option>
+                            <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển</option>
                             <option value="411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài">411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài</option>
-                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn</option>
-                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn</option>
-                            <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác</option>
+                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển</option>
                             <option value="416 - Kỳ thi V-SAT">416 - Kỳ thi V-SAT</option>
-                            <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức</option>
+                            <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển</option>
                             <option value="500 - Sử dụng phương thức khác">500 - Sử dụng phương thức khác</option>
                         </select>
                     </div>
@@ -583,6 +598,7 @@
         </div>
     </div>
 
+    <!-- Modal xác nhận mật khẩu khi xóa -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -603,10 +619,12 @@
     </footer>
 
     <script type="module">
+        // Import Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyA0ibiATfvdSaPq96JMrPIEPGFJBdIqo6E",
             authDomain: "dangky-xettuyen-daihoc.firebaseapp.com",
@@ -617,10 +635,12 @@
             measurementId: "G-2FEDM2YXTY"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
+        // State variables
         let registrations = [];
         let isAdmin = false;
         let editId = null;
@@ -628,6 +648,7 @@
         let currentUser = localStorage.getItem('currentUser') || '';
         const registrationsCol = collection(db, 'registrations');
 
+        // Page load
         document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('subject1').value = 'Toán';
             document.getElementById('subject2').value = 'Văn';
@@ -643,13 +664,9 @@
             if (currentUser) {
                 document.getElementById('fullName').value = currentUser;
             }
-
-            if (typeof XLSX === 'undefined') {
-                console.error('XLSX library failed to load.');
-                alert('Thư viện xuất Excel không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-            }
         });
 
+        // Fetch registrations from Firestore
         async function fetchRegistrations() {
             try {
                 const querySnapshot = await getDocs(registrationsCol);
@@ -657,10 +674,10 @@
                 displayRegistrations(registrations);
             } catch (error) {
                 console.error('Error fetching registrations:', error);
-                alert('Lỗi khi tải dữ liệu đăng ký: ' + error.message);
             }
         }
 
+        // Submit registration form
         document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -672,7 +689,7 @@
 
             const formData = {
                 fullName: document.getElementById('fullName').value,
-                passwordHash: sha256(password),
+                passwordHash: sha256(password), // Hash mật khẩu trước khi lưu
                 subject1: document.getElementById('subject1').value,
                 subject2: document.getElementById('subject2').value,
                 subject3: document.getElementById('subject3').value,
@@ -706,16 +723,16 @@
                 alert('Đăng ký thành công!');
             } catch (error) {
                 console.error('Error adding registration:', error);
-                alert('Lỗi khi đăng ký: ' + error.message);
             }
 
             document.getElementById('registrationForm').reset();
             document.getElementById('fullName').value = currentUser;
             document.getElementById('subject1').value = 'Toán';
             document.getElementById('subject2').value = 'Văn';
-            updateSubjectOptions();
+            updateSubjectOptions(); // Reset options
         });
 
+        // Submit edit form
         document.getElementById('editForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -728,7 +745,7 @@
 
             const formData = {
                 fullName: document.getElementById('editFullName').value,
-                passwordHash: r.passwordHash,
+                passwordHash: r.passwordHash, // Giữ nguyên passwordHash cũ
                 subject1: document.getElementById('editSubject1').value,
                 subject2: document.getElementById('editSubject2').value,
                 subject3: document.getElementById('editSubject3').value,
@@ -760,10 +777,10 @@
                 alert('Cập nhật thành công!');
             } catch (error) {
                 console.error('Error updating registration:', error);
-                alert('Lỗi khi cập nhật: ' + error.message);
             }
         });
 
+        // Submit delete form
         document.getElementById('deleteForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -783,10 +800,10 @@
                 alert('Xóa thành công!');
             } catch (error) {
                 console.error('Error deleting:', error);
-                alert('Lỗi khi xóa: ' + error.message);
             }
         });
 
+        // Function to update subject options in registration form to prevent duplicates
         window.updateSubjectOptions = function() {
             const subject3 = document.getElementById('subject3').value;
             const subject4 = document.getElementById('subject4').value;
@@ -809,6 +826,7 @@
             document.getElementById('subject3').innerHTML = subject3Options;
         };
 
+        // Function to update subject options in edit form to prevent duplicates
         window.updateEditSubjectOptions = function() {
             const subject3 = document.getElementById('editSubject3').value;
             const subject4 = document.getElementById('editSubject4').value;
@@ -831,6 +849,7 @@
             document.getElementById('editSubject3').innerHTML = subject3Options;
         };
 
+        // Search
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = registrations.filter(r =>
@@ -841,6 +860,7 @@
             displayRegistrations(filtered);
         });
 
+        // Display registrations
         function displayRegistrations(data) {
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
@@ -867,143 +887,149 @@
             document.getElementById('selectAllHeader').style.display = isAdmin ? 'table-cell' : 'none';
         }
 
-        function exportAllToExcel() {
-            if (!isAdmin) {
-                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-                return;
-            }
-            if (typeof XLSX === 'undefined') {
-                alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-                console.error('XLSX library is not loaded.');
-                return;
-            }
-            try {
-                const exportData = registrations.map(r => ({
-                    'Họ và tên': r.fullName || '',
-                    'Môn 1': r.subject1 || '',
-                    'Môn 2': r.subject2 || '',
-                    'Môn 3': r.subject3 || '',
-                    'Môn 4': r.subject4 || '',
-                    'Ngành học': r.major || 'Chưa xác định',
-                    'Trường': r.school || 'Chưa xác định',
-                    'Phương thức xét tuyển': r.method || '',
-                    'Ghi chú': r.note || 'Không có',
-                    'Ngày đăng ký': formatDate(r.createdAt) || ''
-                }));
+        // Export all to Excel
+function exportAllToExcel() {
+    if (!isAdmin) {
+        alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+        return;
+    }
+    if (typeof XLSX === 'undefined') {
+        alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
+        console.error('XLSX library is not loaded.');
+        return;
+    }
+    try {
+        const exportData = registrations.map(r => ({
+            'Họ và tên': r.fullName || '',
+            'Môn 1': r.subject1 || '',
+            'Môn 2': r.subject2 || '',
+            'Môn 3': r.subject3 || '',
+            'Môn 4': r.subject4 || '',
+            'Ngành học': r.major || 'Chưa xác định',
+            'Trường': r.school || 'Chưa xác định',
+            'Phương thức xét tuyển': r.method || '',
+            'Ghi chú': r.note || 'Không có',
+            'Ngày đăng ký': formatDate(r.createdAt) || ''
+        }));
 
-                const worksheet = XLSX.utils.json_to_sheet(exportData, {
-                    header: [
-                        'Họ và tên',
-                        'Môn 1',
-                        'Môn 2',
-                        'Môn 3',
-                        'Môn 4',
-                        'Ngành học',
-                        'Trường',
-                        'Phương thức xét tuyển',
-                        'Ghi chú',
-                        'Ngày đăng ký'
-                    ]
-                });
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
+        const worksheet = XLSX.utils.json_to_sheet(exportData, {
+            header: [
+                'Họ và tên',
+                'Môn 1',
+                'Môn 2',
+                'Môn 3',
+                'Môn 4',
+                'Ngành học',
+                'Trường',
+                'Phương thức xét tuyển',
+                'Ghi chú',
+                'Ngày đăng ký'
+            ]
+        });
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
 
-                worksheet['!cols'] = [
-                    { wch: 20 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 25 },
-                    { wch: 30 },
-                    { wch: 50 },
-                    { wch: 30 },
-                    { wch: 15 }
-                ];
+        // Set column widths for better readability
+        worksheet['!cols'] = [
+            { wch: 20 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 25 },
+            { wch: 30 },
+            { wch: 50 },
+            { wch: 30 },
+            { wch: 15 }
+        ];
 
-                XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx', { compression: true });
-                alert('Xuất file Excel thành công!');
-            } catch (error) {
-                console.error('Lỗi khi xuất file Excel:', error);
-                alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
-            }
-        }
+        XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx', { compression: true });
+        alert('Xuất file Excel thành công!');
+    } catch (error) {
+        console.error('Lỗi khi xuất file Excel:', error);
+        alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
+    }
+}
 
-        function exportSelectedToExcel() {
-            if (!isAdmin) {
-                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-                return;
-            }
-            if (typeof XLSX === 'undefined') {
-                alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-                console.error('XLSX library is not loaded.');
-                return;
-            }
-            const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
-            if (!selected.length) {
-                alert('Vui lòng chọn ít nhất một mục để xuất!');
-                return;
-            }
-            try {
-                const exportData = selected.map(id => {
-                    const r = registrations.find(r => r.id === id);
-                    return {
-                        'Họ và tên': r.fullName || '',
-                        'Môn 1': r.subject1 || '',
-                        'Môn 2': r.subject2 || '',
-                        'Môn 3': r.subject3 || '',
-                        'Môn 4': r.subject4 || '',
-                        'Ngành học': r.major || 'Chưa xác định',
-                        'Trường': r.school || 'Chưa xác định',
-                        'Phương thức xét tuyển': r.method || '',
-                        'Ghi chú': r.note || 'Không có',
-                        'Ngày đăng ký': formatDate(r.createdAt) || ''
-                    };
-                });
+// Export selected to Excel
+function exportSelectedToExcel() {
+    if (!isAdmin) {
+        alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+        return;
+    }
+    if (typeof XLSX === 'undefined') {
+        alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
+        console.error('XLSX library is not loaded.');
+        return;
+    }
+    const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
+    if (!selected.length) {
+        alert('Vui lòng chọn ít nhất một mục để xuất!');
+        return;
+    }
+    try {
+        const exportData = selected.map(id => {
+            const r = registrations.find(r => r.id === id);
+            return {
+                'Họ và tên': r.fullName || '',
+                'Môn 1': r.subject1 || '',
+                'Môn 2': r.subject2 || '',
+                'Môn 3': r.subject3 || '',
+                'Môn 4': r.subject4 || '',
+                'Ngành học': r.major || 'Chưa xác định',
+                'Trường': r.school || 'Chưa xác định',
+                'Phương thức xét tuyển': r.method || '',
+                'Ghi chú': r.note || 'Không có',
+                'Ngày đăng ký': formatDate(r.createdAt) || ''
+            };
+        });
 
-                const worksheet = XLSX.utils.json_to_sheet(exportData, {
-                    header: [
-                        'Họ và tên',
-                        'Môn 1',
-                        'Môn 2',
-                        'Môn 3',
-                        'Môn 4',
-                        'Ngành học',
-                        'Trường',
-                        'Phương thức xét tuyển',
-                        'Ghi chú',
-                        'Ngày đăng ký'
-                    ]
-                });
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
+        const worksheet = XLSX.utils.json_to_sheet(exportData, {
+            header: [
+                'Họ và tên',
+                'Môn 1',
+                'Môn 2',
+                'Môn 3',
+                'Môn 4',
+                'Ngành học',
+                'Trường',
+                'Phương thức xét tuyển',
+                'Ghi chú',
+                'Ngày đăng ký'
+            ]
+        });
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
 
-                worksheet['!cols'] = [
-                    { wch: 20 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 15 },
-                    { wch: 25 },
-                    { wch: 30 },
-                    { wch: 50 },
-                    { wch: 30 },
-                    { wch: 15 }
-                ];
+        // Set column widths
+        worksheet['!cols'] = [
+            { wch: 20 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 25 },
+            { wch: 30 },
+            { wch: 50 },
+            { wch: 30 },
+            { wch: 15 }
+        ];
 
-                XLSX.writeFile(workbook, 'danh_sach_chon.xlsx', { compression: true });
-                alert('Xuất file Excel thành công!');
-            } catch (error) {
-                console.error('Lỗi khi xuất file Excel:', error);
-                alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
-            }
-        }
+        XLSX.writeFile(workbook, 'danh_sach_chon.xlsx', { compression: true });
+        alert('Xuất file Excel thành công!');
+    } catch (error) {
+        console.error('Lỗi khi xuất file Excel:', error);
+        alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
+    }
+}
 
+        // Toggle select all
         function toggleSelectAll() {
             const selectAll = document.getElementById('selectAll').checked;
             document.querySelectorAll('.selectRow').forEach(cb => cb.checked = selectAll);
         }
 
+        // View details
         window.viewDetails = function(id) {
             const r = registrations.find(r => r.id === id);
             document.getElementById('modalContent').innerHTML = `
@@ -1018,6 +1044,7 @@
             document.getElementById('detailModal').style.display = 'flex';
         };
 
+        // Open edit modal
         window.editRegistration = function(id) {
             const r = registrations.find(r => r.id === id);
             if (!isAdmin && r.fullName !== currentUser) {
@@ -1038,6 +1065,7 @@
             document.getElementById('editModal').style.display = 'flex';
         };
 
+        // Open delete modal
         window.openDeleteModal = function(id) {
             const r = registrations.find(r => r.id === id);
             if (!isAdmin && r.fullName !== currentUser) {
@@ -1048,6 +1076,7 @@
             document.getElementById('deleteModal').style.display = 'flex';
         };
 
+        // Update stats
         function updateStats() {
             document.getElementById('totalRegistrations').textContent = registrations.length;
             const today = new Date().toISOString().split('T')[0];
@@ -1067,20 +1096,22 @@
             document.getElementById('popularMajor').textContent = popular;
         }
 
+        // Check admin status
         function checkAdminStatus() {
             const adminLogin = document.getElementById('adminLogin');
             const adminToggle = document.getElementById('adminToggle');
             if (isAdmin) {
                 adminLogin.style.display = 'none';
                 adminToggle.textContent = 'Đăng xuất quản trị viên';
-                adminToggle.style.background = '#27ae60';
+                adminToggle.style.background = 'linear-gradient(135deg, #27ae60, #219653)';
             } else {
                 adminToggle.textContent = 'Đăng nhập quản trị viên';
-                adminToggle.style.background = '#e74c3c';
+                adminToggle.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
             }
             displayRegistrations(registrations);
         }
 
+        // Login admin
         window.loginAdmin = function() {
             const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
@@ -1092,6 +1123,7 @@
                 .catch(error => alert('Lỗi: ' + error.message));
         };
 
+        // Toggle admin
         document.getElementById('adminToggle').addEventListener('click', () => {
             if (isAdmin) {
                 signOut(auth).then(() => alert('Đăng xuất thành công!'));
@@ -1100,6 +1132,7 @@
             }
         });
 
+        // Close modals
         document.querySelectorAll('.close').forEach(btn => {
             btn.addEventListener('click', () => btn.closest('.modal').style.display = 'none');
         });
@@ -1107,8 +1140,9 @@
             if (e.target.classList.contains('modal')) e.target.style.display = 'none';
         });
 
+        // Helper function to format date
         function formatDate(dateStr) {
-            return dateStr ? new Date(dateStr).toLocaleDateString('vi-VN') : '';
+            return new Date(dateStr).toLocaleDateString('vi-VN');
         }
     </script>
 </body>
