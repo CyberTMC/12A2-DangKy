@@ -144,6 +144,18 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
+        button:disabled {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .loading::after {
+            content: 'Đang tải...';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
         .search-box {
             margin-bottom: 25px;
             padding: 14px;
@@ -458,6 +470,9 @@
                     </div>
                 </div>
                 <button type="submit">Đăng ký</button>
+                <div id="loadingMessage" style="display: none; color: #3498db; font-weight: bold; margin-top: 10px;">
+                    Đang tải, vui lòng chờ...
+                </div>
             </form>
         </div>
         
@@ -681,15 +696,24 @@
         document.getElementById('registrationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const loadingMessage = document.getElementById('loadingMessage');
+            submitButton.disabled = true;
+            submitButton.classList.add('loading');
+            loadingMessage.style.display = 'block';
+
             const password = document.getElementById('password').value;
             if (!password) {
                 alert('Vui lòng nhập mật khẩu!');
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
+                loadingMessage.style.display = 'none';
                 return;
             }
 
             const formData = {
                 fullName: document.getElementById('fullName').value,
-                passwordHash: sha256(password), // Hash mật khẩu trước khi lưu
+                passwordHash: sha256(password),
                 subject1: document.getElementById('subject1').value,
                 subject2: document.getElementById('subject2').value,
                 subject3: document.getElementById('subject3').value,
@@ -703,11 +727,17 @@
 
             if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
                 alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
+                loadingMessage.style.display = 'none';
                 return;
             }
 
             if (formData.subject3 === formData.subject4 && formData.subject3 !== "") {
                 alert('Môn 3 và Môn 4 không được trùng nhau!');
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
+                loadingMessage.style.display = 'none';
                 return;
             }
 
@@ -723,6 +753,11 @@
                 alert('Đăng ký thành công!');
             } catch (error) {
                 console.error('Error adding registration:', error);
+                alert('Có lỗi xảy ra khi đăng ký: ' + error.message);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
+                loadingMessage.style.display = 'none';
             }
 
             document.getElementById('registrationForm').reset();
@@ -888,140 +923,140 @@
         }
 
         // Export all to Excel
-function exportAllToExcel() {
-    if (!isAdmin) {
-        alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-        return;
-    }
-    if (typeof XLSX === 'undefined') {
-        alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-        console.error('XLSX library is not loaded.');
-        return;
-    }
-    try {
-        const exportData = registrations.map(r => ({
-            'Họ và tên': r.fullName || '',
-            'Môn 1': r.subject1 || '',
-            'Môn 2': r.subject2 || '',
-            'Môn 3': r.subject3 || '',
-            'Môn 4': r.subject4 || '',
-            'Ngành học': r.major || 'Chưa xác định',
-            'Trường': r.school || 'Chưa xác định',
-            'Phương thức xét tuyển': r.method || '',
-            'Ghi chú': r.note || 'Không có',
-            'Ngày đăng ký': formatDate(r.createdAt) || ''
-        }));
+        function exportAllToExcel() {
+            if (!isAdmin) {
+                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+                return;
+            }
+            if (typeof XLSX === 'undefined') {
+                alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
+                console.error('XLSX library is not loaded.');
+                return;
+            }
+            try {
+                const exportData = registrations.map(r => ({
+                    'Họ và tên': r.fullName || '',
+                    'Môn 1': r.subject1 || '',
+                    'Môn 2': r.subject2 || '',
+                    'Môn 3': r.subject3 || '',
+                    'Môn 4': r.subject4 || '',
+                    'Ngành học': r.major || 'Chưa xác định',
+                    'Trường': r.school || 'Chưa xác định',
+                    'Phương thức xét tuyển': r.method || '',
+                    'Ghi chú': r.note || 'Không có',
+                    'Ngày đăng ký': formatDate(r.createdAt) || ''
+                }));
 
-        const worksheet = XLSX.utils.json_to_sheet(exportData, {
-            header: [
-                'Họ và tên',
-                'Môn 1',
-                'Môn 2',
-                'Môn 3',
-                'Môn 4',
-                'Ngành học',
-                'Trường',
-                'Phương thức xét tuyển',
-                'Ghi chú',
-                'Ngày đăng ký'
-            ]
-        });
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
+                const worksheet = XLSX.utils.json_to_sheet(exportData, {
+                    header: [
+                        'Họ và tên',
+                        'Môn 1',
+                        'Môn 2',
+                        'Môn 3',
+                        'Môn 4',
+                        'Ngành học',
+                        'Trường',
+                        'Phương thức xét tuyển',
+                        'Ghi chú',
+                        'Ngày đăng ký'
+                    ]
+                });
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách');
 
-        // Set column widths for better readability
-        worksheet['!cols'] = [
-            { wch: 20 },
-            { wch: 15 },
-            { wch: 15 },
-            { wch: 15 },
-            { wch: 15 },
-            { wch: 25 },
-            { wch: 30 },
-            { wch: 50 },
-            { wch: 30 },
-            { wch: 15 }
-        ];
+                // Set column widths for better readability
+                worksheet['!cols'] = [
+                    { wch: 20 },
+                    { wch: 15 },
+                    { wch: 15 },
+                    { wch: 15 },
+                    { wch: 15 },
+                    { wch: 25 },
+                    { wch: 30 },
+                    { wch: 50 },
+                    { wch: 30 },
+                    { wch: 15 }
+                ];
 
-        XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx', { compression: true });
-        alert('Xuất file Excel thành công!');
-    } catch (error) {
-        console.error('Lỗi khi xuất file Excel:', error);
-        alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
-    }
-}
+                XLSX.writeFile(workbook, 'danh_sach_tat_ca.xlsx', { compression: true });
+                alert('Xuất file Excel thành công!');
+            } catch (error) {
+                console.error('Lỗi khi xuất file Excel:', error);
+                alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
+            }
+        }
 
-// Export selected to Excel
-function exportSelectedToExcel() {
-    if (!isAdmin) {
-        alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
-        return;
-    }
-    if (typeof XLSX === 'undefined') {
-        alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
-        console.error('XLSX library is not loaded.');
-        return;
-    }
-    const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
-    if (!selected.length) {
-        alert('Vui lòng chọn ít nhất một mục để xuất!');
-        return;
-    }
-    try {
-        const exportData = selected.map(id => {
-            const r = registrations.find(r => r.id === id);
-            return {
-                'Họ và tên': r.fullName || '',
-                'Môn 1': r.subject1 || '',
-                'Môn 2': r.subject2 || '',
-                'Môn 3': r.subject3 || '',
-                'Môn 4': r.subject4 || '',
-                'Ngành học': r.major || 'Chưa xác định',
-                'Trường': r.school || 'Chưa xác định',
-                'Phương thức xét tuyển': r.method || '',
-                'Ghi chú': r.note || 'Không có',
-                'Ngày đăng ký': formatDate(r.createdAt) || ''
-            };
-        });
+        // Export selected to Excel
+        function exportSelectedToExcel() {
+            if (!isAdmin) {
+                alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
+                return;
+            }
+            if (typeof XLSX === 'undefined') {
+                alert('Thư viện XLSX không tải được. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.');
+                console.error('XLSX library is not loaded.');
+                return;
+            }
+            const selected = [...document.querySelectorAll('.selectRow:checked')].map(cb => cb.dataset.id);
+            if (!selected.length) {
+                alert('Vui lòng chọn ít nhất một mục để xuất!');
+                return;
+            }
+            try {
+                const exportData = selected.map(id => {
+                    const r = registrations.find(r => r.id === id);
+                    return {
+                        'Họ và tên': r.fullName || '',
+                        'Môn 1': r.subject1 || '',
+                        'Môn 2': r.subject2 || '',
+                        'Môn 3': r.subject3 || '',
+                        'Môn 4': r.subject4 || '',
+                        'Ngành học': r.major || 'Chưa xác định',
+                        'Trường': r.school || 'Chưa xác định',
+                        'Phương thức xét tuyển': r.method || '',
+                        'Ghi chú': r.note || 'Không có',
+                        'Ngày đăng ký': formatDate(r.createdAt) || ''
+                    };
+                });
 
-        const worksheet = XLSX.utils.json_to_sheet(exportData, {
-            header: [
-                'Họ và tên',
-                'Môn 1',
-                'Môn 2',
-                'Môn 3',
-                'Môn 4',
-                'Ngành học',
-                'Trường',
-                'Phương thức xét tuyển',
-                'Ghi chú',
-                'Ngày đăng ký'
-            ]
-        });
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
+                const worksheet = XLSX.utils.json_to_sheet(exportData, {
+                    header: [
+                        'Họ và tên',
+                        'Môn 1',
+                        'Môn 2',
+                        'Môn 3',
+                        'Môn 4',
+                        'Ngành học',
+                        'Trường',
+                        'Phương thức xét tuyển',
+                        'Ghi chú',
+                        'Ngày đăng ký'
+                    ]
+                });
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Danh sách chọn');
 
-        // Set column widths
-        worksheet['!cols'] = [
-            { wch: 20 },
-            { wch: 15 },
-            { wch: 15 },
-            { wch: 15 },
-            { wch: 15 },
-            { wch: 25 },
-            { wch: 30 },
-            { wch: 50 },
-            { wch: 30 },
-            { wch: 15 }
-        ];
+                // Set column widths
+                worksheet['!cols'] = [
+                    { wch: 20 },
+                    { wch: 15 },
+                    { wch: 15 },
+                    { wch: 15 },
+                    { wch: 15 },
+                    { wch: 25 },
+                    { wch: 30 },
+                    { wch: 50 },
+                    { wch: 30 },
+                    { wch: 15 }
+                ];
 
-        XLSX.writeFile(workbook, 'danh_sach_chon.xlsx', { compression: true });
-        alert('Xuất file Excel thành công!');
-    } catch (error) {
-        console.error('Lỗi khi xuất file Excel:', error);
-        alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
-    }
-}
+                XLSX.writeFile(workbook, 'danh_sach_chon.xlsx', { compression: true });
+                alert('Xuất file Excel thành công!');
+            } catch (error) {
+                console.error('Lỗi khi xuất file Excel:', error);
+                alert('Có lỗi xảy ra khi xuất file Excel: ' + error.message);
+            }
+        }
 
         // Toggle select all
         function toggleSelectAll() {
