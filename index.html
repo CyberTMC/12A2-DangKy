@@ -204,15 +204,6 @@
         .view-btn:hover {
             background: linear-gradient(135deg, #219653, #27ae60);
         }
-        .edit-btn {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            padding: 10px 14px;
-            font-size: 14px;
-            border-radius: 6px;
-        }
-        .edit-btn:hover {
-            background: linear-gradient(135deg, #e67e22, #f39c12);
-        }
         .delete-btn {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             padding: 10px 14px;
@@ -370,7 +361,7 @@
         </header>
 
         <div class="warning">
-            ⚠️ Lưu ý: Không được spam thông tin! Chỉ quản trị viên hoặc người biết mật khẩu có quyền chỉnh sửa/xóa thông tin của mình. Nếu gặp vấn đề, liên hệ admin.
+            ⚠️ Lưu ý: Không được spam thông tin! Chỉ quản trị viên hoặc người biết mật khẩu có quyền xóa thông tin của mình. Nếu nhập sai, vui lòng xóa và nhập lại.
         </div>
 
         <div class="admin-login" id="adminLogin" style="display: none;">
@@ -406,7 +397,7 @@
                         <input type="text" id="fullName" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Mật khẩu (để sửa/xóa) *</label>
+                        <label for="password">Mật khẩu (để xóa) *</label>
                         <input type="password" id="password" required placeholder="Nhập mật khẩu của bạn">
                         <div id="passwordError" class="error-message"></div>
                     </div>
@@ -545,114 +536,6 @@
         </div>
     </div>
 
-    <!-- Modal chỉnh sửa -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Chỉnh sửa thông tin đăng ký</h2>
-            <form id="editForm">
-                <input type="hidden" id="editId">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="editFullName">Họ và tên *</label>
-                        <input type="text" id="editFullName" required>
-                        <div id="editFullNameError" class="error-message"></div>
-                    </div>
-                    <div class="form-group" id="editPasswordGroup">
-                        <label for="editPassword">Mật khẩu (để xác nhận) *</label>
-                        <input type="password" id="editPassword" placeholder="Nhập mật khẩu của bạn">
-                        <div id="editPasswordError" class="error-message"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="editSubject1">Môn 1 *</label>
-                        <select id="editSubject1" required>
-                            <option value="">Chọn môn</option>
-                            <option value="Toán">Toán</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="editSubject2">Môn 2 *</label>
-                        <select id="editSubject2" required>
-                            <option value="">Chọn môn</option>
-                            <option value="Văn">Văn</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="editSubject3">Môn 3 *</label>
-                        <select id="editSubject3" required onchange="updateEditSubjectOptions(); suggestBlocksAndMajors('edit');">
-                            <option value="">Chọn môn</option>
-                            <option value="Tin học">Tin học</option>
-                            <option value="Địa lý">Địa lý</option>
-                            <option value="Tiếng Anh">Tiếng Anh</option>
-                            <option value="Tiếng Trung">Tiếng Trung</option>
-                            <option value="Lịch sử">Lịch sử</option>
-                            <option value="GDKT-PL">GDKT-PL</option>
-                            <option value="Vật lí">Vật lí</option>
-                            <option value="Hóa học">Hóa học</option>
-                            <option value="Sinh học">Sinh học</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="editSubject4">Môn 4 *</label>
-                        <select id="editSubject4" required onchange="updateEditSubjectOptions(); suggestBlocksAndMajors('edit');">
-                            <option value="">Chọn môn</option>
-                            <option value="Tin học">Tin học</option>
-                            <option value="Địa lý">Địa lý</option>
-                            <option value="Tiếng Anh">Tiếng Anh</option>
-                            <option value="Tiếng Trung">Tiếng Trung</option>
-                            <option value="Lịch sử">Lịch sử</option>
-                            <option value="GDKT-PL">GDKT-PL</option>
-                            <option value="Vật lí">Vật lí</option>
-                            <option value="Hóa học">Hóa học</option>
-                            <option value="Sinh học">Sinh học</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="editMajor">Ngành học</label>
-                        <input type="text" id="editMajor">
-                        <div id="editblockSuggestion" style="margin-top: 10px; color: #3498db; font-weight: bold;"></div>
-                        <div id="editmajorSuggestion" style="margin-top: 10px; color: #27ae60; font-weight: bold;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="editSchool">Trường</label>
-                        <input type="text" id="editSchool">
-                    </div>
-                    <div class="form-group">
-                        <label for="editMethod">Phương thức xét tuyển *</label>
-                        <select id="editMethod" required>
-                            <option value="">Chọn phương thức</option>
-                            <option value="100 - Xét kết quả thi tốt nghiệp THPT">100 - Xét kết quả thi tốt nghiệp THPT</option>
-                            <option value="200 - Xét kết quả học tập cấp THPT (học bạ)">200 - Xét kết quả học tập cấp THPT (học bạ)</option>
-                            <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
-                            <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển</option>
-                            <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển">402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển</option>
-                            <option value="403 - Thi văn hóa do CSĐT tổ chức để xét tuyển">403 - Thi văn hóa do CSĐT tổ chức để xét tuyển</option>
-                            <option value="404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển">404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển</option>
-                            <option value="405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển">405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển</option>
-                            <option value="406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển">406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển</option>
-                            <option value="407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển">407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển</option>
-                            <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển</option>
-                            <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển</option>
-                            <option value="411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài">411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài</option>
-                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển</option>
-                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển</option>
-                            <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển</option>
-                            <option value="416 - Kỳ thi V-SAT">416 - Kỳ thi V-SAT</option>
-                            <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển</option>
-                            <option value="500 - Sử dụng phương thức khác">500 - Sử dụng phương thức khác</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="editNote">Ghi chú</label>
-                        <input type="text" id="editNote">
-                    </div>
-                </div>
-                <button type="submit">Cập nhật</button>
-                <div id="editFormError" class="error-message" style="margin-top: 10px;"></div>
-            </form>
-        </div>
-    </div>
-
     <!-- Modal xác nhận mật khẩu khi xóa -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
@@ -677,7 +560,7 @@
     <script type="module">
         // Import Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
         // Firebase configuration
@@ -751,51 +634,251 @@
         let registrations = [];
         let displayedData = [];
         let isAdmin = false;
-        let editId = null;
         let deleteId = null;
         let currentUser = localStorage.getItem('currentUser') || '';
         const registrationsCol = collection(db, 'registrations');
 
         // Danh sách tổ hợp xét tuyển (sẽ được thêm sau)
         const combinations = {
-    // Khối A (Toán + Khoa học tự nhiên) - 18 tổ hợp phổ biến
+    // === KHỐI TRUYỀN THỐNG & PHỔ BIẾN NHẤT (Dựa trên dữ liệu thực) ===
+    'D01': ['Toán', 'Ngữ văn', 'Tiếng Anh'],
     'A00': ['Toán', 'Vật lí', 'Hóa học'],
     'A01': ['Toán', 'Vật lí', 'Tiếng Anh'],
-    'A02': ['Toán', 'Vật lí', 'Sinh học'],
-    'A03': ['Toán', 'Vật lí', 'Lịch sử'],
-    'A04': ['Toán', 'Vật lí', 'Địa lí'],
-    'A05': ['Toán', 'Hóa học', 'Lịch sử'],
-    'A06': ['Toán', 'Hóa học', 'Địa lí'],
-    'A07': ['Toán', 'Lịch sử', 'Địa lí'],
-    'A08': ['Toán', 'Lịch sử', 'GDKT-PL'],
-    'A09': ['Toán', 'Địa lí', 'GDKT-PL'],
-    'A10': ['Toán', 'Vật lí', 'GDKT-PL'],
-    'A11': ['Toán', 'Hóa học', 'GDKT-PL'],
-    'A12': ['Toán', 'Vật lí', 'Tin học'],
-    'A13': ['Toán', 'Địa lí', 'Tin học'],
-    'A14': ['Toán', 'Hóa học', 'Tin học'],
-    'A15': ['Toán', 'Sinh học', 'Tin học'],
-    'A16': ['Toán', 'Vật lí', 'Công nghệ'],
-    'A17': ['Toán', 'Hóa học', 'Công nghệ'],
-
-    // Khối B (Toán + Sinh học/Hóa học) - 10 tổ hợp
+    'D07': ['Toán', 'Hóa học', 'Tiếng Anh'],
     'B00': ['Toán', 'Hóa học', 'Sinh học'],
-    'B01': ['Toán', 'Lịch sử', 'Sinh học'],
-    'B02': ['Toán', 'Sinh học', 'Địa lí'],
-    'B03': ['Toán', 'Sinh học', 'Ngữ văn'],
-    'B04': ['Toán', 'Sinh học', 'GDKT-PL'],
-    'B05': ['Toán', 'Hóa học', 'GDKT-PL'],
-    'B06': ['Toán', 'Sinh học', 'Tiếng Anh'],
-    'B07': ['Toán', 'Hóa học', 'Tiếng Anh'],
-    'B08': ['Toán', 'Sinh học', 'Tin học'],
-    'B09': ['Toán', 'Hóa học', 'Tin học'],
-
-    // Khối C (Ngữ văn + Khoa học xã hội) - 20 tổ hợp
     'C00': ['Ngữ văn', 'Lịch sử', 'Địa lí'],
     'C01': ['Ngữ văn', 'Toán', 'Vật lí'],
-    'C02': ['Ngữ văn', 'Toán', 'Hóa học'],
-    'C03': ['Ngữ văn', 'Toán', 'Lịch sử'],
+    'D14': ['Ngữ văn', 'Lịch sử', 'Tiếng Anh'],
+    'D15': ['Ngữ văn', 'Địa lí', 'Tiếng Anh'],
+    'A02': ['Toán', 'Vật lí', 'Sinh học'],
     'C04': ['Ngữ văn', 'Toán', 'Địa lí'],
+    'D03': ['Ngữ văn', 'Toán', 'Tiếng Pháp'],
+    'D04': ['Ngữ văn', 'Toán', 'Tiếng Trung'],
+    'D10': ['Toán', 'Địa lí', 'Tiếng Anh'],
+    'B08': ['Toán', 'Sinh học', 'Tiếng Anh'],
+    'D06': ['Ngữ văn', 'Toán', 'Tiếng Nhật'],
+    'D09': ['Toán', 'Lịch sử', 'Tiếng Anh'],
+    'D02': ['Ngữ văn', 'Toán', 'Tiếng Nga'],
+    'D05': ['Ngữ văn', 'Toán', 'Tiếng Đức'],
+    'C02': ['Ngữ văn', 'Toán', 'Hóa học'],
+    'A07': ['Toán', 'Lịch sử', 'Địa lí'],
+    'C03': ['Ngữ văn', 'Toán', 'Lịch sử'],
+    'B03': ['Toán', 'Sinh học', 'Ngữ văn'],
+    'A05': ['Toán', 'Hóa học', 'Lịch sử'],
+    'A06': ['Toán', 'Hóa học', 'Địa lí'],
+    'B02': ['Toán', 'Sinh học', 'Địa lí'],
+    'B01': ['Toán', 'Lịch sử', 'Sinh học'],
+    'A03': ['Toán', 'Vật lí', 'Lịch sử'],
+    'A04': ['Toán', 'Vật lí', 'Địa lí'],
+
+    // === KHỐI MỚI VỚI GDKT-PL (GIÁO DỤC KINH TẾ & PHÁP LUẬT) ===
+    'X74': ['Ngữ văn', 'Địa lí', 'GDKT-PL'],
+    'X70': ['Ngữ văn', 'Lịch sử', 'GDKT-PL'],
+    'X01': ['Ngữ văn', 'Toán', 'GDKT-PL'],
+    'X78': ['Ngữ văn', 'GDKT-PL', 'Tiếng Anh'],
+    'X21': ['Toán', 'Địa lí', 'GDKT-PL'],
+    'X05': ['Toán', 'Vật lí', 'GDKT-PL'],
+    'X13': ['Toán', 'Sinh học', 'GDKT-PL'],
+    'X17': ['Toán', 'Lịch sử', 'GDKT-PL'],
+    'X09': ['Toán', 'Hóa học', 'GDKT-PL'],
+    'X25': ['Toán', 'Tiếng Anh', 'GDKT-PL'],
+    'X58': ['Ngữ văn', 'Vật lí', 'GDKT-PL'],
+    'X62': ['Ngữ văn', 'Hóa học', 'GDKT-PL'],
+    'X66': ['Ngữ văn', 'Sinh học', 'GDKT-PL'],
+    'X53': ['Toán', 'GDKT-PL', 'Tin học'],
+    'X86': ['Ngữ văn', 'GDKT-PL', 'Tiếng Pháp'],
+    'X90': ['Ngữ văn', 'GDKT-PL', 'Tiếng Trung'],
+    'X94': ['Ngữ văn', 'GDKT-PL', 'Tiếng Đức'],
+    'X98': ['Ngữ văn', 'GDKT-PL', 'Tiếng Nhật'],
+    'X41': ['Toán', 'GDKT-PL', 'Tiếng Đức'],
+    'X29': ['Toán', 'GDKT-PL', 'Tiếng Nga'],
+    'X45': ['Toán', 'GDKT-PL', 'Tiếng Nhật'],
+    'X33': ['Toán', 'GDKT-PL', 'Tiếng Pháp'],
+    'D89': ['Toán', 'GDKT-PL', 'Tiếng Trung'],
+    'D68': ['Ngữ văn', 'GDKT-PL', 'Tiếng Nga'],
+    'D70': ['Ngữ văn', 'GDKT-PL', 'Tiếng Pháp'],
+    'D71': ['Ngữ văn', 'GDKT-PL', 'Tiếng Trung'],
+    'Y07': ['Ngữ văn', 'GDKT-PL', 'Tin học'],
+
+    // === KHỐI MỚI VỚI TIN HỌC ===
+    'X26': ['Toán', 'Tiếng Anh', 'Tin học'],
+    'K01': ['Toán', 'Tiếng Anh', 'Tin học'], // Trùng với X26
+    'X02': ['Toán', 'Ngữ văn', 'Tin học'],
+    'X06': ['Toán', 'Vật lí', 'Tin học'],
+    'X10': ['Toán', 'Hóa học', 'Tin học'],
+    'X14': ['Toán', 'Sinh học', 'Tin học'],
+    'X22': ['Toán', 'Địa lí', 'Tin học'],
+    'X18': ['Toán', 'Lịch sử', 'Tin học'],
+    'X75': ['Ngữ văn', 'Địa lí', 'Tin học'],
+    'X71': ['Ngữ văn', 'Lịch sử', 'Tin học'],
+    'X79': ['Ngữ văn', 'Tiếng Anh', 'Tin học'],
+    'X46': ['Toán', 'Tiếng Nhật', 'Tin học'],
+    'X63': ['Ngữ văn', 'Hóa học', 'Tin học'],
+    'X67': ['Ngữ văn', 'Sinh học', 'Tin học'],
+    'X59': ['Ngữ văn', 'Vật lí', 'Tin học'],
+    'X35': ['Ngữ văn', 'Lịch sử', 'Tin học'], // Trùng với X71
+    'X36': ['Ngữ văn', 'Địa lí', 'Tin học'], // Trùng với X75
+
+    // === KHỐI MỚI VỚI CÔNG NGHỆ ===
+    'X07': ['Toán', 'Vật lí', 'Công nghệ công nghiệp'],
+    'X08': ['Toán', 'Vật lí', 'Công nghệ nông nghiệp'],
+    'X11': ['Toán', 'Hóa học', 'Công nghệ công nghiệp'],
+    'X12': ['Toán', 'Hóa học', 'Công nghệ nông nghiệp'],
+    'X15': ['Toán', 'Sinh học', 'Công nghệ công nghiệp'],
+    'X16': ['Toán', 'Sinh học', 'Công nghệ nông nghiệp'],
+    'X19': ['Toán', 'Lịch sử', 'Công nghệ công nghiệp'],
+    'X20': ['Toán', 'Lịch sử', 'Công nghệ nông nghiệp'],
+    'X23': ['Toán', 'Địa lí', 'Công nghệ công nghiệp'],
+    'X24': ['Toán', 'Địa lí', 'Công nghệ nông nghiệp'],
+    'X27': ['Toán', 'Tiếng Anh', 'Công nghệ công nghiệp'],
+    'X28': ['Toán', 'Tiếng Anh', 'Công nghệ nông nghiệp'],
+    'X03': ['Toán', 'Ngữ văn', 'Công nghệ công nghiệp'],
+    'X04': ['Toán', 'Ngữ văn', 'Công nghệ nông nghiệp'],
+    'X54': ['Toán', 'GDKT-PL', 'Công nghệ công nghiệp'],
+    'X55': ['Toán', 'GDKT-PL', 'Công nghệ nông nghiệp'],
+    'X56': ['Toán', 'Tin học', 'Công nghệ công nghiệp'],
+    'X57': ['Toán', 'Tin học', 'Công nghệ nông nghiệp'],
+    'X60': ['Ngữ văn', 'Vật lí', 'Công nghệ công nghiệp'],
+    'X61': ['Ngữ văn', 'Vật lí', 'Công nghệ nông nghiệp'],
+    'X64': ['Ngữ văn', 'Hóa học', 'Công nghệ công nghiệp'],
+    'X65': ['Ngữ văn', 'Hóa học', 'Công nghệ nông nghiệp'],
+    'X68': ['Ngữ văn', 'Sinh học', 'Công nghệ công nghiệp'],
+    'X69': ['Ngữ văn', 'Sinh học', 'Công nghệ nông nghiệp'],
+    'X72': ['Ngữ văn', 'Lịch sử', 'Công nghệ công nghiệp'],
+    'X73': ['Ngữ văn', 'Lịch sử', 'Công nghệ nông nghiệp'],
+    'X76': ['Ngữ văn', 'Địa lí', 'Công nghệ công nghiệp'],
+    'X77': ['Ngữ văn', 'Địa lí', 'Công nghệ nông nghiệp'],
+    'X80': ['Ngữ văn', 'Tiếng Anh', 'Công nghệ công nghiệp'],
+    'X81': ['Ngữ văn', 'Tiếng Anh', 'Công nghệ nông nghiệp'],
+    'Y08': ['Ngữ văn', 'GDKT-PL', 'Công nghệ công nghiệp'],
+    'Y09': ['Ngữ văn', 'GDKT-PL', 'Công nghệ nông nghiệp'],
+    'Y10': ['Ngữ văn', 'Tin học', 'Công nghệ công nghiệp'],
+    'Y11': ['Ngữ văn', 'Tin học', 'Công nghệ nông nghiệp'],
+
+    // === KHỐI NĂNG KHIẾU MỞ RỘNG (Dựa trên dữ liệu thực) ===
+    // Khối H (Mỹ thuật)
+    'H00': ['Ngữ văn', 'Năng khiếu vẽ Nghệ thuật 1', 'Năng khiếu vẽ Nghệ thuật 2'],
+    'H01': ['Toán', 'Ngữ văn', 'Vẽ Mỹ thuật'],
+    'H02': ['Toán', 'Vẽ Hình họa mỹ thuật', 'Vẽ trang trí màu'],
+    'H04': ['Toán', 'Tiếng Anh', 'Vẽ Năng khiếu'],
+    'H06': ['Ngữ văn', 'Tiếng Anh', 'Vẽ mỹ thuật'],
+    'H07': ['Toán', 'Hình họa', 'Trang trí'],
+    'H08': ['Ngữ văn', 'Lịch sử', 'Vẽ mỹ thuật'],
+    'H09': ['Ngữ văn', 'Địa lí', 'Năng khiếu'],
+    'H10': ['Ngữ văn', 'Ngoại ngữ', 'Năng khiếu'],
+
+    // Khối V (Thiết kế)
+    'V00': ['Toán', 'Vật lí', 'Vẽ Hình họa mỹ thuật'],
+    'V01': ['Toán', 'Ngữ văn', 'Vẽ Hình họa mỹ thuật'],
+    'V02': ['Toán', 'Tiếng Anh', 'Vẽ mỹ thuật'],
+    'V03': ['Vẽ mỹ thuật', 'Toán', 'Hóa học'],
+    'V05': ['Ngữ văn', 'Vật lí', 'Vẽ mỹ thuật'],
+    'V06': ['Toán', 'Địa lí', 'Vẽ mỹ thuật'],
+    'V07': ['Toán', 'Tiếng Đức', 'Vẽ mỹ thuật'],
+    'V08': ['Toán', 'Tiếng Nga', 'Vẽ mỹ thuật'],
+    'V09': ['Toán', 'Tiếng Nhật', 'Vẽ mỹ thuật'],
+    'V10': ['Toán', 'Tiếng Pháp', 'Vẽ mỹ thuật'],
+    'V11': ['Toán', 'Tiếng Trung', 'Vẽ mỹ thuật'],
+
+    // Khối T (Thể dục Thể thao)
+    'T00': ['Toán', 'Sinh học', 'Năng khiếu TDTT'],
+    'T01': ['Toán', 'Ngữ văn', 'Năng khiếu TDTT'],
+    'T02': ['Ngữ văn', 'Sinh học', 'Năng khiếu TDTT'],
+    'T03': ['Ngữ văn', 'Địa lí', 'Năng khiếu TDTT'],
+    'T04': ['Toán', 'Vật lí', 'Năng khiếu TDTT'],
+    'T05': ['Ngữ văn', 'GDKT-PL', 'Năng khiếu TDTT'],
+    'T06': ['Toán', 'Địa lí', 'Năng khiếu TDTT'],
+    'T07': ['Ngữ văn', 'Địa lí', 'Năng khiếu TDTT'],
+    'T08': ['Toán', 'GDKT-PL', 'Năng khiếu TDTT'],
+    'T09': ['Ngữ văn', 'Lịch sử', 'Năng khiếu TDTT'],
+    'T10': ['Toán', 'Vật lí', 'Năng khiếu TDTT'],
+
+    // Khối M (Mầm non)
+    'M00': ['Ngữ văn', 'Toán', 'Đọc diễn cảm, Hát'],
+    'M01': ['Ngữ văn', 'Lịch sử', 'Năng khiếu'],
+    'M02': ['Toán', 'Năng khiếu 1', 'Năng khiếu 2'],
+    'M03': ['Ngữ văn', 'Năng khiếu 1', 'Năng khiếu 2'],
+    'M04': ['Toán', 'Đọc kể diễn cảm', 'Hát - Múa'],
+    'M06': ['Ngữ văn', 'Toán', 'Năng khiếu Giáo dục mầm non'],
+    'M07': ['Ngữ văn', 'Địa lí', 'Năng khiếu đọc diễn cảm và Hát'],
+    'M08': ['Ngữ văn', 'Năng khiếu 1', 'Năng khiếu 2'],
+    'M09': ['Toán', 'NK Mầm non 1', 'NK Mầm non 2'],
+    'M10': ['Toán', 'Tiếng Anh', 'NK1'],
+    'M11': ['Ngữ văn', 'Năng khiếu báo chí', 'Tiếng Anh'],
+    'M13': ['Toán', 'Sinh học', 'Năng khiếu'],
+    'M14': ['Ngữ văn', 'Năng khiếu báo chí', 'Toán'],
+
+    // Khối N (Âm nhạc)
+    'N00': ['Ngữ văn', 'Năng khiếu Âm nhạc 1', 'Năng khiếu Âm nhạc 2'],
+    'N01': ['Ngữ văn', 'Xướng âm', 'Biểu diễn nghệ thuật'],
+    'N02': ['Ngữ văn', 'Ký xướng âm', 'Hát hoặc biểu diễn nhạc cụ'],
+    'N05': ['Ngữ văn', 'Xây dựng kịch bản sự kiện', 'Năng khiếu'],
+
+    // Khối R (Báo chí) & S (Sân khấu điện ảnh)
+    'R00': ['Ngữ văn', 'Toán', 'Năng khiếu báo chí'],
+    'R01': ['Ngữ văn', 'Tiếng Anh', 'Năng khiếu báo chí'],
+    'R04': ['Ngữ văn', 'Biểu diễn nghệ thuật', 'Năng khiếu văn hóa nghệ thuật'],
+    'S00': ['Ngữ văn', 'Năng khiếu SKĐA 1', 'Năng khiếu SKĐA 2'],
+
+    // === KHỐI ĐẶC THÙ & ĐÁNH GIÁ NĂNG LỰC ===
+    'K00': ['Toán', 'Đọc hiểu', 'Tư duy Khoa học Giải quyết vấn đề'],
+    'Q00': ['Tư duy định lượng', 'Tư duy định tính', 'Khoa học/ Tiếng Anh'],
+    'HSA-KHTN': ['Tư duy định lượng', 'Tư duy định tính', 'Khoa học'],
+    'HSA-TA': ['Tư duy định lượng', 'Tư duy định tính', 'Tiếng Anh'],
+    'D96': ['Toán', 'Khoa học xã hội', 'Tiếng Anh'],
+
+    // === KHỐI MỞ RỘNG VỚI TIẾNG HÀN & BIẾN THỂ NGOẠI NGỮ ===
+    'AH1': ['Toán', 'Địa lí', 'Tiếng Hàn'],
+    'AH2': ['Toán', 'Hóa học', 'Tiếng Hàn'],
+    'AH3': ['Toán', 'Vật lí', 'Tiếng Hàn'],
+    'AH4': ['Toán', 'Sinh học', 'Tiếng Hàn'],
+    'DD2': ['Ngữ văn', 'Toán', 'Tiếng Hàn'],
+    'DH1': ['Ngữ văn', 'Địa lí', 'Tiếng Hàn'],
+    'DH5': ['Ngữ văn', 'Lịch sử', 'Tiếng Hàn'],
+
+    // === BIẾN THỂ NGOẠI NGỮ KHÁC (Mở rộng từ D00) ===
+    'D28': ['Toán', 'Vật lí', 'Tiếng Nhật'],
+    'D29': ['Toán', 'Vật lí', 'Tiếng Pháp'],
+    'D26': ['Toán', 'Vật lí', 'Tiếng Đức'],
+    'D24': ['Toán', 'Hóa học', 'Tiếng Pháp'],
+    'D23': ['Toán', 'Hóa học', 'Tiếng Nhật'],
+    'D27': ['Toán', 'Vật lí', 'Tiếng Nga'],
+    'D30': ['Toán', 'Vật lí', 'Tiếng Trung'],
+    'D21': ['Toán', 'Hóa học', 'Tiếng Đức'],
+    'D22': ['Toán', 'Hóa học', 'Tiếng Nga'],
+    'D25': ['Toán', 'Hóa học', 'Tiếng Trung'],
+    'D32': ['Toán', 'Sinh học', 'Tiếng Nga'],
+    'D33': ['Toán', 'Sinh học', 'Tiếng Nhật'],
+    'D34': ['Toán', 'Sinh học', 'Tiếng Pháp'],
+    'D31': ['Toán', 'Sinh học', 'Tiếng Đức'],
+    'D35': ['Toán', 'Sinh học', 'Tiếng Trung'],
+    'D36': ['Toán', 'Lịch sử', 'Tiếng Đức'],
+    'D37': ['Toán', 'Lịch sử', 'Tiếng Nga'],
+    'D38': ['Toán', 'Lịch sử', 'Tiếng Nhật'],
+    'D39': ['Toán', 'Lịch sử', 'Tiếng Pháp'],
+    'D40': ['Toán', 'Lịch sử', 'Tiếng Trung'],
+    'D18': ['Toán', 'Địa lí', 'Tiếng Nhật'],
+    'D19': ['Toán', 'Địa lí', 'Tiếng Pháp'],
+    'D20': ['Toán', 'Địa lí', 'Tiếng Trung'],
+    'D16': ['Toán', 'Địa lí', 'Tiếng Đức'],
+    'D17': ['Toán', 'Địa lí', 'Tiếng Nga'],
+    'D41': ['Ngữ văn', 'Địa lí', 'Tiếng Đức'],
+    'D42': ['Ngữ văn', 'Địa lí', 'Tiếng Nga'],
+    'D43': ['Ngữ văn', 'Địa lí', 'Tiếng Nhật'],
+    'D44': ['Ngữ văn', 'Địa lí', 'Tiếng Pháp'],
+    'D45': ['Ngữ văn', 'Địa lí', 'Tiếng Trung'],
+    'D50': ['Ngữ văn', 'Hóa học', 'Tiếng Trung'],
+    'D55': ['Ngữ văn', 'Vật lí', 'Tiếng Trung'],
+    'D61': ['Ngữ văn', 'Lịch sử', 'Tiếng Đức'],
+    'D62': ['Ngữ văn', 'Lịch sử', 'Tiếng Nga'],
+    'D63': ['Ngữ văn', 'Lịch sử', 'Tiếng Nhật'],
+    'D64': ['Ngữ văn', 'Lịch sử', 'Tiếng Pháp'],
+    'D65': ['Ngữ văn', 'Lịch sử', 'Tiếng Trung'],
+    'D11': ['Ngữ văn', 'Vật lí', 'Tiếng Anh'],
+    'D12': ['Ngữ văn', 'Hóa học', 'Tiếng Anh'],
+    'D13': ['Ngữ văn', 'Sinh học', 'Tiếng Anh'],
+
+    // === CÁC TỔ HỢP ĐẶC BIỆT KHÁC ===
     'C05': ['Ngữ văn', 'Vật lí', 'Hóa học'],
     'C06': ['Ngữ văn', 'Vật lí', 'Sinh học'],
     'C07': ['Ngữ văn', 'Lịch sử', 'Vật lí'],
@@ -811,182 +894,250 @@
     'C17': ['Ngữ văn', 'Hóa học', 'GDKT-PL'],
     'C18': ['Ngữ văn', 'Địa lí', 'GDKT-PL'],
     'C19': ['Ngữ văn', 'Lịch sử', 'Tin học'],
-
-    // Khối D (Ngữ văn/Toán + Ngoại ngữ) - 25 tổ hợp
-    'D01': ['Ngữ văn', 'Toán', 'Tiếng Anh'],
-    'D02': ['Ngữ văn', 'Toán', 'Tiếng Nga'],
-    'D03': ['Ngữ văn', 'Toán', 'Tiếng Pháp'],
-    'D04': ['Ngữ văn', 'Toán', 'Tiếng Trung'],
-    'D05': ['Ngữ văn', 'Toán', 'Tiếng Đức'],
-    'D06': ['Ngữ văn', 'Toán', 'Tiếng Nhật'],
-    'D07': ['Toán', 'Hóa học', 'Tiếng Anh'],
-    'D08': ['Toán', 'Sinh học', 'Tiếng Anh'],
-    'D09': ['Toán', 'Lịch sử', 'Tiếng Anh'],
-    'D10': ['Toán', 'Địa lí', 'Tiếng Anh'],
-    'D11': ['Ngữ văn', 'Vật lí', 'Tiếng Anh'],
-    'D12': ['Ngữ văn', 'Hóa học', 'Tiếng Anh'],
-    'D13': ['Ngữ văn', 'Sinh học', 'Tiếng Anh'],
-    'D14': ['Ngữ văn', 'Lịch sử', 'Tiếng Anh'],
-    'D15': ['Ngữ văn', 'Địa lí', 'Tiếng Anh'],
-    'D16': ['Toán', 'Địa lí', 'Tiếng Đức'],
-    'D17': ['Toán', 'Địa lí', 'Tiếng Nga'],
-    'D18': ['Toán', 'Địa lí', 'Tiếng Nhật'],
-    'D19': ['Toán', 'Địa lí', 'Tiếng Pháp'],
-    'D20': ['Toán', 'Địa lí', 'Tiếng Trung'],
-    'D21': ['Toán', 'Hóa học', 'Tiếng Đức'],
-    'D22': ['Toán', 'Hóa học', 'Tiếng Nga'],
-    'D23': ['Toán', 'Hóa học', 'Tiếng Nhật'],
-    'D24': ['Toán', 'Hóa học', 'Tiếng Pháp'],
-    'D25': ['Toán', 'Hóa học', 'Tiếng Trung'],
-
-    // Các tổ hợp mới với GDKT-PL, Tin học, Công nghệ (từ 2025) - 20 tổ hợp
-    'X01': ['Ngữ văn', 'Toán', 'GDKT-PL'],
-    'X02': ['Toán', 'Ngữ văn', 'Tin học'],
-    'X03': ['Toán', 'Ngữ văn', 'Công nghệ'],
-    'X04': ['Toán', 'Ngữ văn', 'Công nghệ nông nghiệp'],
-    'X05': ['Toán', 'Vật lí', 'GDKT-PL'],
-    'X06': ['Toán', 'Vật lí', 'Tin học'],
-    'X07': ['Toán', 'Vật lí', 'Công nghệ công nghiệp'],
-    'X08': ['Toán', 'Vật lí', 'Công nghệ nông nghiệp'],
-    'X09': ['Toán', 'Hóa học', 'GDKT-PL'],
-    'X10': ['Toán', 'Hóa học', 'Tin học'],
-    'X11': ['Toán', 'Hóa học', 'Công nghệ công nghiệp'],
-    'X12': ['Toán', 'Hóa học', 'Công nghệ nông nghiệp'],
-    'X13': ['Toán', 'Sinh học', 'GDKT-PL'],
-    'X14': ['Toán', 'Sinh học', 'Tin học'],
-    'X15': ['Toán', 'Sinh học', 'Công nghệ công nghiệp'],
-    'X16': ['Toán', 'Sinh học', 'Công nghệ nông nghiệp'],
-    'X17': ['Toán', 'Lịch sử', 'GDKT-PL'],
-    'X18': ['Toán', 'Lịch sử', 'Tin học'],
-    'X19': ['Toán', 'Lịch sử', 'Công nghệ công nghiệp'],
-    'X20': ['Toán', 'Lịch sử', 'Công nghệ nông nghiệp'],
-
-    // Khối H (Năng khiếu Mỹ thuật) - 10 tổ hợp
-    'H00': ['Ngữ văn', 'Năng khiếu vẽ 1', 'Năng khiếu vẽ 2'],
-    'H01': ['Toán', 'Ngữ văn', 'Vẽ mỹ thuật'],
-    'H02': ['Toán', 'Hình họa', 'Trang trí'],
-    'H03': ['Toán', 'Tiếng Anh', 'Vẽ năng khiếu'],
-    'H04': ['Toán', 'Vẽ hình họa', 'Vẽ trang trí màu'],
-    'H05': ['Ngữ văn', 'Vật lí', 'Vẽ mỹ thuật'],
-    'H06': ['Ngữ văn', 'Tiếng Anh', 'Vẽ mỹ thuật'],
-    'H07': ['Toán', 'Hình họa', 'Trang trí'],
-    'H08': ['Ngữ văn', 'Lịch sử', 'Vẽ mỹ thuật'],
-    'H09': ['Ngữ văn', 'Địa lí', 'Năng khiếu'],
-
-    // Khối V (Năng khiếu Thiết kế) - 8 tổ hợp
-    'V00': ['Toán', 'Vật lí', 'Vẽ hình họa mỹ thuật'],
-    'V01': ['Toán', 'Ngữ văn', 'Vẽ hình họa mỹ thuật'],
-    'V02': ['Toán', 'Tiếng Anh', 'Vẽ mỹ thuật'],
-    'V03': ['Vẽ mỹ thuật', 'Toán', 'Hóa học'],
-    'V04': ['Toán', 'Tiếng Pháp', 'Vẽ mỹ thuật'],
-    'V05': ['Ngữ văn', 'Vật lí', 'Vẽ mỹ thuật'],
-    'V06': ['Toán', 'Địa lí', 'Vẽ mỹ thuật'],
-    'V07': ['Toán', 'Tiếng Đức', 'Vẽ mỹ thuật'],
-
-    // Khối T (Năng khiếu Thể dục Thể thao) - 10 tổ hợp
-    'T00': ['Toán', 'Sinh học', 'Năng khiếu TDTT'],
-    'T01': ['Toán', 'Ngữ văn', 'Năng khiếu TDTT'],
-    'T02': ['Ngữ văn', 'Sinh học', 'Năng khiếu TDTT'],
-    'T03': ['Ngữ văn', 'Địa lí', 'Năng khiếu TDTT'],
-    'T04': ['Toán', 'Vật lí', 'Năng khiếu TDTT'],
-    'T05': ['Ngữ văn', 'GDKT-PL', 'Năng khiếu TDTT'],
-    'T06': ['Toán', 'Địa lí', 'Năng khiếu TDTT'],
-    'T07': ['Ngữ văn', 'Địa lí', 'Năng khiếu TDTT'],
-    'T08': ['Toán', 'GDKT-PL', 'Năng khiếu TDTT'],
-    'T09': ['Ngữ văn', 'Lịch sử', 'Năng khiếu TDTT'],
-
-    // Khối M (Năng khiếu Giáo dục Mầm non) - 8 tổ hợp
-    'M00': ['Ngữ văn', 'Toán', 'Đọc diễn cảm, Hát'],
-    'M01': ['Ngữ văn', 'Lịch sử', 'Năng khiếu'],
-    'M02': ['Toán', 'Năng khiếu 1', 'Năng khiếu 2'],
-    'M03': ['Ngữ văn', 'Năng khiếu 1', 'Năng khiếu 2'],
-    'M04': ['Toán', 'Đọc kể diễn cảm', 'Hát - Múa'],
-    'M05': ['Ngữ văn', 'Toán', 'Năng khiếu Giáo dục mầm non'],
-    'M06': ['Ngữ văn', 'Toán', 'Năng khiếu Giáo dục mầm non'],
-    'M07': ['Ngữ văn', 'Địa lí', 'Năng khiếu đọc diễn cảm và Hát'],
-
-    // Khối N (Năng khiếu Âm nhạc) - 8 tổ hợp
-    'N00': ['Ngữ văn', 'Năng khiếu Âm nhạc 1', 'Năng khiếu Âm nhạc 2'],
-    'N01': ['Ngữ văn', 'Xướng âm', 'Biểu diễn nghệ thuật'],
-    'N02': ['Ngữ văn', 'Ký xướng âm', 'Hát hoặc biểu diễn nhạc cụ'],
-    'N03': ['Ngữ văn', 'Ký xướng âm', 'Biểu diễn nghệ thuật'],
-    'N04': ['Ngữ văn', 'Xướng âm', 'Hát hoặc biểu diễn nhạc cụ'],
-    'N05': ['Ngữ văn', 'Xây dựng kịch bản sự kiện', 'Năng khiếu'],
-    'N06': ['Ngữ văn', 'Xướng âm', 'Biểu diễn nghệ thuật'],
-    'N07': ['Ngữ văn', 'Ký xướng âm', 'Hát hoặc biểu diễn nhạc cụ'],
-
-    // Khối R (Năng khiếu Báo chí) - 5 tổ hợp
-    'R00': ['Ngữ văn', 'Toán', 'Năng khiếu báo chí'],
-    'R01': ['Ngữ văn', 'Tiếng Anh', 'Năng khiếu báo chí'],
-    'R02': ['Ngữ văn', 'Lịch sử', 'Năng khiếu báo chí'],
-    'R03': ['Ngữ văn', 'Địa lí', 'Năng khiếu báo chí'],
-    'R04': ['Ngữ văn', 'Biểu diễn nghệ thuật', 'Năng khiếu văn hóa nghệ thuật'],
-
-    // Các tổ hợp mở rộng khác (từ 2025, với ngoại ngữ khác) - 10 tổ hợp
-    'AH1': ['Toán', 'Địa lí', 'Tiếng Hàn'],
-    'AH2': ['Toán', 'Hóa học', 'Tiếng Hàn'],
-    'AH3': ['Toán', 'Vật lí', 'Tiếng Hàn'],
-    'AH4': ['Toán', 'Sinh học', 'Tiếng Hàn'],
-    'DD1': ['Ngữ văn', 'Toán', 'Tiếng Hàn'],
-    'DD2': ['Ngữ văn', 'Toán', 'Tiếng Hàn'], // Biến thể
-    'K00': ['Toán', 'Đọc hiểu', 'Tư duy Khoa học Giải quyết vấn đề'],
-    'K01': ['Toán', 'Tiếng Anh', 'Tin học'],
-    'Q00': ['Tư duy định lượng', 'Tư duy định tính', 'Khoa học/Tiếng Anh'],
-    'TH1': ['Toán', 'Vật lí', 'Tin học'],
-
-    // Thêm các tổ hợp năng khiếu mở rộng (siêu nhiều để đầy đủ)
-    'H10': ['Ngữ văn', 'Ngoại ngữ', 'Năng khiếu'],
-    'H11': ['Ngữ văn', 'Ngoại ngữ', 'Năng khiếu'],
-    'V08': ['Toán', 'Tiếng Nga', 'Vẽ mỹ thuật'],
-    'V09': ['Toán', 'Tiếng Nhật', 'Vẽ mỹ thuật'],
-    'V10': ['Toán', 'Tiếng Pháp', 'Vẽ mỹ thuật'],
-    'V11': ['Toán', 'Tiếng Trung', 'Vẽ mỹ thuật'],
-    'M08': ['Ngữ văn', 'Năng khiếu 1', 'Năng khiếu 2'],
-    'M09': ['Toán', 'NK Mầm non 1', 'NK Mầm non 2'],
-    'M10': ['Toán', 'Tiếng Anh', 'NK1'],
-    'M11': ['Ngữ văn', 'Năng khiếu báo chí', 'Tiếng Anh'],
-    'M12': ['Toán', 'Sinh học', 'Năng khiếu'],
-    'M13': ['Toán', 'Sinh học', 'Năng khiếu'],
-    'M14': ['Ngữ văn', 'Năng khiếu báo chí', 'Toán'],
-    'N08': ['Ngữ văn', 'Hòa thanh', 'Phát triển chủ đề và phổ thơ'],
-    'N09': ['Ngữ văn', 'Hòa thanh', 'Bốc thăm đề - chỉ huy tại chỗ'],
-    'S00': ['Ngữ văn', 'Năng khiếu SKĐA 1', 'Năng khiếu SKĐA 2'],
-    'X21': ['Toán', 'Địa lí', 'GDKT-PL'],
-    'X22': ['Toán', 'Địa lí', 'Tin học'],
-    'X23': ['Toán', 'Địa lí', 'Công nghệ công nghiệp'],
-    'X24': ['Toán', 'Địa lí', 'Công nghệ nông nghiệp'],
-    'X25': ['Toán', 'Tiếng Anh', 'GDKT-PL'],
-    'X26': ['Toán', 'Tiếng Anh', 'Tin học'],
-    'X27': ['Toán', 'Tiếng Anh', 'Công nghệ công nghiệp'],
-    'X28': ['Toán', 'Tiếng Anh', 'Công nghệ nông nghiệp'],
-    'X29': ['Toán', 'GDKT-PL', 'Tiếng Nga'],
-    'X30': ['Toán', 'GDKT-PL', 'Tin học'],
-    'X31': ['Toán', 'GDKT-PL', 'Công nghệ'],
-    'X32': ['Ngữ văn', 'GDKT-PL', 'Tiếng Anh'],
-    'X33': ['Toán', 'GDKT-PL', 'Tiếng Pháp'],
-    'X34': ['Toán', 'GDKT-PL', 'Tiếng Trung'],
-    'X35': ['Ngữ văn', 'Lịch sử', 'Tin học'],
-    'X36': ['Ngữ văn', 'Địa lí', 'Tin học'],
-    'X37': ['Ngữ văn', 'GDKT-PL', 'Tin học'],
-    'X38': ['Toán', 'Lịch sử', 'Tin học'],
-    'X39': ['Toán', 'Sinh học', 'GDKT-PL'],
-    'X40': ['Toán', 'Hóa học', 'Tin học'],
-    // Tiếp tục thêm để "siêu nhiều" (tổng >100)
-    'X41': ['Toán', 'GDKT-PL', 'Tiếng Đức'],
-    'X42': ['Ngữ văn', 'Vật lí', 'GDKT-PL'],
-    'X43': ['Ngữ văn', 'Hóa học', 'Tin học'],
-    'X44': ['Ngữ văn', 'Sinh học', 'Tin học'],
-    'X45': ['Toán', 'GDKT-PL', 'Tiếng Nhật'],
-    'X46': ['Toán', 'Tiếng Nhật', 'Tin học'],
-    'X47': ['Ngữ văn', 'Lịch sử', 'Công nghệ'],
-    'X48': ['Toán', 'Vật lí', 'GDKT-PL'],
-    'X49': ['Ngữ văn', 'Toán', 'Công nghệ'],
-    'X50': ['Toán', 'Tiếng Anh', 'Công nghệ'],
-    // ... (có thể mở rộng thêm dựa trên quy định mới 2025)
 };
 
         // Danh sách gợi ý ngành theo khối (sẽ được thêm sau)
-        const majors = {};
+        const majors = {// === KHỐI TRUYỀN THỐNG & PHỔ BIẾN NHẤT ===
+    'D01': ['Công nghệ thông tin', 'Kinh tế', 'Quản trị kinh doanh', 'Ngôn ngữ Anh', 'Sư phạm Tiếng Anh'],
+    'A00': ['Kỹ thuật cơ khí', 'Kỹ thuật điện', 'Công nghệ thông tin', 'Y đa khoa', 'Kỹ thuật xây dựng'],
+    'A01': ['Công nghệ thông tin', 'Kỹ thuật điện tử', 'Kỹ thuật viễn thông', 'Quản trị kinh doanh', 'Kinh tế quốc tế'],
+    'D07': ['Hóa học', 'Công nghệ hóa học', 'Kỹ thuật môi trường', 'Công nghệ sinh học', 'Ngôn ngữ Anh'],
+    'B00': ['Y đa khoa', 'Dược học', 'Công nghệ sinh học', 'Nông nghiệp', 'Thú y'],
+    'C00': ['Sư phạm Ngữ văn', 'Sư phạm Lịch sử', 'Luật', 'Báo chí', 'Lịch sử'],
+    'C01': ['Sư phạm Toán', 'Sư phạm Vật lý', 'Công nghệ thông tin', 'Kỹ thuật cơ khí', 'Luật'],
+    'D14': ['Sư phạm Lịch sử', 'Báo chí', 'Ngôn ngữ Anh', 'Quan hệ quốc tế', 'Tâm lý học'],
+    'D15': ['Sư phạm Địa lý', 'Báo chí', 'Ngôn ngữ Anh', 'Du lịch', 'Địa lý học'],
+    'A02': ['Y đa khoa', 'Sinh học', 'Công nghệ sinh học', 'Kỹ thuật y sinh', 'Nông nghiệp'],
+    'C04': ['Sư phạm Địa lý', 'Địa lý học', 'Quản lý tài nguyên thiên nhiên', 'Du lịch', 'Kinh tế'],
+    'D03': ['Ngôn ngữ Pháp', 'Sư phạm Tiếng Pháp', 'Quan hệ quốc tế', 'Kinh tế quốc tế'],
+    'D04': ['Ngôn ngữ Trung', 'Sư phạm Tiếng Trung', 'Quan hệ quốc tế', 'Kinh tế quốc tế'],
+    'D10': ['Du lịch', 'Địa lý học', 'Kinh tế quốc tế', 'Ngôn ngữ Anh', 'Quản lý tài nguyên thiên nhiên'],
+    'B08': ['Công nghệ sinh học', 'Y đa khoa', 'Nông nghiệp', 'Ngôn ngữ Anh', 'Sinh học'],
+    'D06': ['Ngôn ngữ Nhật', 'Sư phạm Tiếng Nhật', 'Quan hệ quốc tế', 'Kinh tế quốc tế'],
+    'D09': ['Lịch sử', 'Quan hệ quốc tế', 'Ngôn ngữ Anh', 'Kinh tế quốc tế'],
+    'D02': ['Ngôn ngữ Nga', 'Sư phạm Tiếng Nga', 'Quan hệ quốc tế'],
+    'D05': ['Ngôn ngữ Đức', 'Sư phạm Tiếng Đức', 'Quan hệ quốc tế'],
+    'C02': ['Sư phạm Hóa học', 'Hóa học', 'Công nghệ hóa học', 'Kỹ thuật môi trường'],
+    'A07': ['Lịch sử', 'Địa lý học', 'Kinh tế', 'Quản lý tài nguyên thiên nhiên'],
+    'C03': ['Sư phạm Lịch sử', 'Lịch sử', 'Luật', 'Báo chí'],
+    'B03': ['Sư phạm Sinh học', 'Sinh học', 'Công nghệ sinh học', 'Nông nghiệp'],
+    'A05': ['Hóa học', 'Kỹ thuật môi trường', 'Lịch sử', 'Công nghệ hóa học'],
+    'A06': ['Địa lý học', 'Kỹ thuật môi trường', 'Hóa học', 'Quản lý tài nguyên thiên nhiên'],
+    'B02': ['Nông nghiệp', 'Sinh học', 'Công nghệ sinh học', 'Quản lý tài nguyên thiên nhiên'],
+    'B01': ['Lịch sử', 'Sinh học', 'Sư phạm Sinh học', 'Nông nghiệp'],
+    'A03': ['Kỹ thuật cơ khí', 'Lịch sử', 'Kỹ thuật điện', 'Công nghệ thông tin'],
+    'A04': ['Địa lý học', 'Kỹ thuật xây dựng', 'Quản lý tài nguyên thiên nhiên', 'Kỹ thuật môi trường'],
+
+    // === KHỐI MỚI VỚI GDKT-PL (GIÁO DỤC KINH TẾ & PHÁP LUẬT) ===
+    'X74': ['Luật', 'Quản trị kinh doanh', 'Kinh tế', 'Sư phạm Địa lý'],
+    'X70': ['Luật', 'Sư phạm Lịch sử', 'Kinh tế', 'Quản trị kinh doanh'],
+    'X01': ['Sư phạm Toán', 'Luật', 'Kinh tế', 'Quản trị kinh doanh'],
+    'X78': ['Luật', 'Ngôn ngữ Anh', 'Kinh tế quốc tế', 'Quan hệ quốc tế'],
+    'X21': ['Địa lý học', 'Quản lý tài nguyên thiên nhiên', 'Kinh tế', 'Du lịch'],
+    'X05': ['Kỹ thuật cơ khí', 'Kỹ thuật điện', 'Luật', 'Kinh tế'],
+    'X13': ['Sinh học', 'Nông nghiệp', 'Công nghệ sinh học', 'Luật'],
+    'X17': ['Lịch sử', 'Kinh tế', 'Luật', 'Sư phạm Lịch sử'],
+    'X09': ['Hóa học', 'Kỹ thuật môi trường', 'Luật', 'Kinh tế'],
+    'X25': ['Kinh tế quốc tế', 'Ngôn ngữ Anh', 'Luật', 'Quản trị kinh doanh'],
+    'X58': ['Kỹ thuật cơ khí', 'Luật', 'Sư phạm Vật lý'],
+    'X62': ['Hóa học', 'Kỹ thuật môi trường', 'Luật'],
+    'X66': ['Sinh học', 'Nông nghiệp', 'Luật'],
+    'X53': ['Công nghệ thông tin', 'Kinh tế', 'Luật'],
+    'X86': ['Ngôn ngữ Pháp', 'Luật', 'Kinh tế quốc tế'],
+    'X90': ['Ngôn ngữ Trung', 'Luật', 'Kinh tế quốc tế'],
+    'X94': ['Ngôn ngữ Đức', 'Luật', 'Kinh tế quốc tế'],
+    'X98': ['Ngôn ngữ Nhật', 'Luật', 'Kinh tế quốc tế'],
+    'X41': ['Ngôn ngữ Đức', 'Kinh tế', 'Luật'],
+    'X29': ['Ngôn ngữ Nga', 'Kinh tế', 'Luật'],
+    'X45': ['Ngôn ngữ Nhật', 'Kinh tế', 'Luật'],
+    'X33': ['Ngôn ngữ Pháp', 'Kinh tế', 'Luật'],
+    'D89': ['Ngôn ngữ Trung', 'Kinh tế', 'Luật'],
+    'D68': ['Ngôn ngữ Nga', 'Luật', 'Kinh tế quốc tế'],
+    'D70': ['Ngôn ngữ Pháp', 'Luật', 'Kinh tế quốc tế'],
+    'D71': ['Ngôn ngữ Trung', 'Luật', 'Kinh tế quốc tế'],
+    'Y07': ['Công nghệ thông tin', 'Luật', 'Kinh tế'],
+
+    // === KHỐI MỚI VỚI TIN HỌC ===
+    'X26': ['Công nghệ thông tin', 'Kỹ thuật phần mềm', 'Khoa học dữ liệu', 'Ngôn ngữ Anh'],
+    'K01': ['Công nghệ thông tin', 'Kỹ thuật phần mềm', 'Khoa học dữ liệu', 'Ngôn ngữ Anh'],
+    'X02': ['Công nghệ thông tin', 'Sư phạm Toán', 'Khoa học dữ liệu'],
+    'X06': ['Công nghệ thông tin', 'Kỹ thuật điện tử', 'Kỹ thuật viễn thông'],
+    'X10': ['Công nghệ thông tin', 'Hóa học', 'Kỹ thuật môi trường'],
+    'X14': ['Công nghệ thông tin', 'Sinh học', 'Công nghệ sinh học'],
+    'X22': ['Công nghệ thông tin', 'Địa lý học', 'Quản lý tài nguyên thiên nhiên'],
+    'X18': ['Công nghệ thông tin', 'Lịch sử', 'Khoa học dữ liệu'],
+    'X75': ['Công nghệ thông tin', 'Sư phạm Địa lý', 'Du lịch'],
+    'X71': ['Công nghệ thông tin', 'Sư phạm Lịch sử', 'Báo chí'],
+    'X79': ['Công nghệ thông tin', 'Ngôn ngữ Anh', 'Khoa học dữ liệu'],
+    'X46': ['Công nghệ thông tin', 'Ngôn ngữ Nhật', 'Khoa học dữ liệu'],
+    'X63': ['Công nghệ thông tin', 'Hóa học', 'Kỹ thuật môi trường'],
+    'X67': ['Công nghệ thông tin', 'Sinh học', 'Công nghệ sinh học'],
+    'X59': ['Công nghệ thông tin', 'Kỹ thuật điện tử', 'Sư phạm Vật lý'],
+    'X35': ['Công nghệ thông tin', 'Sư phạm Lịch sử', 'Báo chí'],
+    'X36': ['Công nghệ thông tin', 'Sư phạm Địa lý', 'Du lịch'],
+
+    // === KHỐI MỚI VỚI CÔNG NGHỆ ===
+    'X07': ['Kỹ thuật cơ khí', 'Công nghệ công nghiệp', 'Kỹ thuật điện'],
+    'X08': ['Công nghệ nông nghiệp', 'Nông nghiệp', 'Kỹ thuật môi trường'],
+    'X11': ['Hóa học', 'Công nghệ công nghiệp', 'Kỹ thuật môi trường'],
+    'X12': ['Hóa học', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X15': ['Sinh học', 'Công nghệ công nghiệp', 'Công nghệ sinh học'],
+    'X16': ['Sinh học', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X19': ['Lịch sử', 'Công nghệ công nghiệp', 'Kỹ thuật môi trường'],
+    'X20': ['Lịch sử', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X23': ['Địa lý học', 'Công nghệ công nghiệp', 'Quản lý tài nguyên thiên nhiên'],
+    'X24': ['Địa lý học', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X27': ['Kỹ thuật công nghiệp', 'Ngôn ngữ Anh', 'Kỹ thuật môi trường'],
+    'X28': ['Công nghệ nông nghiệp', 'Ngôn ngữ Anh', 'Nông nghiệp'],
+    'X03': ['Công nghệ công nghiệp', 'Sư phạm Toán', 'Kinh tế'],
+    'X04': ['Công nghệ nông nghiệp', 'Sư phạm Toán', 'Nông nghiệp'],
+    'X54': ['Công nghệ công nghiệp', 'Luật', 'Kinh tế'],
+    'X55': ['Công nghệ nông nghiệp', 'Luật', 'Nông nghiệp'],
+    'X56': ['Công nghệ thông tin', 'Công nghệ công nghiệp', 'Khoa học dữ liệu'],
+    'X57': ['Công nghệ thông tin', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X60': ['Kỹ thuật cơ khí', 'Công nghệ công nghiệp', 'Sư phạm Vật lý'],
+    'X61': ['Kỹ thuật điện', 'Công nghệ công nghiệp', 'Sư phạm Vật lý'],
+    'X64': ['Hóa học', 'Công nghệ công nghiệp', 'Kỹ thuật môi trường'],
+    'X65': ['Hóa học', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X68': ['Sinh học', 'Công nghệ công nghiệp', 'Công nghệ sinh học'],
+    'X69': ['Sinh học', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X72': ['Lịch sử', 'Công nghệ công nghiệp', 'Sư phạm Lịch sử'],
+    'X73': ['Lịch sử', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X76': ['Địa lý học', 'Công nghệ công nghiệp', 'Quản lý tài nguyên thiên nhiên'],
+    'X77': ['Địa lý học', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'X80': ['Ngôn ngữ Anh', 'Công nghệ công nghiệp', 'Kinh tế quốc tế'],
+    'X81': ['Ngôn ngữ Anh', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'Y08': ['Luật', 'Công nghệ công nghiệp', 'Kinh tế'],
+    'Y09': ['Luật', 'Công nghệ nông nghiệp', 'Nông nghiệp'],
+    'Y10': ['Công nghệ thông tin', 'Công nghệ công nghiệp', 'Khoa học dữ liệu'],
+    'Y11': ['Công nghệ thông tin', 'Công năng nông nghiệp', 'Nông nghiệp'],
+
+    // === KHỐI NĂNG KHIẾU MỞ RỘNG ===
+    'H00': ['Mỹ thuật', 'Thiết kế đồ họa', 'Hội họa'],
+    'H01': ['Mỹ thuật', 'Sư phạm Mỹ thuật', 'Thiết kế đồ họa'],
+    'H02': ['Thiết kế đồ họa', 'Mỹ thuật', 'Hội họa'],
+    'H04': ['Thiết kế đồ họa', 'Ngôn ngữ Anh', 'Mỹ thuật'],
+    'H06': ['Mỹ thuật', 'Ngôn ngữ Anh', 'Sư phạm Mỹ thuật'],
+    'H07': ['Thiết kế đồ họa', 'Hội họa', 'Mỹ thuật'],
+    'H08': ['Mỹ thuật', 'Sư phạm Lịch sử', 'Hội họa'],
+    'H09': ['Mỹ thuật', 'Sư phạm Địa lý', 'Du lịch'],
+    'H10': ['Mỹ thuật', 'Ngôn ngữ Anh', 'Thiết kế đồ họa'],
+    'V00': ['Kiến trúc', 'Thiết kế nội thất', 'Thiết kế đô thị'],
+    'V01': ['Kiến trúc', 'Thiết kế nội thất', 'Sư phạm Mỹ thuật'],
+    'V02': ['Thiết kế đồ họa', 'Ngôn ngữ Anh', 'Kiến trúc'],
+    'V03': ['Thiết kế công nghiệp', 'Hóa học', 'Kiến trúc'],
+    'V05': ['Kiến trúc', 'Kỹ thuật xây dựng', 'Thiết kế nội thất'],
+    'V06': ['Kiến trúc', 'Địa lý học', 'Thiết kế đô thị'],
+    'V07': ['Kiến trúc', 'Ngôn ngữ Đức', 'Thiết kế đồ họa'],
+    'V08': ['Kiến trúc', 'Ngôn ngữ Nga', 'Thiết kế đồ họa'],
+    'V09': ['Kiến trúc', 'Ngôn ngữ Nhật', 'Thiết kế đồ họa'],
+    'V10': ['Kiến trúc', 'Ngôn ngữ Pháp', 'Thiết kế đồ họa'],
+    'V11': ['Kiến trúc', 'Ngôn ngữ Trung', 'Thiết kế đồ họa'],
+    'T00': ['Thể dục thể thao', 'Sư phạm Thể dục', 'Quản lý thể thao'],
+    'T01': ['Sư phạm Thể dục', 'Thể dục thể thao', 'Y học thể thao'],
+    'T02': ['Thể dục thể thao', 'Sinh học', 'Sư phạm Thể dục'],
+    'T03': ['Thể dục thể thao', 'Du lịch', 'Sư phạm Địa lý'],
+    'T04': ['Thể dục thể thao', 'Kỹ thuật y sinh', 'Sư phạm Thể dục'],
+    'T05': ['Thể dục thể thao', 'Luật', 'Sư phạm Thể dục'],
+    'T06': ['Thể dục thể thao', 'Địa lý học', 'Quản lý thể thao'],
+    'T07': ['Thể dục thể thao', 'Sư phạm Địa lý', 'Du lịch'],
+    'T08': ['Thể dục thể thao', 'Luật', 'Sư phạm Thể dục'],
+    'T09': ['Thể dục thể thao', 'Sư phạm Lịch sử', 'Y học thể thao'],
+    'T10': ['Thể dục thể thao', 'Kỹ thuật y sinh', 'Sư phạm Thể dục'],
+    'M00': ['Sư phạm Mầm non', 'Giáo dục mầm non'],
+    'M01': ['Sư phạm Mầm non', 'Sư phạm Lịch sử', 'Giáo dục mầm non'],
+    'M02': ['Giáo dục mầm non', 'Sư phạm Mầm non'],
+    'M03': ['Giáo dục mầm non', 'Sư phạm Mầm non'],
+    'M04': ['Giáo dục mầm non', 'Sư phạm Mầm non'],
+    'M06': ['Sư phạm Mầm non', 'Giáo dục mầm non'],
+    'M07': ['Sư phạm Mầm non', 'Sư phạm Địa lý', 'Giáo dục mầm non'],
+    'M08': ['Giáo dục mầm non', 'Sư phạm Mầm non'],
+    'M09': ['Giáo dục mầm non', 'Sư phạm Mầm non'],
+    'M10': ['Giáo dục mầm non', 'Ngôn ngữ Anh'],
+    'M11': ['Báo chí', 'Ngôn ngữ Anh', 'Giáo dục mầm non'],
+    'M13': ['Giáo dục mầm non', 'Sinh học', 'Sư phạm Mầm non'],
+    'M14': ['Báo chí', 'Sư phạm Mầm non', 'Giáo dục mầm non'],
+    'N00': ['Âm nhạc', 'Sư phạm Âm nhạc', 'Biểu diễn nghệ thuật'],
+    'N01': ['Sư phạm Âm nhạc', 'Biểu diễn nghệ thuật', 'Âm nhạc'],
+    'N02': ['Âm nhạc', 'Sư phạm Âm nhạc', 'Biểu diễn nghệ thuật'],
+    'N05': ['Âm nhạc', 'Biểu diễn nghệ thuật', 'Sư phạm Âm nhạc'],
+    'R00': ['Báo chí', 'Truyền thông đa phương tiện', 'Quan hệ công chúng'],
+    'R01': ['Báo chí', 'Ngôn ngữ Anh', 'Quan hệ công chúng'],
+    'R04': ['Báo chí', 'Biểu diễn nghệ thuật', 'Truyền thông đa phương tiện'],
+    'S00': ['Điện ảnh', 'Diễn xuất', 'Sân khấu'],
+
+    // === KHỐI ĐẶC THÙ & ĐÁNH GIÁ NĂNG LỰC ===
+    'K00': ['Công nghệ thông tin', 'Kỹ thuật y sinh', 'Khoa học dữ liệu'],
+    'Q00': ['Kinh tế', 'Quản trị kinh doanh', 'Khoa học dữ liệu'],
+    'HSA-KHTN': ['Công nghệ sinh học', 'Kỹ thuật y sinh', 'Khoa học dữ liệu'],
+    'HSA-TA': ['Ngôn ngữ Anh', 'Kinh tế quốc tế', 'Quan hệ quốc tế'],
+    'D96': ['Kinh tế quốc tế', 'Ngôn ngữ Anh', 'Luật'],
+
+    // === KHỐI MỞ RỘNG VỚI TIẾNG HÀN & BIẾN THỂ NGOẠI NGỮ ===
+    'AH1': ['Ngôn ngữ Hàn', 'Du lịch', 'Kinh tế quốc tế'],
+    'AH2': ['Ngôn ngữ Hàn', 'Hóa học', 'Kỹ thuật môi trường'],
+    'AH3': ['Ngôn ngữ Hàn', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'AH4': ['Ngôn ngữ Hàn', 'Sinh học', 'Công nghệ sinh học'],
+    'DD2': ['Ngôn ngữ Hàn', 'Sư phạm Toán', 'Kinh tế quốc tế'],
+    'DH1': ['Ngôn ngữ Hàn', 'Sư phạm Địa lý', 'Du lịch'],
+    'DH5': ['Ngôn ngữ Hàn', 'Sư phạm Lịch sử', 'Quan hệ quốc tế'],
+    'D28': ['Ngôn ngữ Nhật', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'D29': ['Ngôn ngữ Pháp', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'D26': ['Ngôn ngữ Đức', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'D24': ['Ngôn ngữ Pháp', 'Hóa học', 'Kỹ thuật môi trường'],
+    'D23': ['Ngôn ngữ Nhật', 'Hóa học', 'Kỹ thuật môi trường'],
+    'D27': ['Ngôn ngữ Nga', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'D30': ['Ngôn ngữ Trung', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'D21': ['Ngôn ngữ Đức', 'Hóa học', 'Kỹ thuật môi trường'],
+    'D22': ['Ngôn ngữ Nga', 'Hóa học', 'Kỹ thuật môi trường'],
+    'D25': ['Ngôn ngữ Trung', 'Hóa học', 'Kỹ thuật môi trường'],
+    'D32': ['Ngôn ngữ Nga', 'Sinh học', 'Công nghệ sinh học'],
+    'D33': ['Ngôn ngữ Nhật', 'Sinh học', 'Công nghệ sinh học'],
+    'D34': ['Ngôn ngữ Pháp', 'Sinh học', 'Công nghệ sinh học'],
+    'D31': ['Ngôn ngữ Đức', 'Sinh học', 'Công nghệ sinh học'],
+    'D35': ['Ngôn ngữ Trung', 'Sinh học', 'Công nghệ sinh học'],
+    'D36': ['Ngôn ngữ Đức', 'Lịch sử', 'Quan hệ quốc tế'],
+    'D37': ['Ngôn ngữ Nga', 'Lịch sử', 'Quan hệ quốc tế'],
+    'D38': ['Ngôn ngữ Nhật', 'Lịch sử', 'Quan hệ quốc tế'],
+    'D39': ['Ngôn ngữ Pháp', 'Lịch sử', 'Quan hệ quốc tế'],
+    'D40': ['Ngôn ngữ Trung', 'Lịch sử', 'Quan hệ quốc tế'],
+    'D18': ['Ngôn ngữ Nhật', 'Địa lý học', 'Du lịch'],
+    'D19': ['Ngôn ngữ Pháp', 'Địa lý học', 'Du lịch'],
+    'D20': ['Ngôn ngữ Trung', 'Địa lý học', 'Du lịch'],
+    'D16': ['Ngôn ngữ Đức', 'Địa lý học', 'Du lịch'],
+    'D17': ['Ngôn ngữ Nga', 'Địa lý học', 'Du lịch'],
+    'D41': ['Ngôn ngữ Đức', 'Sư phạm Địa lý', 'Du lịch'],
+    'D42': ['Ngôn ngữ Nga', 'Sư phạm Địa lý', 'Du lịch'],
+    'D43': ['Ngôn ngữ Nhật', 'Sư phạm Địa lý', 'Du lịch'],
+    'D44': ['Ngôn ngữ Pháp', 'Sư phạm Địa lý', 'Du lịch'],
+    'D45': ['Ngôn ngữ Trung', 'Sư phạm Địa lý', 'Du lịch'],
+    'D50': ['Ngôn ngữ Trung', 'Hóa học', 'Kỹ thuật môi trường'],
+    'D55': ['Ngôn ngữ Trung', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'D61': ['Ngôn ngữ Đức', 'Sư phạm Lịch sử', 'Quan hệ quốc tế'],
+    'D62': ['Ngôn ngữ Nga', 'Sư phạm Lịch sử', 'Quan hệ quốc tế'],
+    'D63': ['Ngôn ngữ Nhật', 'Sư phạm Lịch sử', 'Quan hệ quốc tế'],
+    'D64': ['Ngôn ngữ Pháp', 'Sư phạm Lịch sử', 'Quan hệ quốc tế'],
+    'D65': ['Ngôn ngữ Trung', 'Sư phạm Lịch sử', 'Quan hệ quốc tế'],
+    'D11': ['Ngôn ngữ Anh', 'Kỹ thuật điện tử', 'Công nghệ thông tin'],
+    'D12': ['Ngôn ngữ Anh', 'Hóa học', 'Kỹ thuật môi trường'],
+    'D13': ['Ngôn ngữ Anh', 'Sinh học', 'Công nghệ sinh học'],
+
+    // === CÁC TỔ HỢP ĐẶC BIỆT KHÁC ===
+    'C05': ['Kỹ thuật môi trường', 'Hóa học', 'Kỹ thuật điện'],
+    'C06': ['Sinh học', 'Kỹ thuật y sinh', 'Sư phạm Vật lý'],
+    'C07': ['Sư phạm Lịch sử', 'Kỹ thuật điện', 'Lịch sử'],
+    'C08': ['Sinh học', 'Hóa học', 'Công nghệ sinh học'],
+    'C09': ['Địa lý học', 'Kỹ thuật xây dựng', 'Du lịch'],
+    'C10': ['Hóa học', 'Sư phạm Lịch sử', 'Kỹ thuật môi trường'],
+    'C11': ['Hóa học', 'Sư phạm Địa lý', 'Kỹ thuật môi trường'],
+    'C12': ['Sinh học', 'Sư phạm Lịch sử', 'Nông nghiệp'],
+    'C13': ['Sinh học', 'Sư phạm Địa lý', 'Nông nghiệp'],
+    'C14': ['Luật', 'Sư phạm Toán', 'Kinh tế'],
+    'C15': ['Công nghệ thông tin', 'Sư phạm Toán', 'Khoa học dữ liệu'],
+    'C16': ['Luật', 'Sư phạm Lịch sử', 'Kinh tế'],
+    'C17': ['Hóa học', 'Luật', 'Kỹ thuật môi trường'],
+    'C18': ['Luật', 'Sư phạm Địa lý', 'Du lịch'],
+    'C19': ['Công nghệ thông tin', 'Sư phạm Lịch sử', 'Báo chí']};
 
         // Page load
         document.addEventListener('DOMContentLoaded', async () => {
@@ -1110,87 +1261,6 @@
             updateSubjectOptions();
         });
 
-        // Submit edit form
-        document.getElementById('editForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const fullNameError = document.getElementById('editFullNameError');
-            const passwordError = document.getElementById('editPasswordError');
-            const formError = document.getElementById('editFormError');
-            const submitButton = e.target.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-
-            // Reset error messages
-            fullNameError.style.display = 'none';
-            passwordError.style.display = 'none';
-            formError.style.display = 'none';
-
-            const fullName = document.getElementById('editFullName').value;
-            const password = document.getElementById('editPassword').value;
-            const r = registrations.find(r => r.id === editId);
-
-            // Kiểm tra tên
-            if (!students.some(s => s.fullName === fullName)) {
-                fullNameError.textContent = 'Tên không có trong danh sách học sinh lớp 12A2.';
-                fullNameError.style.display = 'block';
-                submitButton.disabled = false;
-                return;
-            }
-
-            // Kiểm tra mật khẩu (nếu không là admin)
-            if (!isAdmin && (!password || sha256(password) !== r.passwordHash)) {
-                passwordError.textContent = 'Mật khẩu không đúng. Vui lòng thử lại hoặc liên hệ admin.';
-                passwordError.style.display = 'block';
-                submitButton.disabled = false;
-                return;
-            }
-
-            const formData = {
-                fullName: fullName,
-                passwordHash: r.passwordHash,
-                subject1: document.getElementById('editSubject1').value,
-                subject2: document.getElementById('editSubject2').value,
-                subject3: document.getElementById('editSubject3').value,
-                subject4: document.getElementById('editSubject4').value,
-                major: document.getElementById('editMajor').value,
-                school: document.getElementById('editSchool').value,
-                method: document.getElementById('editMethod').value,
-                note: document.getElementById('editNote').value,
-                createdAt: r.createdAt
-            };
-
-            if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
-                formError.textContent = 'Vui lòng điền đầy đủ các trường bắt buộc (*).';
-                formError.style.display = 'block';
-                submitButton.disabled = false;
-                return;
-            }
-
-            if (formData.subject3 === formData.subject4 && formData.subject3 !== "") {
-                formError.textContent = 'Môn 3 và Môn 4 không được trùng nhau!';
-                formError.style.display = 'block';
-                submitButton.disabled = false;
-                return;
-            }
-
-            try {
-                await updateDoc(doc(db, 'registrations', editId), formData);
-                const index = registrations.findIndex(r => r.id === editId);
-                registrations[index] = { ...formData, id: editId };
-                displayedData = registrations;
-                renderData();
-                updateStats();
-                document.getElementById('editModal').style.display = 'none';
-                alert('Cập nhật thành công!');
-            } catch (error) {
-                console.error('Error updating registration:', error);
-                formError.textContent = 'Có lỗi xảy ra khi cập nhật: ' + error.message;
-                formError.style.display = 'block';
-            } finally {
-                submitButton.disabled = false;
-            }
-        });
-
         // Submit delete form
         document.getElementById('deleteForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1217,7 +1287,7 @@
                 renderData();
                 updateStats();
                 document.getElementById('deleteModal').style.display = 'none';
-                alert('Xóa thành công!');
+                alert('Xóa thành công! Vui lòng nhập lại thông tin nếu cần.');
             } catch (error) {
                 console.error('Error deleting:', error);
                 passwordError.textContent = 'Có lỗi xảy ra khi xóa: ' + error.message;
@@ -1250,33 +1320,10 @@
             document.getElementById('subject3').innerHTML = subject3Options;
         };
 
-        // Function to update subject options in edit form to prevent duplicates
-        window.updateEditSubjectOptions = function() {
-            const subject3 = document.getElementById('editSubject3').value;
-            const subject4 = document.getElementById('editSubject4').value;
-            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Tiếng Trung", "Lịch sử", "GDKT-PL", "Vật lí", "Hóa học", "Sinh học"];
-
-            let subject4Options = '<option value="">Chọn môn</option>';
-            options.forEach(opt => {
-                if (opt !== subject3) {
-                    subject4Options += `<option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>`;
-                }
-            });
-            document.getElementById('editSubject4').innerHTML = subject4Options;
-
-            let subject3Options = '<option value="">Chọn môn</option>';
-            options.forEach(opt => {
-                if (opt !== subject4) {
-                    subject3Options += `<option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>`;
-                }
-            });
-            document.getElementById('editSubject3').innerHTML = subject3Options;
-        };
-
         // Function to suggest blocks and majors based on selected subjects
-        window.suggestBlocksAndMajors = function(formPrefix = '') {
-            const blockSuggestion = document.getElementById(formPrefix + 'blockSuggestion');
-            const majorSuggestion = document.getElementById(formPrefix + 'majorSuggestion');
+        window.suggestBlocksAndMajors = function() {
+            const blockSuggestion = document.getElementById('blockSuggestion');
+            const majorSuggestion = document.getElementById('majorSuggestion');
 
             if (Object.keys(combinations).length === 0) {
                 blockSuggestion.innerHTML = 'Danh sách tổ hợp môn chưa được cập nhật.';
@@ -1284,10 +1331,10 @@
                 return;
             }
 
-            const subject1 = document.getElementById(formPrefix + 'subject1').value;
-            const subject2 = document.getElementById(formPrefix + 'subject2').value;
-            const subject3 = document.getElementById(formPrefix + 'subject3').value;
-            const subject4 = document.getElementById(formPrefix + 'subject4').value;
+            const subject1 = document.getElementById('subject1').value;
+            const subject2 = document.getElementById('subject2').value;
+            const subject3 = document.getElementById('subject3').value;
+            const subject4 = document.getElementById('subject4').value;
 
             if (!subject1 || !subject2 || !subject3 || !subject4) {
                 blockSuggestion.innerHTML = '';
@@ -1371,7 +1418,6 @@
                     <td>${r.method}</td>
                     <td class="actions">
                         <button class="view-btn" onclick="viewDetails('${r.id}')">Xem</button>
-                        ${isAdmin || r.fullName === currentUser ? `<button class="edit-btn" onclick="editRegistration('${r.id}')">Sửa</button>` : ''}
                         ${isAdmin || r.fullName === currentUser ? `<button class="delete-btn" onclick="openDeleteModal('${r.id}')">Xóa</button>` : ''}
                     </td>
                 </tr>`;
@@ -1588,44 +1634,6 @@
                 <p><strong>Ngày đăng ký:</strong> ${formatDate(r.createdAt)}</p>
             `;
             document.getElementById('detailModal').style.display = 'flex';
-        };
-
-        // Open edit modal
-        window.editRegistration = function(id) {
-            const r = registrations.find(r => r.id === id);
-            if (!isAdmin && r.fullName !== currentUser) {
-                alert('Bạn chỉ có thể chỉnh sửa thông tin của chính mình. Nếu gặp vấn đề, liên hệ admin.');
-                return;
-            }
-            editId = id;
-            document.getElementById('editFullName').value = r.fullName;
-            document.getElementById('editSubject1').value = r.subject1;
-            document.getElementById('editSubject2').value = r.subject2;
-            document.getElementById('editSubject3').value = r.subject3;
-            document.getElementById('editSubject4').value = r.subject4;
-            document.getElementById('editMajor').value = r.major || '';
-            document.getElementById('editSchool').value = r.school || '';
-            document.getElementById('editMethod').value = r.method;
-            document.getElementById('editNote').value = r.note || '';
-            updateEditSubjectOptions();
-            suggestBlocksAndMajors('edit');
-
-            // Ẩn trường mật khẩu nếu là admin
-            if (isAdmin) {
-                document.getElementById('editPasswordGroup').style.display = 'none';
-                document.getElementById('editPassword').removeAttribute('required');
-            } else {
-                document.getElementById('editPasswordGroup').style.display = 'block';
-                document.getElementById('editPassword').setAttribute('required', 'required');
-                document.getElementById('editPassword').value = '';
-            }
-
-            // Reset error messages
-            document.getElementById('editFullNameError').style.display = 'none';
-            document.getElementById('editPasswordError').style.display = 'none';
-            document.getElementById('editFormError').style.display = 'none';
-
-            document.getElementById('editModal').style.display = 'flex';
         };
 
         // Open delete modal
