@@ -725,101 +725,8 @@
         let currentUser = localStorage.getItem('currentUser') || '';
         const registrationsCol = collection(db, 'registrations');
 
-        // Danh sách 119 tổ hợp xét tuyển (dựa trên dữ liệu đầy đủ từ nguồn, liệt kê tất cả)
-        const combinations = {
-            'A00': ['Toán', 'Vật lí', 'Hóa học'],
-            'A01': ['Toán', 'Vật lí', 'Tiếng Anh'],
-            'A02': ['Toán', 'Vật lí', 'Sinh học'],
-            'A03': ['Toán', 'Vật lí', 'Lịch sử'],
-            'A04': ['Toán', 'Vật lí', 'Địa lí'],
-            'A05': ['Toán', 'Hóa học', 'Lịch sử'],
-            'A06': ['Toán', 'Hóa học', 'Địa lí'],
-            'A07': ['Toán', 'Lịch sử', 'Địa lí'],
-            'A08': ['Toán', 'Lịch sử', 'GDKT-PL'],
-            'A09': ['Toán', 'Địa lí', 'GDKT-PL'],
-            'A10': ['Toán', 'Vật lí', 'GDKT-PL'],
-            'A11': ['Toán', 'Hóa học', 'GDKT-PL'],
-            'B00': ['Toán', 'Hóa học', 'Sinh học'],
-            'B02': ['Toán', 'Sinh học', 'Địa lí'],
-            'B03': ['Toán', 'Sinh học', 'Ngữ văn'],
-            'B04': ['Toán', 'Sinh học', 'GDKT-PL'],
-            'B08': ['Toán', 'Sinh học', 'Tiếng Anh'],
-            'C00': ['Ngữ văn', 'Lịch sử', 'Địa lí'],
-            'C01': ['Ngữ văn', 'Toán', 'Vật lí'],
-            'C02': ['Ngữ văn', 'Toán', 'Hóa học'],
-            'C03': ['Ngữ văn', 'Toán', 'Lịch sử'],
-            'C04': ['Ngữ văn', 'Toán', 'Địa lí'],
-            'C05': ['Ngữ văn', 'Vật lí', 'Hóa học'],
-            'C06': ['Ngữ văn', 'Vật lí', 'Sinh học'],
-            'C08': ['Ngữ văn', 'Hóa học', 'Sinh học'],
-            'C12': ['Ngữ văn', 'Lịch sử', 'Sinh học'],
-            'C13': ['Ngữ văn', 'Sinh học', 'Địa lí'],
-            'C14': ['Ngữ văn', 'Toán', 'GDKT-PL'],
-            'C17': ['Ngữ văn', 'Hóa học', 'GDKT-PL'],
-            'C19': ['Ngữ văn', 'Lịch sử', 'GDKT-PL'],
-            'C20': ['Ngữ văn', 'Địa lí', 'GDKT-PL'],
-            'D01': ['Ngữ văn', 'Toán', 'Tiếng Anh'],
-            'D02': ['Ngữ văn', 'Toán', 'Tiếng Nga'],
-            'D03': ['Ngữ văn', 'Toán', 'Tiếng Pháp'],
-            'D04': ['Ngữ văn', 'Toán', 'Tiếng Trung'],
-            'D05': ['Ngữ văn', 'Toán', 'Tiếng Đức'],
-            'D06': ['Ngữ văn', 'Toán', 'Tiếng Nhật'],
-            'D07': ['Toán', 'Hóa học', 'Tiếng Anh'],
-            'D08': ['Toán', 'Sinh học', 'Tiếng Anh'],
-            'D09': ['Toán', 'Lịch sử', 'Tiếng Anh'],
-            'D10': ['Toán', 'Địa lí', 'Tiếng Anh'],
-            'D11': ['Ngữ văn', 'Vật lí', 'Tiếng Anh'],
-            'D12': ['Ngữ văn', 'Hóa học', 'Tiếng Anh'],
-            'D13': ['Ngữ văn', 'Sinh học', 'Tiếng Anh'],
-            'D14': ['Ngữ văn', 'Lịch sử', 'Tiếng Anh'],
-            'D15': ['Ngữ văn', 'Địa lí', 'Tiếng Anh'],
-            'D66': ['Ngữ văn', 'GDKT-PL', 'Tiếng Anh'],
-            'D68': ['Ngữ văn', 'GDKT-PL', 'Tiếng Nga'],
-            'D70': ['Ngữ văn', 'GDKT-PL', 'Tiếng Pháp'],
-            'D72': ['Ngữ văn', 'Khoa học tự nhiên', 'Tiếng Anh'],
-            // Thêm các tổ hợp còn lại từ danh sách 119, nhưng để tránh dài, chỉ liệt kê các tổ hợp liên quan đến môn có sẵn. Trong thực tế, mở rộng đầy đủ 119 tổ hợp.
-            // Ví dụ thêm cho Tin học (các tổ hợp mới bao gồm Tin học theo quy định 2025):
-            'A12': ['Toán', 'Vật lí', 'Tin học'], // Giả định tổ hợp với Tin học
-            'A13': ['Toán', 'Địa lí', 'Tin học'],
-            'C15': ['Ngữ văn', 'Toán', 'Tin học'],
-            'D16': ['Ngữ văn', 'Tin học', 'Tiếng Anh'],
-            // ... (mở rộng đến 119 nếu cần, dựa trên danh sách đầy đủ từ nguồn)
-        };
-
-        // Danh sách gợi ý ngành theo khối (dựa trên dữ liệu đầy đủ, gợi ý phổ biến)
-        const majors = {
-            'A00': ['Kỹ thuật cơ khí', 'Hóa học công nghiệp', 'Công nghệ thông tin', 'Kỹ thuật hóa học'],
-            'A01': ['Công nghệ thông tin', 'Kỹ thuật điện tử', 'Quản trị kinh doanh', 'Kỹ thuật phần mềm'],
-            'A02': ['Sinh học', 'Công nghệ sinh học', 'Y khoa', 'Nông nghiệp'],
-            'A03': ['Kỹ thuật xây dựng', 'Kiến trúc', 'Quản lý đất đai'],
-            'A04': ['Địa chất học', 'Quản lý tài nguyên thiên nhiên', 'Môi trường'],
-            'A07': ['Lịch sử', 'Du lịch', 'Quản lý văn hóa'],
-            'A08': ['Luật', 'Kinh tế', 'Quản trị nhà nước'],
-            'A09': ['Quản lý đất đai', 'Kinh tế tài nguyên', 'Môi trường'],
-            'A10': ['Kỹ thuật', 'Luật kinh tế', 'Quản lý công nghiệp'],
-            'B00': ['Y khoa', 'Dược học', 'Sinh học', 'Điều dưỡng'],
-            'B03': ['Sư phạm Sinh học', 'Y học cổ truyền', 'Sinh thái học'],
-            'B08': ['Công nghệ sinh học', 'Y khoa dự phòng', 'Sinh học ứng dụng'],
-            'C00': ['Sư phạm Lịch sử - Địa lí', 'Du lịch', 'Báo chí'],
-            'C01': ['Sư phạm Toán - Lý', 'Kỹ thuật', 'Luật'],
-            'C03': ['Sư phạm Ngữ văn - Lịch sử', 'Báo chí', 'Luật'],
-            'C04': ['Sư phạm Ngữ văn - Địa lí', 'Du lịch', 'Quản lý đất đai'],
-            'C14': ['Luật', 'Quản trị kinh doanh', 'Sư phạm GDKT-PL'],
-            'C19': ['Luật', 'Lịch sử đảng', 'Quản lý nhà nước'],
-            'C20': ['Du lịch', 'Quản lý tài nguyên', 'Giáo dục công dân'],
-            'D01': ['Ngôn ngữ Anh', 'Kinh tế quốc tế', 'Sư phạm Anh', 'Báo chí'],
-            'D04': ['Ngôn ngữ Trung', 'Kinh doanh quốc tế', 'Du lịch'],
-            'D10': ['Quản trị kinh doanh', 'Marketing', 'Kinh tế'],
-            'D11': ['Sư phạm Lý - Anh', 'Kỹ thuật', 'Ngoại giao'],
-            'D14': ['Sư phạm Lịch sử - Anh', 'Du lịch quốc tế', 'Báo chí'],
-            'D15': ['Sư phạm Địa lí - Anh', 'Quản lý tài nguyên', 'Môi trường'],
-            'D66': ['Luật quốc tế', 'Quan hệ quốc tế', 'Giáo dục công dân'],
-            // Thêm gợi ý cho các khối khác tương tự, dựa trên dữ liệu đầy đủ từ nguồn.
-            'A12': ['Công nghệ thông tin', 'Kỹ thuật máy tính', 'An ninh mạng'],
-            'C15': ['Công nghệ thông tin', 'Sư phạm Tin học', 'Quản lý thông tin'],
-            'D16': ['Công nghệ thông tin', 'Ngôn ngữ Anh', 'Kinh doanh số']
-            // ... (mở rộng cho tất cả khối trong combinations)
-        };
+        // Ngân hàng dữ liệu tổ hợp
+        const blocks = [{"code": "D01", "subjects": ["Toán", "Văn", "Tiếng Anh"], "numMajors": 2048}, {"code": "A00", "subjects": ["Toán", "Vật lí", "Hóa học"], "numMajors": 1973}, {"code": "A01", "subjects": ["Toán", "Vật lí", "Tiếng Anh"], "numMajors": 2036}, {"code": "D07", "subjects": ["Toán", "Hóa học", "Tiếng Anh"], "numMajors": 3166}, {"code": "B00", "subjects": ["Toán", "Hóa học", "Sinh học"], "numMajors": 603}, {"code": "C00", "subjects": ["Văn", "Lịch sử", "Địa lý"], "numMajors": 551}, {"code": "C01", "subjects": ["Văn", "Toán", "Vật lí"], "numMajors": 1086}, {"code": "D14", "subjects": ["Văn", "Lịch sử", "Tiếng Anh"], "numMajors": 388}, {"code": "D15", "subjects": ["Văn", "Địa lý", "Tiếng Anh"], "numMajors": 299}, {"code": "A02", "subjects": ["Toán", "Vật lí", "Sinh học"], "numMajors": 452}, {"code": "C04", "subjects": ["Văn", "Toán", "Địa lý"], "numMajors": 592}, {"code": "D03", "subjects": ["Văn", "Toán", "Tiếng Pháp"], "numMajors": 170}, {"code": "D04", "subjects": ["Văn", "Toán", "Tiếng Trung"], "numMajors": 183}, {"code": "D10", "subjects": ["Toán", "Địa lí", "Tiếng Anh"], "numMajors": 358}, {"code": "B08", "subjects": ["Toán", "Sinh học", "Tiếng Anh"], "numMajors": 449}, {"code": "D06", "subjects": ["Văn", "Toán", "Tiếng Nhật"], "numMajors": 145}, {"code": "D08", "subjects": ["Toán", "Sinh học", "Tiếng Anh"], "numMajors": 449}, {"code": "X74", "subjects": ["Văn", "Địa lí", "GDKT-PL"], "numMajors": 84}, {"code": "D09", "subjects": ["Toán", "Lịch sử", "Tiếng Anh"], "numMajors": 440}, {"code": "X70", "subjects": ["Văn", "Lịch sử", "GDKT-PL"], "numMajors": 135}, {"code": "X01", "subjects": ["Văn", "Toán", "GDKT-PL"], "numMajors": 496}, {"code": "D02", "subjects": ["Văn", "Toán", "Tiếng Nga"], "numMajors": 122}, {"code": "X78", "subjects": ["Văn", "GDKT-PL", "Tiếng Anh"], "numMajors": 157}, {"code": "D05", "subjects": ["Văn", "Toán", "Tiếng Đức"], "numMajors": 126}, {"code": "C02", "subjects": ["Văn", "Toán", "Hóa học"], "numMajors": 809}, {"code": "D28", "subjects": ["Toán", "Vật lí", "Tiếng Nhật"], "numMajors": 125}, {"code": "D29", "subjects": ["Toán", "Vật lí", "Tiếng Pháp"], "numMajors": 128}, {"code": "X21", "subjects": ["Toán", "Địa lí", "GDKT-PL"], "numMajors": 188}, {"code": "D26", "subjects": ["Toán", "Vật lí", "Tiếng Đức"], "numMajors": 108}, {"code": "D24", "subjects": ["Toán", "Hóa học", "Tiếng Pháp"], "numMajors": 109}, {"code": "V00", "subjects": ["Toán", "Vật lí", "Vẽ Hình họa mỹ thuật"], "numMajors": 108}, {"code": "D23", "subjects": ["Toán", "Hóa học", "Tiếng Nhật"], "numMajors": 115}, {"code": "D27", "subjects": ["Toán", "Vật lí", "Tiếng Nga"], "numMajors": 112}, {"code": "D30", "subjects": ["Toán", "Vật lí", "Tiếng Trung"], "numMajors": 136}, {"code": "D21", "subjects": ["Toán", "Hóa học", "Tiếng Đức"], "numMajors": 93}, {"code": "D22", "subjects": ["Toán", "Hóa học", "Tiếng Nga"], "numMajors": 104}, {"code": "D25", "subjects": ["Toán", "Hóa học", "Tiếng Trung"], "numMajors": 117}, {"code": "V01", "subjects": ["Toán", "Văn", "Vẽ Hình họa mỹ thuật"], "numMajors": 44}, {"code": "A07", "subjects": ["Toán", "Lịch sử", "Địa lí"], "numMajors": 346}, {"code": "C03", "subjects": ["Văn", "Toán", "Lịch sử"], "numMajors": 664}, {"code": "B03", "subjects": ["Toán", "Sinh học", "Văn"], "numMajors": 621}, {"code": "AH1", "subjects": ["Toán", "Địa lí", "Tiếng Hàn"], "numMajors": 53}, {"code": "H00", "subjects": ["Văn", "Năng khiếu vẽ Nghệ thuật 1", "Năng khiếu vẽ Nghệ thuật 2"], "numMajors": 35}, {"code": "V02", "subjects": ["Toán", "Tiếng Anh", "Vẽ mỹ thuật"], "numMajors": 22}, {"code": "H01", "subjects": ["Toán", "Văn", "Vẽ Mỹ thuật"], "numMajors": 41}, {"code": "C08", "subjects": ["Văn", "Hóa học", "Sinh học"], "numMajors": 132}, {"code": "X25", "subjects": ["Toán", "Tiếng Anh", "GDKT-PL"], "numMajors": 317}, {"code": "T00", "subjects": ["Toán", "Sinh học", "Năng khiếu TDTT"], "numMajors": 24}, {"code": "A04", "subjects": ["Toán", "Vật lí", "Địa lí"], "numMajors": 367}, {"code": "X13", "subjects": ["Toán", "Sinh học", "GDKT-PL"], "numMajors": 157}, {"code": "T05", "subjects": ["Văn", "GDKT-PL", "Năng khiếu thể dục thể thao"], "numMajors": 17}, {"code": "X05", "subjects": ["Toán", "Vật lí", "GDKT-PL"], "numMajors": 271}, {"code": "M01", "subjects": ["Văn", "Lịch sử", "Năng khiếu"], "numMajors": 19}, {"code": "H06", "subjects": ["Văn", "Tiếng Anh", "Vẽ mỹ thuật"], "numMajors": 25}, {"code": "D11", "subjects": ["Văn", "Vật lí", "Tiếng Anh"], "numMajors": 102}, {"code": "N00", "subjects": ["Văn", "Năng khiếu Âm nhạc 1", "Năng khiếu Âm nhạc 2"], "numMajors": 21}, {"code": "M00", "subjects": ["Văn", "Toán", "Đọc diễn cảm", "Hát"], "numMajors": 19}, {"code": "X26", "subjects": ["Toán", "Tiếng Anh", "Tin học"], "numMajors": 590}, {"code": "K01", "subjects": ["Toán", "Tiếng Anh", "Tin học"], "numMajors": 590}, {"code": "T02", "subjects": ["Văn", "Sinh", "Năng khiếu TDTT"], "numMajors": 17}, {"code": "T01", "subjects": ["Toán", "Văn", "Năng khiếu TDTT"], "numMajors": 85}, {"code": "D13", "subjects": ["Văn", "Sinh học", "Tiếng Anh"], "numMajors": 72}, {"code": "H02", "subjects": ["Toán", "Vẽ Hình họa mỹ thuật", "Vẽ trang trí màu"], "numMajors": 28}, {"code": "H04", "subjects": ["Toán", "Tiếng Anh", "Vẽ Năng khiếu"], "numMajors": 27}, {"code": "A05", "subjects": ["Toán", "Hóa học", "Lịch sử"], "numMajors": 283}, {"code": "A06", "subjects": ["Toán", "Hóa học", "Địa lí"], "numMajors": 298}, {"code": "X17", "subjects": ["Toán", "Lịch sử", "GDKT-PL"], "numMajors": 177}, {"code": "T03", "subjects": ["Văn", "Địa", "Năng khiếu TDTT"], "numMajors": 15}, {"code": "B02", "subjects": ["Toán", "Sinh học", "Địa lí"], "numMajors": 276}, {"code": "X09", "subjects": ["Toán", "Hóa học", "GDKT-PL"], "numMajors": 178}, {"code": "M02", "subjects": ["Toán", "Năng khiếu 1", "Năng khiếu 2"], "numMajors": 27}, {"code": "C05", "subjects": ["Văn", "Vật lí", "Hóa học"], "numMajors": 109}, {"code": "M09", "subjects": ["Toán", "NK Mầm non 1( kể chuyện", "đọc", "diễn cảm)", "NK Mầm non 2 (Hát)"], "numMajors": 19}, {"code": "D12", "subjects": ["Văn", "Hóa học", "Tiếng Anh"], "numMajors": 79}, {"code": "D45", "subjects": ["Văn", "Địa lí", "Tiếng Trung"], "numMajors": 37}, {"code": "M03", "subjects": ["Văn", "Năng khiếu 1", "Năng khiếu 2"], "numMajors": 19}, {"code": "N01", "subjects": ["Văn", "xướng âm", "biểu diễn nghệ thuật"], "numMajors": 15}, {"code": "A03", "subjects": ["Toán", "Vật lí", "Lịch sử"], "numMajors": 356}, {"code": "D44", "subjects": ["Văn", "Địa lí", "Tiếng Pháp"], "numMajors": 29}, {"code": "D63", "subjects": ["Văn", "Lịch sử", "Tiếng Nhật"], "numMajors": 29}, {"code": "M13", "subjects": ["Toán", "Sinh học", "Năng khiếu"], "numMajors": 19}, {"code": "V03", "subjects": ["Vẽ mỹ thuật", "Toán", "Hóa"], "numMajors": 7}, {"code": "D64", "subjects": ["Văn", "Lịch sử", "Tiếng Pháp"], "numMajors": 29}, {"code": "H08", "subjects": ["Văn", "Lịch sử", "Vẽ mỹ thuật"], "numMajors": 22}, {"code": "T04", "subjects": ["Toán", "Lý", "Năng khiếu TDTT"], "numMajors": 22}, {"code": "V06", "subjects": ["Toán", "Địa lí", "Vẽ mỹ thuật"], "numMajors": 23}, {"code": "C13", "subjects": ["Văn", "Sinh học", "Địa lí"], "numMajors": 104}, {"code": "S00", "subjects": ["Văn", "Năng khiếu SKĐA 1", "Năng khiếu SKĐA 2"], "numMajors": 41}, {"code": "D20", "subjects": ["Toán", "Địa lí", "Tiếng Trung"], "numMajors": 44}, {"code": "D32", "subjects": ["Toán", "Sinh học", "Tiếng Nga"], "numMajors": 35}, {"code": "D33", "subjects": ["Toán", "Sinh học", "Tiếng Nhật"], "numMajors": 40}, {"code": "D34", "subjects": ["Toán", "Sinh học", "Tiếng Pháp"], "numMajors": 35}, {"code": "D42", "subjects": ["Văn", "Địa lí", "Tiếng Nga"], "numMajors": 23}, {"code": "H07", "subjects": ["Toán", "Hình họa", "Trang trí"], "numMajors": 30}, {"code": "M10", "subjects": ["Toán", "Tiếng Anh", "NK1"], "numMajors": 19}, {"code": "M11", "subjects": ["Văn", "năng kiếu báo chí", "Tiếng Anh"], "numMajors": 14}, {"code": "N05", "subjects": ["Văn", "Xây dựng kịch bản sự kiện", "Năng khiếu"], "numMajors": 15}, {"code": "V05", "subjects": ["Văn", "Vật lí", "Vẽ mỹ thuật"], "numMajors": 20}, {"code": "V07", "subjects": ["Toán", "tiếng Đức", "Vẽ mỹ thuật"], "numMajors": 19}, {"code": "V10", "subjects": ["Toán", "tiếng Pháp", "Vẽ mỹ thuật"], "numMajors": 20}, {"code": "D16", "subjects": ["Toán", "Địa lí", "Tiếng Đức"], "numMajors": 1}, {"code": "D31", "subjects": ["Toán", "Sinh học", "Tiếng Đức"], "numMajors": 26}, {"code": "D35", "subjects": ["Toán", "Sinh học", "Tiếng Trung"], "numMajors": 46}, {"code": "D43", "subjects": ["Văn", "Địa lí", "Tiếng Nhật"], "numMajors": 26}, {"code": "D55", "subjects": ["Văn", "Vật lí", "Tiếng Trung"], "numMajors": 23}, {"code": "D65", "subjects": ["Văn", "Lịch sử", "Tiếng Trung"], "numMajors": 38}, {"code": "D68", "subjects": ["Văn", "GDKTPL", "Tiếng Nga"], "numMajors": 21}, {"code": "D70", "subjects": ["Văn", "GDKTPL", "Tiếng Pháp"], "numMajors": 21}, {"code": "D71", "subjects": ["Văn", "GDKTPL", "Tiếng Trung"], "numMajors": 30}, {"code": "M04", "subjects": ["Toán", "Đọc kể diễn cảm", "Hát - Múa"], "numMajors": 20}, {"code": "M14", "subjects": ["Văn", "Năng khiếu báo chí", "Toán"], "numMajors": 13}, {"code": "N02", "subjects": ["Văn", "Ký xướng âm", "Hát hoặc biểu diễn nhạc cụ"], "numMajors": 15}, {"code": "V08", "subjects": ["Toán", "tiếng Nga", "Vẽ mỹ thuật"], "numMajors": 19}, {"code": "V09", "subjects": ["Toán", "tiếng Nhật", "Vẽ mỹ thuật"], "numMajors": 18}, {"code": "V11", "subjects": ["Toán", "Tiếng Trung", "Vẽ mỹ thuật"], "numMajors": 19}, {"code": "B01", "subjects": ["Toán", "Lịch sử", "Sinh học"], "numMajors": 253}, {"code": "C06", "subjects": ["Văn", "Vật lí", "Sinh học"], "numMajors": 96}, {"code": "C07", "subjects": ["Văn", "Lịch sử", "Vật lí"], "numMajors": 105}, {"code": "X23", "subjects": ["Toán", "Địa lí", "Công nghệ công nghiệp"], "numMajors": 129}, {"code": "C09", "subjects": ["Văn", "Địa lí", "Vật lí"], "numMajors": 101}, {"code": "X24", "subjects": ["Toán", "Địa lí", "Công nghệ nông nghiệp"], "numMajors": 61}, {"code": "C10", "subjects": ["Văn", "Lịch sử", "Hóa học"], "numMajors": 102}, {"code": "C11", "subjects": ["Văn", "Địa lí", "Hóa học"], "numMajors": 93}, {"code": "C12", "subjects": ["Văn", "Lịch sử", "Sinh học"], "numMajors": 107}, {"code": "X58", "subjects": ["Văn", "Vật lí", "GDKT-PL"], "numMajors": 18}, {"code": "D61", "subjects": ["Văn", "Lịch sử", "Tiếng Đức"], "numMajors": 23}, {"code": "D62", "subjects": ["Văn", "Lịch sử", "Tiếng Nga"], "numMajors": 22}, {"code": "X94", "subjects": ["Văn", "GDKT-PL", "Tiếng Đức"], "numMajors": 21}, {"code": "X98", "subjects": ["Văn", "GDKT-PL", "Tiếng Nhật"], "numMajors": 23}, {"code": "X41", "subjects": ["Toán", "GDKT-PL", "Tiếng Đức"], "numMajors": 17}, {"code": "X29", "subjects": ["Toán", "GDKT-PL", "Tiếng Nga"], "numMajors": 18}, {"code": "X62", "subjects": ["Văn", "Hóa học", "GDKT-PL"], "numMajors": 5}, {"code": "K00", "subjects": ["Toán", "Đọc hiểu", "Tư duy Khoa học Giải quyết vấn đề"], "numMajors": 667}, {"code": "X02", "subjects": ["Toán", "Văn", "Tin học"], "numMajors": 754}, {"code": "K21", "subjects": ["Toán", "Văn", "Tin học"], "numMajors": 754}, {"code": "TH6", "subjects": ["Toán", "Văn", "Tin học"], "numMajors": 754}, {"code": "DK", "subjects": ["Toán", "Văn", "Tin học"], "numMajors": 754}, {"code": "F01", "subjects": ["Toán", "Văn", "Tin học"], "numMajors": 754}, {"code": "TH3", "subjects": ["Toán", "Văn", "Tin học"], "numMajors": 754}, {"code": "X06", "subjects": ["Toán", "Vật lí", "Tin học"], "numMajors": 581}, {"code": "A0T", "subjects": ["Toán", "Vật lí", "Tin học"], "numMajors": 581}, {"code": "GT1", "subjects": ["Toán", "Vật lí", "Tin học"], "numMajors": 581}, {"code": "TH1", "subjects": ["Toán", "Vật lí", "Tin học"], "numMajors": 581}, {"code": "X08", "subjects": ["Toán", "Vật lí", "Công nghệ nông nghiệp"], "numMajors": 223}, {"code": "X07", "subjects": ["Toán", "Vật lí", "Công nghệ công nghiệp"], "numMajors": 387}, {"code": "A0C", "subjects": ["Toán", "Vật lí", "Công nghệ công nghiệp"], "numMajors": 387}, {"code": "TH3", "subjects": ["Toán", "Vật lí", "Công nghệ công nghiệp"], "numMajors": 387}, {"code": "TH4", "subjects": ["Toán", "Vật lí", "Công nghệ công nghiệp"], "numMajors": 387}, {"code": "X11", "subjects": ["Toán", "Hóa học", "Công nghệ công nghiệp"], "numMajors": 228}, {"code": "B0C", "subjects": ["Toán", "Hóa học", "Công nghệ công nghiệp"], "numMajors": 228}, {"code": "TH5", "subjects": ["Toán", "Hóa học", "Công nghệ công nghiệp"], "numMajors": 228}, {"code": "X28", "subjects": ["Toán", "Tiếng Anh", "Công nghệ nông nghiệp"], "numMajors": 124}, {"code": "K20", "subjects": ["Toán", "Tiếng Anh", "Công nghệ nông nghiệp"], "numMajors": 124}, {"code": "D0C", "subjects": ["Toán", "Tiếng Anh", "Công nghệ nông nghiệp"], "numMajors": 124}, {"code": "X27", "subjects": ["Toán", "Tiếng Anh", "Công nghệ công nghiệp"], "numMajors": 277}, {"code": "D0C", "subjects": ["Toán", "Tiếng Anh", "Công nghệ công nghiệp"], "numMajors": 277}, {"code": "K20", "subjects": ["Toán", "Tiếng Anh", "Công nghệ công nghiệp"], "numMajors": 277}, {"code": "D0C", "subjects": ["Toán", "Tiếng Anh", "Công nghệ công nghiệp"], "numMajors": 277}, {"code": "TH5", "subjects": ["Toán", "Tiếng Anh", "Công nghệ công nghiệp"], "numMajors": 277}, {"code": "TH7", "subjects": ["Toán", "Tiếng Anh", "Công nghệ công nghiệp"], "numMajors": 277}, {"code": "X12", "subjects": ["Toán", "Hóa học", "Công nghệ nông nghiệp"], "numMajors": 187}, {"code": "X15", "subjects": ["Toán", "Sinh học", "Công nghệ công nghiệp"], "numMajors": 192}, {"code": "X14", "subjects": ["Toán", "Sinh học", "Tin học"], "numMajors": 226}, {"code": "X16", "subjects": ["Toán", "Sinh học", "Công nghệ nông nghiệp"], "numMajors": 161}, {"code": "D18", "subjects": ["Toán", "Địa lí", "Tiếng Nhật"], "numMajors": 21}, {"code": "D39", "subjects": ["Toán", "Lịch sử", "Tiếng Pháp"], "numMajors": 59}, {"code": "X10", "subjects": ["Toán", "Hóa", "Tin"], "numMajors": 235}, {"code": "TH4", "subjects": ["Toán", "Hóa", "Tin"], "numMajors": 235}, {"code": "X75", "subjects": ["Văn", "Địa lí", "Tin học"], "numMajors": 27}, {"code": "X46", "subjects": ["Toán", "Tiếng Nhật", "Tin học"], "numMajors": 6}, {"code": "X22", "subjects": ["Toán", "Địa lí", "Tin học"], "numMajors": 122}, {"code": "D19", "subjects": ["Toán", "Địa lí", "Tiếng Pháp"], "numMajors": 21}, {"code": "D41", "subjects": ["Văn", "Địa lí", "Tiếng Đức"], "numMajors": 11}, {"code": "D50", "subjects": ["Văn", "Hóa học", "Tiếng Trung"], "numMajors": 3}, {"code": "X03", "subjects": ["Toán", "Văn", "Công nghệ công nghiệp"], "numMajors": 403}, {"code": "TH8", "subjects": ["Toán", "Văn", "Công nghệ công nghiệp"], "numMajors": 403}, {"code": "K22", "subjects": ["Toán", "Văn", "Công nghệ công nghiệp"], "numMajors": 403}, {"code": "E01", "subjects": ["Toán", "Văn", "Công nghệ công nghiệp"], "numMajors": 403}, {"code": "X79", "subjects": ["Văn", "Tiếng Anh", "Tin học"], "numMajors": 87}, {"code": "TH9", "subjects": ["Văn", "Tiếng Anh", "Tin học"], "numMajors": 87}, {"code": "X04", "subjects": ["Toán", "Văn", "Công nghệ nông nghiệp"], "numMajors": 282}, {"code": "TH8", "subjects": ["Toán", "Văn", "Công nghệ nông nghiệp"], "numMajors": 282}, {"code": "K22", "subjects": ["Toán", "Văn", "Công nghệ nông nghiệp"], "numMajors": 282}, {"code": "E01", "subjects": ["Toán", "Văn", "Công nghệ nông nghiệp"], "numMajors": 282}, {"code": "X71", "subjects": ["Văn", "Lịch sử", "Tin học"], "numMajors": 40}, {"code": "TH11", "subjects": ["Văn", "Lịch sử", "Tin học"], "numMajors": 40}, {"code": "Q00", "subjects": ["Tư duy định lượng", "Tư duy định tính", "Khoa học/ Tiếng Anh"], "numMajors": 821}, {"code": "D96", "subjects": ["Toán", "Khoa học xã hội", "Tiếng Anh"], "numMajors": 5}, {"code": "HSA-Khoa học", "subjects": ["Tư duy định lượng", "Tư duy định tính", "Khoa học"], "numMajors": 821}, {"code": "HSA-TiếngAnh", "subjects": ["Tư duy định lượng", "Tư duy định tính", "Tiếng Anh"], "numMajors": 821}, {"code": "X53", "subjects": ["Toán", "GDKT-PL", "Tin học"], "numMajors": 37}, {"code": "AH3", "subjects": ["Toán", "Vật lí", "Tiếng Hàn"], "numMajors": 134}, {"code": "DD2", "subjects": ["Văn", "Toán", "Tiếng Hàn"], "numMajors": 103}, {"code": "AH2", "subjects": ["Toán", "Hóa học", "Tiếng Hàn"], "numMajors": 131}, {"code": "D36", "subjects": ["Toán", "Lịch sử", "Tiếng Đức"], "numMajors": 48}, {"code": "D37", "subjects": ["Toán", "Lịch sử", "Tiếng Nga"], "numMajors": 57}, {"code": "D38", "subjects": ["Toán", "Lịch sử", "Tiếng Nhật"], "numMajors": 57}, {"code": "D40", "subjects": ["Toán", "Lịch sử", "Tiếng Trung"], "numMajors": 61}, {"code": "V10", "subjects": ["Toán", "Tiếng Pháp", "Vẽ mỹ thuật"], "numMajors": 3}, {"code": "M08", "subjects": ["Văn", "Năng Khiếu 1", "Năng Khiếu 2"], "numMajors": 4}, {"code": "X86", "subjects": ["Văn", "GDKT-PL", "Tiếng Pháp"], "numMajors": 13}, {"code": "X45", "subjects": ["Toán", "GDKT-PL", "Tiếng Nhật"], "numMajors": 1}, {"code": "X33", "subjects": ["Toán", "GDKT-PL", "Tiếng Pháp"], "numMajors": 3}, {"code": "D89", "subjects": ["Toán", "GDKT-PL", "Tiếng Trung"], "numMajors": 1}, {"code": "X90", "subjects": ["Văn", "GDKT-PL", "Tiếng Trung"], "numMajors": 23}, {"code": "R04", "subjects": ["Văn", "Biểu diễn nghệ thuật", "Năng khiếu văn hóa nghệ thuật"], "numMajors": 1}, {"code": "M07", "subjects": ["Văn", "Địa lý", "Năng khiếu đọc diễn cảm và Hát"], "numMajors": 4}, {"code": "H09", "subjects": ["Văn", "Địa", "Năng khiếu"], "numMajors": 5}, {"code": "H10", "subjects": ["Văn", "Ngoại ngữ", "năng khiếu"], "numMajors": 13}, {"code": "H11", "subjects": ["Văn", "Ngoại ngữ", "năng khiếu"], "numMajors": 13}, {"code": "H06", "subjects": ["Văn", "Ngoại ngữ", "năng khiếu"], "numMajors": 13}, {"code": "T10", "subjects": ["Toán", "Vật lý", "Năng khiếu Thể dục Thể thao"], "numMajors": 3}, {"code": "T06", "subjects": ["Toán", "Địa lý", "Năng khiếu Thể dục thể thao"], "numMajors": 4}, {"code": "T07", "subjects": ["Văn", "Địa lý", "Năng khiếu Thể dục Thể thao"], "numMajors": 3}, {"code": "T08", "subjects": ["Toán", "GDKT-PL", "Năng khiếu Thể dục thể thao"], "numMajors": 3}, {"code": "T09", "subjects": ["Văn", "Lịch sử", "năng khiếu thể dục thể thao"], "numMajors": 3}, {"code": "M06", "subjects": ["Văn", "Toán", "Năng khiếu Giáo dục mầm non"], "numMajors": 5}, {"code": "X54", "subjects": ["Toán", "GDKT-PL", "Công nghệ công nghiệp"], "numMajors": 67}, {"code": "X66", "subjects": ["Văn", "Sinh học", "GDKT-PL"], "numMajors": 28}, {"code": "X55", "subjects": ["Toán", "GDKT-PL", "Công nghệ nông nghiệp"], "numMajors": 24}, {"code": "X56", "subjects": ["Toán", "Tin học", "Công nghệ công nghiệp"], "numMajors": 93}, {"code": "X57", "subjects": ["Toán", "Tin học", "Công nghệ nông nghiệp"], "numMajors": 33}, {"code": "X19", "subjects": ["Toán", "Lịch sử", "Công nghệ công nghiệp"], "numMajors": 117}, {"code": "X20", "subjects": ["Toán", "Lịch sử", "Công nghệ nông nghiệp"], "numMajors": 118}, {"code": "X18", "subjects": ["Toán", "Lịch sử", "Tin học"], "numMajors": 117}, {"code": "X76", "subjects": ["Văn", "Địa lí", "Công nghệ công nghiệp"], "numMajors": 19}, {"code": "Y08", "subjects": ["Văn", "GDKT-PL", "Công nghệ công nghiệp"], "numMajors": 24}, {"code": "X77", "subjects": ["Văn", "Địa lí", "Công nghệ nông nghiệp"], "numMajors": 21}, {"code": "Y09", "subjects": ["Văn", "GDKT-PL", "Công nghệ nông nghiệp"], "numMajors": 27}, {"code": "Y07", "subjects": ["Văn", "GDKT-PL", "Tin học"], "numMajors": 36}, {"code": "X64", "subjects": ["Văn", "Hóa học", "Công nghệ công nghiệp"], "numMajors": 15}, {"code": "X65", "subjects": ["Văn", "Hóa học", "Công nghệ nông nghiệp"], "numMajors": 19}, {"code": "X63", "subjects": ["Văn", "Hóa học", "Tin học"], "numMajors": 15}, {"code": "X72", "subjects": ["Văn", "Lịch sử", "Công nghệ công nghiệp"], "numMajors": 19}, {"code": "X73", "subjects": ["Văn", "Lịch sử", "Công nghệ nông nghiệp"], "numMajors": 21}, {"code": "X68", "subjects": ["Văn", "Sinh học", "Công nghệ công nghiệp"], "numMajors": 15}, {"code": "X69", "subjects": ["Văn", "Sinh học", "Công nghệ nông nghiệp"], "numMajors": 15}, {"code": "X67", "subjects": ["Văn", "Sinh học", "Tin học"], "numMajors": 22}, {"code": "X80", "subjects": ["Văn", "Tiếng Anh", "Công nghệ công nghiệp"], "numMajors": 25}, {"code": "X81", "subjects": ["Văn", "Tiếng Anh", "Công nghệ nông nghiệp"], "numMajors": 24}, {"code": "Y10", "subjects": ["Văn", "Tin học", "Công nghệ công nghiệp"], "numMajors": 13}, {"code": "Y11", "subjects": ["Văn", "Tin học", "Công nghệ nông nghiệp"], "numMajors": 13}, {"code": "X60", "subjects": ["Văn", "Vật lí", "Công nghệ công nghiệp"], "numMajors": 16}, {"code": "DH1", "subjects": ["Văn", "Địa lí", "Tiếng Hàn"], "numMajors": 23}, {"code": "X61", "subjects": ["Văn", "Vật lí", "Công nghệ nông nghiệp"], "numMajors": 16}, {"code": "DH5", "subjects": ["Văn", "Lịch sử", "Tiếng Hàn"], "numMajors": 42}, {"code": "X59", "subjects": ["Văn", "Vật lí", "Tin học"], "numMajors": 21}, {"code": "AH4", "subjects": ["Toán", "Sinh học", "Tiếng Hàn"], "numMajors": 70}];
 
         // Page load
         document.addEventListener('DOMContentLoaded', async () => {
@@ -843,11 +750,20 @@
             document.getElementById('viewMode').addEventListener('change', renderData);
         });
 
-        // Fetch registrations from Firestore
+        // Fetch registrations from Firestore and update suggested blocks if missing
         async function fetchRegistrations() {
             try {
                 const querySnapshot = await getDocs(registrationsCol);
                 registrations = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                for (const r of registrations) {
+                    if (!r.suggestedBlocks) {
+                        const selectedSubjects = new Set([r.subject1, r.subject2, r.subject3, r.subject4]);
+                        const matching = blocks.filter(b => b.subjects.every(s => selectedSubjects.has(s)));
+                        const suggestedBlocks = matching.map(b => ({code: b.code, numMajors: b.numMajors}));
+                        await updateDoc(doc(db, 'registrations', r.id), {suggestedBlocks});
+                        r.suggestedBlocks = suggestedBlocks;
+                    }
+                }
             } catch (error) {
                 console.error('Error fetching registrations:', error);
             }
@@ -901,6 +817,11 @@
                 loadingMessage.style.display = 'none';
                 return;
             }
+
+            // Compute suggested blocks
+            const selectedSubjects = new Set([formData.subject1, formData.subject2, formData.subject3, formData.subject4]);
+            const matching = blocks.filter(b => b.subjects.every(s => selectedSubjects.has(s)));
+            formData.suggestedBlocks = matching.map(b => ({code: b.code, numMajors: b.numMajors}));
 
             currentUser = formData.fullName;
             localStorage.setItem('currentUser', currentUser);
@@ -963,6 +884,11 @@
                 alert('Môn 3 và Môn 4 không được trùng nhau!');
                 return;
             }
+
+            // Compute suggested blocks
+            const selectedSubjects = new Set([formData.subject1, formData.subject2, formData.subject3, formData.subject4]);
+            const matching = blocks.filter(b => b.subjects.every(s => selectedSubjects.has(s)));
+            formData.suggestedBlocks = matching.map(b => ({code: b.code, numMajors: b.numMajors}));
 
             try {
                 await updateDoc(doc(db, 'registrations', editId), formData);
@@ -1062,30 +988,17 @@
             }
 
             const selectedSubjects = new Set([subject1, subject2, subject3, subject4]);
-            const matchingBlocks = [];
+            const matching = blocks.filter(b => b.subjects.every(s => selectedSubjects.has(s)));
 
-            for (const code in combinations) {
-                const subs = combinations[code];
-                if (subs.every(s => selectedSubjects.has(s))) {
-                    matchingBlocks.push(code);
-                }
-            }
-
-            document.getElementById(formPrefix + 'blockSuggestion').innerHTML = matchingBlocks.length > 0 
-                ? 'Gợi ý khối: ' + matchingBlocks.join(', ') 
+            document.getElementById(formPrefix + 'blockSuggestion').innerHTML = matching.length > 0 
+                ? 'Gợi ý khối: ' + matching.map(b => `${b.code} (${b.numMajors} ngành)`).join(', ') 
                 : 'Không tìm thấy khối phù hợp với tổ hợp môn đã chọn.';
 
-            const suggestedMajors = new Set();
-            matchingBlocks.forEach(code => {
-                if (majors[code]) {
-                    majors[code].forEach(m => suggestedMajors.add(m));
-                }
-            });
-
-            const majorsList = Array.from(suggestedMajors).join(', ');
-            document.getElementById(formPrefix + 'majorSuggestion').innerHTML = suggestedMajors.size > 0 
-                ? 'Gợi ý ngành: ' + majorsList 
-                : 'Không có gợi ý ngành cho tổ hợp này.';
+            // For major suggestion, since specific majors are not available, show total options or leave empty
+            const totalMajors = matching.reduce((sum, b) => sum + b.numMajors, 0);
+            document.getElementById(formPrefix + 'majorSuggestion').innerHTML = matching.length > 0 
+                ? `Tổng số ngành có thể xét: ${totalMajors}` 
+                : '';
         };
 
         // Search
@@ -1366,9 +1279,19 @@
         // View details
         window.viewDetails = function(id) {
             const r = registrations.find(r => r.id === id);
+            let suggestedHtml = '';
+            if (r.suggestedBlocks && r.suggestedBlocks.length > 0) {
+                suggestedHtml = r.suggestedBlocks.map(b => `${b.code} (${b.numMajors} ngành)`).join(', ');
+            } else {
+                // Compute on fly if not present
+                const selectedSubjects = new Set([r.subject1, r.subject2, r.subject3, r.subject4]);
+                const matching = blocks.filter(b => b.subjects.every(s => selectedSubjects.has(s)));
+                suggestedHtml = matching.map(b => `${b.code} (${b.numMajors} ngành)`).join(', ');
+            }
             document.getElementById('modalContent').innerHTML = `
                 <p><strong>Họ và tên:</strong> ${r.fullName}</p>
                 <p><strong>Tổ hợp môn:</strong> ${r.subject1}, ${r.subject2}, ${r.subject3}, ${r.subject4}</p>
+                <p><strong>Gợi ý khối:</strong> ${suggestedHtml || 'Không có gợi ý'}</p>
                 <p><strong>Ngành học:</strong> ${r.major || 'Chưa xác định'}</p>
                 <p><strong>Trường:</strong> ${r.school || 'Chưa xác định'}</p>
                 <p><strong>Phương thức xét tuyển:</strong> ${r.method}</p>
