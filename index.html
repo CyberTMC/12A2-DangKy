@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -526,7 +527,7 @@
                         <label for="editFullName">Họ và tên *</label>
                         <input type="text" id="editFullName" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="editPasswordGroup">
                         <label for="editPassword">Mật khẩu (để xác nhận) *</label>
                         <input type="password" id="editPassword" required placeholder="Nhập mật khẩu của bạn">
                     </div>
@@ -620,7 +621,7 @@
             <h2>Xác nhận xóa đăng ký</h2>
             <form id="deleteForm">
                 <input type="hidden" id="deleteId">
-                <div class="form-group">
+                <div class="form-group" id="deletePasswordGroup">
                     <label for="deletePassword">Nhập mật khẩu để xác nhận xóa *</label>
                     <input type="password" id="deletePassword" required placeholder="Nhập mật khẩu của bạn">
                 </div>
@@ -654,6 +655,57 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+
+        // Danh sách học sinh lớp 12A2 (tên và ngày sinh)
+        const students = [
+            { fullName: "Nguyễn Thị Ngọc Anh", dob: "27/05/2008" },
+            { fullName: "Trần Hoàng Anh", dob: "28/08/2007" },
+            { fullName: "Vũ Lâm Anh", dob: "23/04/2008" },
+            { fullName: "Trần Thị Ngọc Ánh", dob: "29/12/2008" },
+            { fullName: "Nguyễn Thị Quỳnh Chi", dob: "19/11/2008" },
+            { fullName: "Trần Minh Chuyên", dob: "02/08/2008" },
+            { fullName: "Nguyễn Đức Đại", dob: "02/07/2008" },
+            { fullName: "Ngô Anh Đức", dob: "10/06/2008" },
+            { fullName: "Nguyễn Thị Hương Giang", dob: "13/07/2008" },
+            { fullName: "Nguyễn Đức Hoàng Hài", dob: "16/10/2008" },
+            { fullName: "Đào Ngọc Minh Hằng", dob: "17/11/2008" },
+            { fullName: "Nguyễn Bảo Hân", dob: "18/06/2007" },
+            { fullName: "Hồ Bảo Hoàng", dob: "29/09/2008" },
+            { fullName: "Nguyễn Thị Thúy Hồng", dob: "01/02/2008" },
+            { fullName: "Trần Thị Huyền", dob: "29/08/2008" },
+            { fullName: "Dương Thị Mai Lan", dob: "10/02/2008" },
+            { fullName: "Lê Thị Linh", dob: "10/09/2008" },
+            { fullName: "Nguyễn Diệu Linh", dob: "16/05/2008" },
+            { fullName: "Trần Kiều Linh", dob: "26/07/2008" },
+            { fullName: "Nguyễn Phú Nghĩa", dob: "02/10/2008" },
+            { fullName: "Nguyễn Vân Nhi", dob: "06/12/2008" },
+            { fullName: "Nguyễn Hồng Nhung", dob: "02/08/2008" },
+            { fullName: "Nguyễn Hồng Nhung", dob: "01/09/2008" },
+            { fullName: "Nguyễn Minh Phượng", dob: "22/07/2008" },
+            { fullName: "Hoàng Đắc Quản", dob: "14/08/2008" },
+            { fullName: "Nguyễn Tiến Quốc", dob: "29/09/2008" },
+            { fullName: "Vi Thị Tú Quyên", dob: "14/10/2008" },
+            { fullName: "Nguyễn Thị Như Quỳnh", dob: "30/10/2008" },
+            { fullName: "Trịnh Thị Quỳnh", dob: "13/10/2008" },
+            { fullName: "Vũ Xuân Sáng", dob: "15/05/2008" },
+            { fullName: "Đặng Minh Sơn", dob: "06/01/2008" },
+            { fullName: "Trần Văn Sơn", dob: "03/02/2008" },
+            { fullName: "Dương Thị Nhữ Tâm", dob: "19/10/2008" },
+            { fullName: "Lê Thị Mỹ Tâm", dob: "27/06/2008" },
+            { fullName: "Nguyễn Minh Tân", dob: "11/11/2008" },
+            { fullName: "Nguyễn Hưng Thịnh", dob: "20/10/2008" },
+            { fullName: "Trương Thị Thúy", dob: "04/07/2008" },
+            { fullName: "Phạm Anh Thư", dob: "02/09/2008" },
+            { fullName: "Nguyễn Đức Trường", dob: "10/01/2008" },
+            { fullName: "Nguyễn Anh Tuấn", dob: "12/03/2008" },
+            { fullName: "Nguyễn Thị Tố Uyên", dob: "14/08/2008" },
+            { fullName: "Nguyễn Thu Uyên", dob: "27/08/2008" },
+            { fullName: "Nguyễn Hà Vi", dob: "08/09/2008" },
+            { fullName: "Nguyễn Thị Khánh Vi", dob: "12/06/2008" },
+            { fullName: "Nguyễn Hải Yến", dob: "03/11/2008" },
+            { fullName: "Nguyễn Thị Hải Yến", dob: "19/06/2008" },
+            { fullName: "Nguyễn Cao Triệu Ngọc", dob: "20/06/2008" }
+        ];
 
         // State variables
         let registrations = [];
@@ -922,8 +974,8 @@
             document.getElementById('selectAllHeader').style.display = isAdmin ? 'table-cell' : 'none';
         }
 
-        // Export all to Excel
-        function exportAllToExcel() {
+        // Export all to Excel (so sánh với danh sách học sinh)
+        window.exportAllToExcel = function() {
             if (!isAdmin) {
                 alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
                 return;
@@ -934,22 +986,47 @@
                 return;
             }
             try {
-                const exportData = registrations.map(r => ({
-                    'Họ và tên': r.fullName || '',
-                    'Môn 1': r.subject1 || '',
-                    'Môn 2': r.subject2 || '',
-                    'Môn 3': r.subject3 || '',
-                    'Môn 4': r.subject4 || '',
-                    'Ngành học': r.major || 'Chưa xác định',
-                    'Trường': r.school || 'Chưa xác định',
-                    'Phương thức xét tuyển': r.method || '',
-                    'Ghi chú': r.note || 'Không có',
-                    'Ngày đăng ký': formatDate(r.createdAt) || ''
-                }));
+                // Tạo map đăng ký theo tên
+                const regMap = new Map(registrations.map(r => [r.fullName, r]));
+
+                // Xây dựng dữ liệu xuất: tất cả học sinh, nếu đăng ký thì dùng dữ liệu, chưa thì mặc định
+                const exportData = students.map(s => {
+                    const reg = regMap.get(s.fullName);
+                    if (reg) {
+                        return {
+                            'Họ và tên': reg.fullName || '',
+                            'Ngày sinh': s.dob,
+                            'Môn 1': reg.subject1 || '',
+                            'Môn 2': reg.subject2 || '',
+                            'Môn 3': reg.subject3 || '',
+                            'Môn 4': reg.subject4 || '',
+                            'Ngành học': reg.major || 'Chưa xác định',
+                            'Trường': reg.school || 'Chưa xác định',
+                            'Phương thức xét tuyển': reg.method || '',
+                            'Ghi chú': reg.note || 'Không có',
+                            'Ngày đăng ký': formatDate(reg.createdAt) || ''
+                        };
+                    } else {
+                        return {
+                            'Họ và tên': s.fullName,
+                            'Ngày sinh': s.dob,
+                            'Môn 1': 'Toán',
+                            'Môn 2': 'Văn',
+                            'Môn 3': 'không xác định',
+                            'Môn 4': 'không xác định',
+                            'Ngành học': '',
+                            'Trường': '',
+                            'Phương thức xét tuyển': '',
+                            'Ghi chú': 'Chưa đăng ký',
+                            'Ngày đăng ký': ''
+                        };
+                    }
+                });
 
                 const worksheet = XLSX.utils.json_to_sheet(exportData, {
                     header: [
                         'Họ và tên',
+                        'Ngày sinh',
                         'Môn 1',
                         'Môn 2',
                         'Môn 3',
@@ -967,6 +1044,7 @@
                 // Set column widths for better readability
                 worksheet['!cols'] = [
                     { wch: 20 },
+                    { wch: 12 },
                     { wch: 15 },
                     { wch: 15 },
                     { wch: 15 },
@@ -986,7 +1064,7 @@
             }
         }
 
-        // Export selected to Excel
+        // Export selected to Excel (giữ nguyên như cũ)
         function exportSelectedToExcel() {
             if (!isAdmin) {
                 alert('Chỉ quản trị viên mới có quyền xuất dữ liệu!');
@@ -1097,6 +1175,17 @@
             document.getElementById('editMethod').value = r.method;
             document.getElementById('editNote').value = r.note || '';
             updateEditSubjectOptions();
+
+            // Ẩn trường mật khẩu nếu là admin
+            if (isAdmin) {
+                document.getElementById('editPasswordGroup').style.display = 'none';
+                document.getElementById('editPassword').removeAttribute('required');
+            } else {
+                document.getElementById('editPasswordGroup').style.display = 'block';
+                document.getElementById('editPassword').setAttribute('required', 'required');
+                document.getElementById('editPassword').value = '';
+            }
+
             document.getElementById('editModal').style.display = 'flex';
         };
 
@@ -1108,6 +1197,17 @@
                 return;
             }
             deleteId = id;
+
+            // Ẩn trường mật khẩu nếu là admin
+            if (isAdmin) {
+                document.getElementById('deletePasswordGroup').style.display = 'none';
+                document.getElementById('deletePassword').removeAttribute('required');
+            } else {
+                document.getElementById('deletePasswordGroup').style.display = 'block';
+                document.getElementById('deletePassword').setAttribute('required', 'required');
+                document.getElementById('deletePassword').value = '';
+            }
+
             document.getElementById('deleteModal').style.display = 'flex';
         };
 
@@ -1182,3 +1282,4 @@
     </script>
 </body>
 </html>
+```
