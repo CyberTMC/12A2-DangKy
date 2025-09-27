@@ -222,12 +222,12 @@
         .delete-btn:hover {
             background: linear-gradient(135deg, #c0392b, #e74c3c);
         }
-        .export-btn, .export-selected-btn {
+        .export-btn, .export-selected-btn, .check-missing-btn {
             background: linear-gradient(135deg, #2ecc71, #27ae60);
             margin-bottom: 15px;
             margin-right: 15px;
         }
-        .export-btn:hover, .export-selected-btn:hover {
+        .export-btn:hover, .export-selected-btn:hover, .check-missing-btn:hover {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
         }
         .modal {
@@ -395,6 +395,10 @@
                 <div class="stat-label">Ngành phổ biến</div>
                 <div class="stat-number" id="popularMajor">-</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-label">Chưa đăng ký</div>
+                <div class="stat-number" id="missingRegistrations">0</div>
+            </div>
         </div>
 
         <div class="form-section">
@@ -506,6 +510,7 @@
             <div id="adminExportControls" style="display: none;">
                 <button class="export-btn" onclick="exportAllToExcel()">Xuất tất cả ra Excel</button>
                 <button class="export-selected-btn" onclick="exportSelectedToExcel()">Xuất các mục đã chọn</button>
+                <button class="check-missing-btn" onclick="checkMissingRegistrations()">Kiểm tra học sinh chưa đăng ký</button>
             </div>
             <input type="text" id="searchInput" class="search-box" placeholder="Tìm kiếm theo tên...">
             <select id="viewMode" class="search-box">
@@ -668,6 +673,15 @@
         </div>
     </div>
 
+    <!-- Modal hiển thị danh sách học sinh chưa đăng ký -->
+    <div id="missingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Danh sách học sinh chưa đăng ký</h2>
+            <div id="missingContent"></div>
+        </div>
+    </div>
+
     <footer>
         <p>Web by TMC</p>
     </footer>
@@ -694,7 +708,7 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Danh sách học sinh lớp 12A2 (tên và ngày sinh) # tôi để rỗng để sau nhập chay
+        // Danh sách học sinh lớp 12A2 (tên và ngày sinh)
         const students = [
             { fullName: "Nguyễn Thị Ngọc Anh", dob: "27/05/2008" },
             { fullName: "Trần Hoàng Anh", dob: "28/08/2007" },
@@ -743,6 +757,8 @@
             { fullName: "Nguyễn Hải Yến", dob: "03/11/2008" },
             { fullName: "Nguyễn Thị Hải Yến", dob: "19/06/2008" },
             { fullName: "Nguyễn Cao Triệu Ngọc", dob: "20/06/2008" }
+            // Ví dụ: { fullName: "Nguyễn Văn A", dob: "2005-01-01" },
+            // Thêm danh sách học sinh tại đây
         ];
 
         // State variables
@@ -1011,7 +1027,6 @@
     'C18': ['Ngữ văn', 'Địa lí', 'GDKT-PL'],
     'C19': ['Ngữ văn', 'Lịch sử', 'Tin học'],
 };
-
 
         // Danh sách gợi ý ngành theo khối (sẽ được thêm sau)
         const majors = {// === KHỐI TRUYỀN THỐNG & PHỔ BIẾN NHẤT ===
@@ -1303,8 +1318,8 @@
             const fullName = document.getElementById('fullName').value;
             const password = document.getElementById('password').value;
 
-            // Kiểm tra tên có trong danh sách học sinh
-            if (!students.some(s => s.fullName === fullName)) {
+            // Kiểm tra tên có trong danh sách học sinh nếu danh sách không rỗng
+            if (students.length > 0 && !students.some(s => s.fullName === fullName)) {
                 alert('Tên không có trong danh sách học sinh lớp 12A2. Vui lòng kiểm tra lại hoặc liên hệ admin.');
                 submitButton.disabled = false;
                 submitButton.classList.remove('loading');
@@ -1867,6 +1882,31 @@
             }
         }
 
+        // Check missing registrations (Admin-only)
+        window.checkMissingRegistrations = function() {
+            if (!isAdmin) {
+                alert('Chỉ quản trị viên mới có quyền xem danh sách học sinh chưa đăng ký!');
+                return;
+            }
+            const registeredNames = new Set(registrations.map(r => r.fullName));
+            const missingStudents = students.filter(s => !registeredNames.has(s.fullName));
+
+            const missingContent = document.getElementById('missingContent');
+            missingContent.innerHTML = '';
+            if (missingStudents.length === 0) {
+                missingContent.innerHTML = '<p>Tất cả học sinh trong danh sách lớp đã đăng ký!</p>';
+            } else {
+                const ul = document.createElement('ul');
+                missingStudents.forEach(s => {
+                    const li = document.createElement('li');
+                    li.textContent = `${s.fullName} (Ngày sinh: ${formatDate(s.dob)})`;
+                    ul.appendChild(li);
+                });
+                missingContent.appendChild(ul);
+            }
+            document.getElementById('missingModal').style.display = 'flex';
+        };
+
         // Toggle select all
         window.toggleSelectAll = function() {
             const selectAll = document.getElementById('selectAll').checked;
@@ -1963,6 +2003,9 @@
                 }
             }
             document.getElementById('popularMajor').textContent = popular;
+            const registeredNames = new Set(registrations.map(r => r.fullName));
+            const missingCount = students.length > 0 ? students.filter(s => !registeredNames.has(s.fullName)).length : 0;
+            document.getElementById('missingRegistrations').textContent = missingCount;
         }
 
         // Check admin status
