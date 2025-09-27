@@ -204,6 +204,15 @@
         .view-btn:hover {
             background: linear-gradient(135deg, #219653, #27ae60);
         }
+        .edit-btn {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 6px;
+        }
+        .edit-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+        }
         .delete-btn {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             padding: 10px 14px;
@@ -553,6 +562,112 @@
         </div>
     </div>
 
+    <!-- Modal chỉnh sửa thông tin -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Chỉnh sửa thông tin đăng ký</h2>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="editFullName">Họ và tên *</label>
+                        <input type="text" id="editFullName" required>
+                    </div>
+                    <div class="form-group" id="editPasswordGroup">
+                        <label for="editPassword">Mật khẩu (để xác thực) *</label>
+                        <input type="password" id="editPassword" placeholder="Nhập mật khẩu của bạn">
+                        <div id="editPasswordError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubject1">Môn 1 *</label>
+                        <select id="editSubject1" required>
+                            <option value="">Chọn môn</option>
+                            <option value="Toán">Toán</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubject2">Môn 2 *</label>
+                        <select id="editSubject2" required>
+                            <option value="">Chọn môn</option>
+                            <option value="Văn">Văn</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubject3">Môn 3 *</label>
+                        <select id="editSubject3" required onchange="updateEditSubjectOptions(); suggestEditBlocksAndMajors();">
+                            <option value="">Chọn môn</option>
+                            <option value="Tin học">Tin học</option>
+                            <option value="Địa lý">Địa lý</option>
+                            <option value="Tiếng Anh">Tiếng Anh</option>
+                            <option value="Tiếng Trung">Tiếng Trung</option>
+                            <option value="Lịch sử">Lịch sử</option>
+                            <option value="GDKT-PL">GDKT-PL</option>
+                            <option value="Vật lí">Vật lí</option>
+                            <option value="Hóa học">Hóa học</option>
+                            <option value="Sinh học">Sinh học</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubject4">Môn 4 *</label>
+                        <select id="editSubject4" required onchange="updateEditSubjectOptions(); suggestEditBlocksAndMajors();">
+                            <option value="">Chọn môn</option>
+                            <option value="Tin học">Tin học</option>
+                            <option value="Địa lý">Địa lý</option>
+                            <option value="Tiếng Anh">Tiếng Anh</option>
+                            <option value="Tiếng Trung">Tiếng Trung</option>
+                            <option value="Lịch sử">Lịch sử</option>
+                            <option value="GDKT-PL">GDKT-PL</option>
+                            <option value="Vật lí">Vật lí</option>
+                            <option value="Hóa học">Hóa học</option>
+                            <option value="Sinh học">Sinh học</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMajor">Ngành học</label>
+                        <input type="text" id="editMajor" placeholder="(Có thể để trống)">
+                        <div id="editBlockSuggestion" style="margin-top: 10px; color: #3498db; font-weight: bold;"></div>
+                        <div id="editMajorSuggestion" style="margin-top: 10px; color: #27ae60; font-weight: bold;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSchool">Trường</label>
+                        <input type="text" id="editSchool" placeholder="Ghi một vài trường muốn vào(Có thể để trống)">
+                    </div>
+                    <div class="form-group">
+                        <label for="editMethod">Phương thức xét tuyển *</label>
+                        <select id="editMethod" required>
+                            <option value="">Chọn phương thức</option>
+                            <option value="100 - Xét kết quả thi tốt nghiệp THPT">100 - Xét kết quả thi tốt nghiệp THPT</option>
+                            <option value="200 - Xét kết quả học tập cấp THPT (học bạ)">200 - Xét kết quả học tập cấp THPT (học bạ)</option>
+                            <option value="301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)">301 - Xét tuyển thẳng theo quy định của Quy chế tuyển sinh (Điều 8)</option>
+                            <option value="401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển">401 - Thi đánh giá năng lực, đánh giá tư duy do CSĐT tự tổ chức để xét tuyển</option>
+                            <option value="402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển">402 - Sử dụng kết quả thi đánh giá năng lực, đánh giá tư duy… do đơn vị khác tổ chức để xét tuyển</option>
+                            <option value="403 - Thi văn hóa do CSĐT tổ chức để xét tuyển">403 - Thi văn hóa do CSĐT tổ chức để xét tuyển</option>
+                            <option value="404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển">404 - Sử dụng kết quả thi văn hóa do CSĐT khác tổ chức để xét tuyển</option>
+                            <option value="405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển">405 - Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển</option>
+                            <option value="406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển">406 - Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển</option>
+                            <option value="407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển">407 - Kết hợp kết quả thi tốt nghiệp THPT với kết quả học tập cấp THPT để xét tuyển</option>
+                            <option value="409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển">409 - Kết hợp kết quả thi tốt nghiệp THPT với chứng chỉ quốc tế để xét tuyển</option>
+                            <option value="410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển">410 - Kết hợp kết quả học tập cấp THPT với chứng chỉ quốc tế để xét tuyển</option>
+                            <option value="411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài">411 - Xét tuyển thí sinh tốt nghiệp THPT nước ngoài</option>
+                            <option value="413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển">413 - Kết hợp kết quả thi tốt nghiệp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển">414 - Kết hợp kết quả học tập cấp THPT với phỏng vấn để xét tuyển</option>
+                            <option value="415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển">415 - Sử dụng chứng chỉ quốc tế SAT hoặc chứng chỉ quốc tế khác đủ điều kiện để xét tuyển</option>
+                            <option value="416 - Kỳ thi V-SAT">416 - Kỳ thi V-SAT</option>
+                            <option value="417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển">417 - Sử dụng kết quả Kỳ thi V-SAT do đơn vị khác tổ chức để xét tuyển</option>
+                            <option value="500 - Sử dụng phương thức khác">500 - Sử dụng phương thức khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editNote">Ghi chú</label>
+                        <input type="text" id="editNote" placeholder="(Có thể để trống)">
+                    </div>
+                </div>
+                <button type="submit">Cập nhật</button>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <p>Web by TMC</p>
     </footer>
@@ -560,7 +675,7 @@
     <script type="module">
         // Import Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
         // Firebase configuration
@@ -579,7 +694,7 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Danh sách học sinh lớp 12A2 (tên và ngày sinh)
+        // Danh sách học sinh lớp 12A2 (tên và ngày sinh) # tôi để rỗng để sau nhập chay
         const students = [
             { fullName: "Nguyễn Thị Ngọc Anh", dob: "27/05/2008" },
             { fullName: "Trần Hoàng Anh", dob: "28/08/2007" },
@@ -635,11 +750,12 @@
         let displayedData = [];
         let isAdmin = false;
         let deleteId = null;
+        let editId = null;
         let currentUser = localStorage.getItem('currentUser') || '';
         const registrationsCol = collection(db, 'registrations');
 
         // Danh sách tổ hợp xét tuyển (sẽ được thêm sau)
-        const combinations = {
+         const combinations = {
     // === KHỐI TRUYỀN THỐNG & PHỔ BIẾN NHẤT (Dựa trên dữ liệu thực) ===
     'D01': ['Toán', 'Ngữ văn', 'Tiếng Anh'],
     'A00': ['Toán', 'Vật lí', 'Hóa học'],
@@ -895,6 +1011,7 @@
     'C18': ['Ngữ văn', 'Địa lí', 'GDKT-PL'],
     'C19': ['Ngữ văn', 'Lịch sử', 'Tin học'],
 };
+
 
         // Danh sách gợi ý ngành theo khối (sẽ được thêm sau)
         const majors = {// === KHỐI TRUYỀN THỐNG & PHỔ BIẾN NHẤT ===
@@ -1297,6 +1414,68 @@
             }
         });
 
+        // Submit edit form
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const passwordError = document.getElementById('editPasswordError');
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            passwordError.style.display = 'none';
+
+            const password = document.getElementById('editPassword').value;
+            const r = registrations.find(r => r.id === editId);
+
+            if (!isAdmin && (!password || sha256(password) !== r.passwordHash)) {
+                passwordError.textContent = 'Mật khẩu không đúng. Vui lòng thử lại hoặc liên hệ admin.';
+                passwordError.style.display = 'block';
+                submitButton.disabled = false;
+                return;
+            }
+
+            const formData = {
+                fullName: document.getElementById('editFullName').value,
+                subject1: document.getElementById('editSubject1').value,
+                subject2: document.getElementById('editSubject2').value,
+                subject3: document.getElementById('editSubject3').value,
+                subject4: document.getElementById('editSubject4').value,
+                major: document.getElementById('editMajor').value,
+                school: document.getElementById('editSchool').value,
+                method: document.getElementById('editMethod').value,
+                note: document.getElementById('editNote').value,
+                createdAt: r.createdAt // Giữ nguyên ngày tạo
+            };
+
+            if (!formData.fullName || !formData.subject1 || !formData.subject2 || !formData.subject3 || !formData.subject4 || !formData.method) {
+                alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
+                submitButton.disabled = false;
+                return;
+            }
+
+            if (formData.subject3 === formData.subject4 && formData.subject3 !== "") {
+                alert('Môn 3 và Môn 4 không được trùng nhau!');
+                submitButton.disabled = false;
+                return;
+            }
+
+            try {
+                await updateDoc(doc(db, 'registrations', editId), formData);
+                const index = registrations.findIndex(r => r.id === editId);
+                registrations[index] = { ...registrations[index], ...formData };
+                displayedData = registrations;
+                renderData();
+                updateStats();
+                document.getElementById('editModal').style.display = 'none';
+                alert('Cập nhật thành công!');
+            } catch (error) {
+                console.error('Error updating:', error);
+                passwordError.textContent = 'Có lỗi xảy ra khi cập nhật: ' + error.message;
+                passwordError.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+
         // Function to update subject options in registration form to prevent duplicates
         window.updateSubjectOptions = function() {
             const subject3 = document.getElementById('subject3').value;
@@ -1320,6 +1499,29 @@
             document.getElementById('subject3').innerHTML = subject3Options;
         };
 
+        // Function to update subject options in edit form to prevent duplicates
+        window.updateEditSubjectOptions = function() {
+            const subject3 = document.getElementById('editSubject3').value;
+            const subject4 = document.getElementById('editSubject4').value;
+            const options = ["Tin học", "Địa lý", "Tiếng Anh", "Tiếng Trung", "Lịch sử", "GDKT-PL", "Vật lí", "Hóa học", "Sinh học"];
+
+            let subject4Options = '<option value="">Chọn môn</option>';
+            options.forEach(opt => {
+                if (opt !== subject3) {
+                    subject4Options += `<option value="${opt}" ${opt === subject4 ? 'selected' : ''}>${opt}</option>`;
+                }
+            });
+            document.getElementById('editSubject4').innerHTML = subject4Options;
+
+            let subject3Options = '<option value="">Chọn môn</option>';
+            options.forEach(opt => {
+                if (opt !== subject4) {
+                    subject3Options += `<option value="${opt}" ${opt === subject3 ? 'selected' : ''}>${opt}</option>`;
+                }
+            });
+            document.getElementById('editSubject3').innerHTML = subject3Options;
+        };
+
         // Function to suggest blocks and majors based on selected subjects
         window.suggestBlocksAndMajors = function() {
             const blockSuggestion = document.getElementById('blockSuggestion');
@@ -1335,6 +1537,55 @@
             const subject2 = document.getElementById('subject2').value;
             const subject3 = document.getElementById('subject3').value;
             const subject4 = document.getElementById('subject4').value;
+
+            if (!subject1 || !subject2 || !subject3 || !subject4) {
+                blockSuggestion.innerHTML = '';
+                majorSuggestion.innerHTML = '';
+                return;
+            }
+
+            const selectedSubjects = new Set([subject1, subject2, subject3, subject4]);
+            const matchingBlocks = [];
+
+            for (const code in combinations) {
+                const subs = combinations[code];
+                if (subs.every(s => selectedSubjects.has(s))) {
+                    matchingBlocks.push(code);
+                }
+            }
+
+            blockSuggestion.innerHTML = matchingBlocks.length > 0 
+                ? 'Gợi ý khối: ' + matchingBlocks.join(', ') 
+                : 'Không tìm thấy khối phù hợp với tổ hợp môn đã chọn.';
+
+            const suggestedMajors = new Set();
+            matchingBlocks.forEach(code => {
+                if (majors[code]) {
+                    majors[code].forEach(m => suggestedMajors.add(m));
+                }
+            });
+
+            const majorsList = Array.from(suggestedMajors).join(', ');
+            majorSuggestion.innerHTML = suggestedMajors.size > 0 
+                ? 'Gợi ý ngành: ' + majorsList 
+                : 'Không có gợi ý ngành cho tổ hợp này.';
+        };
+
+        // Function to suggest blocks and majors in edit form
+        window.suggestEditBlocksAndMajors = function() {
+            const blockSuggestion = document.getElementById('editBlockSuggestion');
+            const majorSuggestion = document.getElementById('editMajorSuggestion');
+
+            if (Object.keys(combinations).length === 0) {
+                blockSuggestion.innerHTML = 'Danh sách tổ hợp môn chưa được cập nhật.';
+                majorSuggestion.innerHTML = 'Danh sách ngành chưa được cập nhật.';
+                return;
+            }
+
+            const subject1 = document.getElementById('editSubject1').value;
+            const subject2 = document.getElementById('editSubject2').value;
+            const subject3 = document.getElementById('editSubject3').value;
+            const subject4 = document.getElementById('editSubject4').value;
 
             if (!subject1 || !subject2 || !subject3 || !subject4) {
                 blockSuggestion.innerHTML = '';
@@ -1418,6 +1669,7 @@
                     <td>${r.method}</td>
                     <td class="actions">
                         <button class="view-btn" onclick="viewDetails('${r.id}')">Xem</button>
+                        ${isAdmin || r.fullName === currentUser ? `<button class="edit-btn" onclick="openEditModal('${r.id}')">Sửa</button>` : ''}
                         ${isAdmin || r.fullName === currentUser ? `<button class="delete-btn" onclick="openDeleteModal('${r.id}')">Xóa</button>` : ''}
                     </td>
                 </tr>`;
@@ -1634,6 +1886,41 @@
                 <p><strong>Ngày đăng ký:</strong> ${formatDate(r.createdAt)}</p>
             `;
             document.getElementById('detailModal').style.display = 'flex';
+        };
+
+        // Open edit modal
+        window.openEditModal = function(id) {
+            const r = registrations.find(r => r.id === id);
+            if (!isAdmin && r.fullName !== currentUser) {
+                alert('Bạn chỉ có thể chỉnh sửa thông tin của chính mình. Nếu gặp vấn đề, liên hệ admin.');
+                return;
+            }
+            editId = id;
+
+            document.getElementById('editFullName').value = r.fullName;
+            document.getElementById('editSubject1').value = r.subject1;
+            document.getElementById('editSubject2').value = r.subject2;
+            document.getElementById('editSubject3').value = r.subject3;
+            document.getElementById('editSubject4').value = r.subject4;
+            document.getElementById('editMajor').value = r.major || '';
+            document.getElementById('editSchool').value = r.school || '';
+            document.getElementById('editMethod').value = r.method;
+            document.getElementById('editNote').value = r.note || '';
+
+            updateEditSubjectOptions();
+            suggestEditBlocksAndMajors();
+
+            if (isAdmin) {
+                document.getElementById('editPasswordGroup').style.display = 'none';
+                document.getElementById('editPassword').removeAttribute('required');
+            } else {
+                document.getElementById('editPasswordGroup').style.display = 'block';
+                document.getElementById('editPassword').setAttribute('required', 'required');
+                document.getElementById('editPassword').value = '';
+            }
+
+            document.getElementById('editPasswordError').style.display = 'none';
+            document.getElementById('editModal').style.display = 'flex';
         };
 
         // Open delete modal
